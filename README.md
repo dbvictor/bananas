@@ -1,4 +1,19 @@
-bananas
-=======
+# Bananas
+<i>Intro to Android: Group Project</i>
 
-Android Intro Class - Group Project - Bananas
+## Team
+- Autumn Victor
+- David Victor
+- Gaurav Makhija
+
+## Overview
+TODO
+
+## User Stories
+TODO
+
+## Activities
+TODO
+
+## Reference
+ - [Assignment](https://yahoo.jiveon.com/docs/DOC-3046)

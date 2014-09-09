@@ -10,25 +10,29 @@
 Jokes app for users to get their daily fix of laughter, engage in a community of jokes, and contribute.
 
 ## User Stories
-TODO
-
+ - User opens the app and sees the latest jokes.
+ - User clicks on a joke to read the full joke.
+ - User can submit a new text joke.
+ - **(Optional)** User can rate up/down jokes
+ - **(Optional)** User can Facebook Like jokes so they can share jokes with others that link back to us.
+ - **(Optional)** User can Tweet jokes on Twitter with indication of our app.
+ - **(Optional)** User can view jokes by greatest (up/down)
+ - **(Optional)** User can view jokes by category or setup filters for select categories.
+ - **(Optional)** User can view jokes that have images.
+ - **(Optional)** User can write jokes with images.
+ - **(Optional)** User can view an image-only funny picture stream / category
+ - **(Optional)** User up/down votes automatically correlated to category filters.
+ - **(Optional)** Company can display ads in the stream that the users can click on.
+ - **(Optional)** Company can display banner ads that the user can click on.
+ 
 ## Activities
-TODO
+ - Jokes List (by latest, by greatest)
+ - Read Full Joke (detail view)
+ - Write Joke
 
-## Internal Notes
- * Start simple, add features.
- 
- * **Required:**
- - Start with text jokes list.
- - Click on joke to get full joke.
- - Write your own
- 
- * **Additional:**
- - rate jokes up and down
- - jokes with images
- - Facebook Like
- - funny pictures
- - categories
+## Basic Principles
+ - Extremely easy to navigate.
+ - User wants to spend a lot of time in the app.
 
 ## Reference
  - [Assignment](https://yahoo.jiveon.com/docs/DOC-3046)

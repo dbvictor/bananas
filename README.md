@@ -34,5 +34,8 @@ Jokes app for users to get their daily fix of laughter, engage in a community of
  - Extremely easy to navigate.
  - User wants to spend a lot of time in the app.
 
+## Wire Frames
+![Wire Frames](wireframes.gif "Wire Frames") 
+
 ## Reference
  - [Assignment](https://yahoo.jiveon.com/docs/DOC-3046)

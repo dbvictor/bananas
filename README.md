@@ -39,3 +39,4 @@ Jokes app for users to get their daily fix of laughter, engage in a community of
 
 ## Reference
  - [Assignment](https://yahoo.jiveon.com/docs/DOC-3046)
+ - [Spring Planning](https://docs.google.com/a/yahoo-inc.com/document/d/1ovSyPseKw6-jMlB-czenkP4n8Nlbl3RjBsO89DFc7ks/edit)

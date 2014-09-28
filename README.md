@@ -2,7 +2,7 @@
 <i>Intro to Android: Group Project</i>
 
 ## Team
-- Autumn Victor
+- Autumn Victor 2
 - David Victor
 - Gaurav Makhija
 

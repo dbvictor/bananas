@@ -7,6 +7,7 @@ import com.parse.Parse;
 import com.parse.ParseUser;
 import com.parse.PushService;
 import com.yahoo.bananas.clients.ParseClient;
+import com.yahoo.bananas.activities.JokeStreamActivity;
 
 public class JokeApplication extends Application {
 	// Member Variables

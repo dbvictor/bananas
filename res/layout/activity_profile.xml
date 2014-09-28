@@ -1,0 +1,102 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="${relativePackage}.${activityClass}" >
+
+    <RelativeLayout
+        android:id="@+id/rlHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="0dp"
+        android:paddingRight="5dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true" >
+
+	    <ImageView
+	        android:id="@+id/ivProfileImage"
+	        android:layout_width="50dp"
+	        android:layout_height="50dp"
+	        android:layout_alignParentLeft="true"
+	        android:layout_alignParentTop="true"
+	        android:layout_marginRight="10dp"
+	        android:src="@android:drawable/screen_background_light_transparent" />
+
+	    <TextView
+	        android:id="@+id/tvRealName"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentTop="true"
+	        android:layout_toRightOf="@+id/ivProfileImage"
+	        android:text="Your Name"
+	        android:textSize="16sp" />
+
+	    <TextView
+	        android:id="@+id/tvTagline"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignLeft="@+id/tvRealName"
+	        android:layout_below="@+id/tvRealName"
+	        android:text="Your BIO"
+	        android:textSize="12sp" />
+	    	    
+    </RelativeLayout>
+    
+    <LinearLayout
+        android:id="@+id/llCounts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@+id/rlHeader"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/tvFollowers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="# Followers" 
+            android:textStyle="italic"
+            />
+        	    
+        <TextView
+            android:id="@+id/tvFollowing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="# Following" 
+            android:textStyle="italic"
+            />
+        
+    </LinearLayout>
+    
+    <!-- Statically loaded fragment (cannot change dynamically) -->
+	<!-- Switched to dynamically loaded so we can use the constructor to pass arguments.
+    <fragment
+        android:id="@+id/fragmentUserTimeline"
+        android:name="com.dvictor.twitter.fragments.UserTimelineFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/llCounts"
+        tools:layout="@layout/fragment_tweets_list" />
+    -->
+    
+	<!-- Frame Layout for Dynamically Loaded Fragments -->
+    <FrameLayout
+        android:id="@+id/flProfileTimelineContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/llCounts" >
+
+    </FrameLayout>
+    
+
+</RelativeLayout>

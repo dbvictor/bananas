@@ -2,12 +2,12 @@
 <i>Intro to Android: Group Project</i>
 
 ## Team
-- Autumn Victor 2
+- Autumn Victor
 - David Victor
 - Gaurav Makhija
 
 ## Overview
-Jokes app for users to get their daily fix of laughter, engage in a community of jokes, and contribute. 2
+Jokes app for users to get their daily fix of laughter, engage in a community of jokes, and contribute.
 
 ## User Stories
  - User opens the app and sees the latest jokes.

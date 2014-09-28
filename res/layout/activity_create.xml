@@ -1,0 +1,41 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="${relativePackage}.${activityClass}" >
+
+    <EditText
+        android:id="@+id/etNewTweet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:ems="10"
+        android:lines="4"
+        android:maxLength="140"
+        android:hint="@string/new_tweet_hint" >
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/bSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etNewTweet"
+        android:layout_centerHorizontal="true"
+        android:onClick="create"
+        android:text="@string/new_tweet_button" />
+
+    <TextView
+        android:id="@+id/tvCharsRemaining"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/etNewTweet"
+        android:paddingLeft="0dp"
+        android:paddingRight="5dp"
+        android:textStyle="italic"
+        android:text="N remaining" />
+
+</RelativeLayout>

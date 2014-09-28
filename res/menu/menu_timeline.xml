@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/actionCreate"
+        android:icon="@drawable/ic_action_create"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:onClick="create"
+        android:title="@string/action_create"/>
+
+    <item
+        android:id="@+id/actionProfile"
+        android:icon="@drawable/ic_action_profile"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:onClick="viewProfile"
+        android:title="@string/action_profile"/>
+    
+    <item
+        android:id="@+id/actionInternetToggle"
+        android:icon="@drawable/ic_action_internet_off"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:onClick="internetToggle"
+        android:visible="true"
+        android:title="@string/action_internet_toggle"/>
+    
+</menu>

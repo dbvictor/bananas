@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ImageView
+        android:id="@+id/ivProfileImage"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+		android:onClick="onProfileClick"
+        android:src="@drawable/ic_launcher" />
+
+    <TextView
+        android:id="@+id/tvRealName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/ivProfileImage"
+        android:paddingLeft="5dp"
+        android:paddingRight="0dp"
+        android:textStyle="bold"
+        android:maxLines="1"
+        android:text="Real Name" />
+
+    <TextView
+        android:id="@+id/tvUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/tvRealName"
+        android:paddingLeft="7dp"
+        android:paddingRight="0dp"
+        android:maxLines="1"
+        android:text="\@Username" />
+
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/tvUserName"
+        android:paddingLeft="7dp"
+        android:paddingRight="0dp"
+        android:textStyle="italic"
+        android:maxLines="1"
+        android:text="Time" />
+    
+    <TextView
+        android:id="@+id/tvBody"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvRealName"
+        android:layout_below="@+id/tvRealName"
+        android:paddingLeft="5dp"
+        android:paddingRight="0dp"
+        android:autoLink="all"
+        android:text="Tweet body..." />
+
+</RelativeLayout>

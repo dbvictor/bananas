@@ -15,35 +15,37 @@ import com.parse.ParseObject;
 public class Joke extends Model implements Serializable {
 	// Constants
 	private static final long serialVersionUID = -5588479582018973661L;
-	private static final String TABLE         = "Jokes";
-	private static final String COL_OBJECTID  = "objectId";  // (automatic) generated row ID.
-	private static final String COL_CREATEDAT = "createdAt"; // (automatic) timestamp row created
-	private static final String COL_CREATEDBY = "createdBy"; // User table's objectId
-	private static final String COL_TEXT      = "text";      // Joke text
-	private static final String COL_VOTESUP   = "votesUp";   // User up votes / likes
-	private static final String COL_VOTESDOWN = "votesDown"; // User down votes / dislikes
-	private static final String COL_SHARES    = "shares";    // # times shared
+	public static final String TABLE         = "Jokes";
+	public static final class COL{
+		public static final String OBJECTID  = "objectId";  // (automatic) generated row ID.
+		public static final String CREATEDAT = "createdAt"; // (automatic) timestamp row created
+		public static final String CREATEDBY = "createdBy"; // User table's objectId
+		public static final String TEXT      = "text";      // Joke text
+		public static final String VOTESUP   = "votesUp";   // User up votes / likes
+		public static final String VOTESDOWN = "votesDown"; // User down votes / dislikes
+		public static final String SHARES    = "shares";    // # times shared
+	}
 	
 	// Member Variables
-	@Column(name = COL_OBJECTID, unique = true, onUniqueConflict = Column.ConflictAction.REPLACE) // avoid duplicates
+	@Column(name = COL.OBJECTID, unique = true, onUniqueConflict = Column.ConflictAction.REPLACE) // avoid duplicates
 	private String objectId;
 	
-	@Column(name = COL_TEXT)
+	@Column(name = COL.TEXT)
 	private String text;
 
-	@Column(name = COL_CREATEDAT)
+	@Column(name = COL.CREATEDAT)
 	private Date createdAt;
 	
-	@Column(name = COL_CREATEDBY) //We'll manage references manually -- , onUpdate = ForeignKeyAction.CASCADE, onDelete = ForeignKeyAction.CASCADE)
+	@Column(name = COL.CREATEDBY) //We'll manage references manually -- , onUpdate = ForeignKeyAction.CASCADE, onDelete = ForeignKeyAction.CASCADE)
 	private String createdBy; // User table's objectId.
 
-	@Column(name = COL_VOTESUP)
+	@Column(name = COL.VOTESUP)
 	private int votesUp;
 
-	@Column(name = COL_VOTESDOWN)
+	@Column(name = COL.VOTESDOWN)
 	private int votesDown;
 
-	@Column(name = COL_SHARES)
+	@Column(name = COL.SHARES)
 	private int shares;
 
 	// ----- ACCESS -----
@@ -106,13 +108,13 @@ public class Joke extends Model implements Serializable {
     // ----- PARSE -----
     public ParseObject toParseObject(){
     	ParseObject po = new ParseObject(TABLE);
-    	po.put(COL_OBJECTID  ,objectId );
-    	po.put(COL_CREATEDAT ,createdAt);
-    	po.put(COL_CREATEDBY ,createdBy);
-    	po.put(COL_TEXT      ,text     );
-    	po.put(COL_VOTESUP   ,votesUp  );
-    	po.put(COL_VOTESDOWN ,votesDown);
-    	po.put(COL_SHARES    ,shares   );
+    	po.put(COL.OBJECTID  ,objectId );
+    	po.put(COL.CREATEDAT ,createdAt);
+    	po.put(COL.CREATEDBY ,createdBy);
+    	po.put(COL.TEXT      ,text     );
+    	po.put(COL.VOTESUP   ,votesUp  );
+    	po.put(COL.VOTESDOWN ,votesDown);
+    	po.put(COL.SHARES    ,shares   );
     	return po;
     }
 	

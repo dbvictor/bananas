@@ -19,31 +19,33 @@ import com.yahoo.bananas.util.Util;
 public class User extends Model implements Serializable{
 	// Constants
 	private static final long serialVersionUID = 8667788773549950232L;
-	private static final String TABLE         = "Users";
-	private static final String COL_OBJECTID  = "objectId";  // (automatic) generated row ID.
-	private static final String COL_CREATEDAT = "createdAt"; // (automatic) timestamp row created
-	private static final String COL_USERNAME  = "username";  // (automatic) anonymous username.
-	private static final String COL_REALNAME  = "realName";  // User's real name
-	private static final String COL_EMAIL     = "email";     // (built-in) user's email.
-	private static final String COL_IMAGEURL  = "imageUrl";  // Profile image URL
+	public static final String TABLE         = "Users";
+	public static final class COL{
+		public static final String OBJECTID  = "objectId";  // (automatic) generated row ID.
+		public static final String CREATEDAT = "createdAt"; // (automatic) timestamp row created
+		public static final String USERNAME  = "username";  // (automatic) anonymous username.
+		public static final String REALNAME  = "realName";  // User's real name
+		public static final String EMAIL     = "email";     // (built-in) user's email.
+		public static final String IMAGEURL  = "imageUrl";  // Profile image URL
+	}
 
 	// Member Variables
-	@Column(name = COL_OBJECTID, unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
+	@Column(name = COL.OBJECTID, unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
 	private String objectId;
 	
-	@Column(name = COL_CREATEDAT)
+	@Column(name = COL.CREATEDAT)
 	private Date createdAt;	
 
-	@Column(name = COL_USERNAME)
+	@Column(name = COL.USERNAME)
 	private String userName;
 	
-	@Column(name = COL_REALNAME)
+	@Column(name = COL.REALNAME)
 	private String realName;
 
-	@Column(name = COL_EMAIL)
+	@Column(name = COL.EMAIL)
 	private String email;
 	
-	@Column(name = COL_IMAGEURL)
+	@Column(name = COL.IMAGEURL)
 	private String imageUrl;
 
 	// ----- ACCESS -----
@@ -104,12 +106,12 @@ public class User extends Model implements Serializable{
     // ----- PARSE -----
     public ParseObject toParseObject(){
     	ParseObject po = new ParseObject(TABLE);
-    	po.put(COL_OBJECTID  ,objectId );
-    	po.put(COL_CREATEDAT ,createdAt);
-    	po.put(COL_USERNAME  ,userName );
-    	po.put(COL_REALNAME  ,realName );
-    	po.put(COL_EMAIL     ,email    );
-    	po.put(COL_IMAGEURL  ,imageUrl );
+    	po.put(COL.OBJECTID  ,objectId );
+    	po.put(COL.CREATEDAT ,createdAt);
+    	po.put(COL.USERNAME  ,userName );
+    	po.put(COL.REALNAME  ,realName );
+    	po.put(COL.EMAIL     ,email    );
+    	po.put(COL.IMAGEURL  ,imageUrl );
     	return po;
     }
 	

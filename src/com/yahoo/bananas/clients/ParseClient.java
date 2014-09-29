@@ -1,14 +1,9 @@
 package com.yahoo.bananas.clients;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Date;
 
-import android.app.Activity;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseAnonymousUtils;
@@ -63,9 +58,63 @@ public class ParseClient {
 		});
     }*/
     
+	/**
+	 * Get jokes sorted by latest first.
+	 * @param lastItemDate
+	 *          The date of the last joke received.  This is not sufficiently unique on its own.
+	 *          NULL = refresh from beginning. 
+	 * @param lastObjectId
+	 *          The ObjectId of the last joke received.  This should be unique among any multiple created at the same time.
+	 *          NULL = refresh from beginning. 
+	 * @param optUserId
+	 *          (Optional) Limit jokes to only those created by a specific user.
+	 *          NULL: defaults all users.
+	 * @param handler
+	 *          Asynchronous callback mechanism for you to handle results. 
+	 * @param handler - callback handler to return results when they are ready.
+	 */
+	public void getJokesNewest(Date lastDate, String lastObjectId, String optUserId, FindCallback<ParseObject> handler){
+		ParseQuery<ParseObject> query = ParseQuery.getQuery(Joke.TABLE);
+		query.setLimit(PAGESIZE);
+		if(lastDate!=null) query.whereLessThan(Joke.COL.CREATEDAT, lastDate);
+		// We will have to consider that multiple can have the same date, but objectId isn't sequential
+		// - so we also sort secondarily by objectid.
+		if(lastObjectId!=null) query.whereLessThan(Joke.COL.OBJECTID , lastObjectId);
+		query.orderByDescending(Joke.COL.CREATEDAT);
+		query.orderByDescending(Joke.COL.OBJECTID);
+		query.findInBackground(handler);
+	}
+
+	/**
+	 * Get jokes sorted by latest first.
+	 * @param lastVotesUp
+	 *          The votes up count of the last joke received.  This is not sufficiently unique on its own.
+	 *          -1/NULL = refresh from beginning. 
+	 * @param lastObjectId
+	 *          The ObjectId of the last joke received.  This should be unique among any multiple created at the same time.
+	 *          NULL = refresh from beginning. 
+	 * @param optUserId
+	 *          (Optional) Limit jokes to only those created by a specific user.
+	 *          NULL: defaults all users.
+	 * @param handler
+	 *          Asynchronous callback mechanism for you to handle results. 
+	 * @param handler - callback handler to return results when they are ready.
+	 */
+	public void getJokesNewest(int lastVotesUp, String lastObjectId, FindCallback<ParseObject> handler){
+		ParseQuery<ParseObject> query = ParseQuery.getQuery(Joke.TABLE);
+		query.setLimit(PAGESIZE);
+		if(lastVotesUp>=0) query.whereLessThan(Joke.COL.VOTESUP, lastVotesUp);
+		// We will have to consider that multiple can have the same date, but objectId isn't sequential
+		// - so we also sort secondarily by objectid.
+		if(lastObjectId!=null) query.whereLessThan(Joke.COL.OBJECTID , lastObjectId);
+		query.orderByDescending(Joke.COL.VOTESUP);
+		query.orderByDescending(Joke.COL.OBJECTID);
+		query.findInBackground(handler);
+	}
+	
     /** (Cached) get the user with the specified userid (user object id). */
     private void getUser(String userObjectId){
     	// TODO
     }
-
+    
 }

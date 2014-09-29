@@ -16,16 +16,16 @@ import android.widget.Toast;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.parse.ParseException;
 import com.parse.SaveCallback;
-import com.yahoo.bananas.JokeApplication;
+import com.yahoo.bananas.JokesApplication;
 import com.yahoo.bananas.R;
-import com.yahoo.bananas.clients.JokeClient;
 import com.yahoo.bananas.clients.ParseClient;
+import com.yahoo.bananas.clients.TwitterClient;
 import com.yahoo.bananas.models.Joke;
 import com.yahoo.bananas.models.Tweet;
 
 public class CreateActivity extends Activity {
 	private ParseClient client;
-	private JokeClient twitterClient;
+	private TwitterClient twitterClient;
 	private Tweet joke;
 	// Remembered Views
 	private EditText etBody;
@@ -37,7 +37,7 @@ public class CreateActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create);
-		client = JokeApplication.getParseClient();
+		twitterClient = JokesApplication.getTwitterClient();
 		// Remember views for easy access later.
 		etBody           = (EditText) findViewById(R.id.etNewJoke      );
 		tvCharsRemaining = (TextView) findViewById(R.id.tvCharsRemaining);

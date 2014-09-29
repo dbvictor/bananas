@@ -23,11 +23,10 @@
     <permission
         android:name="com.yahoo.bananas.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
-
     <uses-permission android:name="com.yahoo.bananas.permission.C2D_MESSAGE" />
 
     <application
-        android:name=".Bananas"
+        android:name="com.yahoo.bananas.JokesApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -41,7 +40,6 @@
         <!-- SERVICES -->
         <!-- Parse Push Notifications -->
         <service android:name="com.parse.PushService" />
-
         <receiver android:name="com.parse.ParseBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

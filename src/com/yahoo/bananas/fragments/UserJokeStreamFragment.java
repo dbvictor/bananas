@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.yahoo.bananas.models.Tweet;
-import com.yahoo.bananas.models.User;
+import com.yahoo.bananas.models.TweetUser;
 
 public class UserJokeStreamFragment extends JokesListFragment {
 	private static final String DEBUG = "B_DEBUG";
@@ -17,14 +17,14 @@ public class UserJokeStreamFragment extends JokesListFragment {
 
 	/** [For static loading] The activity can tell the jokestream to show a custom user instead
 	 *  of defaulting to the current user.  Set to NULL (default) for current user. */
-	public void setCustomUser(User user){ // Needed if we do the static loading alternative.
+	public void setCustomUser(TweetUser user){ // Needed if we do the static loading alternative.
 		if(user==null) optCustomUid  = -1;
 		else           optCustomUid = user.getUid();
 	}
 	
 	/** [For dynamic loading] The activity can pass a custom user instead of defaulting to the current user.
 	 *  Set to NULL (default) for current user. */
-    public static UserJokeStreamFragment newInstance(User user) {
+    public static UserJokeStreamFragment newInstance(TweetUser user) {
     	UserJokeStreamFragment f = new UserJokeStreamFragment();
         Bundle args = new Bundle();
         if(user!=null) args.putLong(UID, user.getUid());

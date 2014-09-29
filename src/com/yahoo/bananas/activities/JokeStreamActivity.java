@@ -16,7 +16,7 @@ import com.yahoo.bananas.fragments.NewestStreamFragment;
 import com.yahoo.bananas.fragments.PopularStreamFragment;
 import com.yahoo.bananas.listeners.FragmentTabListener;
 import com.yahoo.bananas.models.Tweet;
-import com.yahoo.bananas.models.User;
+import com.yahoo.bananas.models.TweetUser;
 import com.yahoo.bananas.util.InternetStatus;
 
 public class JokeStreamActivity extends FragmentActivity {
@@ -118,7 +118,7 @@ public class JokeStreamActivity extends FragmentActivity {
 	
 	public void onProfileClick(View v){
 		// Get the user that they clicked on.
-		User u = (User) v.getTag(); // We stored the user object in JokeArrayAdapter when the image is created.
+		TweetUser u = (TweetUser) v.getTag(); // We stored the user object in JokeArrayAdapter when the image is created.
 		if(u==null){ // Error if not there.
 			Toast.makeText(this, "Image Missing User Info!", Toast.LENGTH_SHORT).show();
 			return;

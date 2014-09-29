@@ -1,6 +1,9 @@
 package com.yahoo.bananas.models;
 
 import java.io.Serializable;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,81 +11,119 @@ import org.json.JSONObject;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
+import com.parse.ParseObject;
+import com.yahoo.bananas.util.Util;
 
 @Table(name = "Users")
 public class User extends Model implements Serializable{
-	private static final long serialVersionUID = -7608183936172537118L;
+	// Constants
+	private static final long serialVersionUID = 8667788773549950232L;
+	private static final String TABLE         = "Users";
+	private static final String COL_OBJECTID  = "objectId";  // (automatic) generated row ID.
+	private static final String COL_CREATEDAT = "createdAt"; // (automatic) timestamp row created
+	private static final String COL_USERNAME  = "username";  // (automatic) anonymous username.
+	private static final String COL_REALNAME  = "realName";  // User's real name
+	private static final String COL_EMAIL     = "email";     // (built-in) user's email.
+	private static final String COL_IMAGEURL  = "imageUrl";  // Profile image URL
+
+	// Member Variables
+	@Column(name = COL_OBJECTID, unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
+	private String objectId;
 	
-	// TODO: The following comment-out causes duplicate users.  But with it, it causes only 1 tweet per user to appear.
-	@Column(name = "uid") //, unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
-	private long   uid;
+	@Column(name = COL_CREATEDAT)
+	private Date createdAt;	
+
+	@Column(name = COL_USERNAME)
+	private String userName;
 	
-	@Column(name = "realName")
+	@Column(name = COL_REALNAME)
 	private String realName;
+
+	@Column(name = COL_EMAIL)
+	private String email;
 	
-	@Column(name = "screenName")
-	private String screenName;
-	
-	@Column(name = "imageUrl")
+	@Column(name = COL_IMAGEURL)
 	private String imageUrl;
 
-	@Column(name = "description")
-	private String description;	
-	
-	@Column(name = "followers_count")
-	private int followersCount;
-
-	@Column(name = "friends_count")
-	private int friendsCount;
-
-	public static User fromJSON(JSONObject json) {
-		User user = new User();
-		// Extract values from JSON to populate the member variables.
-		try{
-			user.uid            = json.getLong  ("id"  );
-			user.realName       = json.getString("name");
-			user.screenName     = json.getString("screen_name");
-			user.imageUrl       = json.getString("profile_image_url");
-			user.description    = json.getString("description");			
-			user.followersCount = json.getInt   ("followers_count");
-			user.friendsCount   = json.getInt   ("friends_count");
-		}catch(JSONException e){
-			e.printStackTrace();
-			return null;
-		}
-		return user;
+	// ----- ACCESS -----
+	/** (Automatically generated) row ID. */
+	public String getObjectId() {
+		return objectId;
+	}
+	public void setObjectId(String objectId) {
+		this.objectId = objectId;
 	}
 
-	public long getUid() {
-		return uid;
+	/** (Automatically generated) timestamp that the user was first created. */
+	public Date getCreatedAt() {
+		return createdAt;
 	}
 
+	/** (Automatically generated) user name. */ 
+	public String getUserName() {
+		return userName;
+	}
+
+	/** User's real name to display. */
 	public String getRealName() {
 		return realName;
 	}
-
-	public String getScreenName() {
-		return screenName;
+	public void setRealName(String realName) {
+		this.realName = realName;
 	}
 
+	/** User's email. */
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	/**
+	 * User's profile image URL to use.
+	 * @return Non-null image URL that you can display.
+	 *         Automatically generates a unique image URL if none set for this user,
+	 *         or else returns the user's customized image URL.
+	 */
 	public String getImageUrl() {
-		return imageUrl;
+		if(imageUrl==null) return Util.generateProfileImageUrl(objectId); // If none set, make one up that will be unique to this user.
+		else               return imageUrl; // Else use the one the user picked.
+	}
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 
-	public String getDescription() {
-		return description;
-	}	
-	
-	public int getFollowersCount() {
-		return followersCount;
-	}
-
-	public int getFriendsCount() {
-		return friendsCount;
-	}
-	
+	// ------ OTHER ------
+	@Override
 	public String toString(){
-		return realName+" ("+uid+")";
+		return "["+objectId+"] "+((realName!=null)? realName : userName);
 	}
+
+    // ----- PARSE -----
+    public ParseObject toParseObject(){
+    	ParseObject po = new ParseObject(TABLE);
+    	po.put(COL_OBJECTID  ,objectId );
+    	po.put(COL_CREATEDAT ,createdAt);
+    	po.put(COL_USERNAME  ,userName );
+    	po.put(COL_REALNAME  ,realName );
+    	po.put(COL_EMAIL     ,email    );
+    	po.put(COL_IMAGEURL  ,imageUrl );
+    	return po;
+    }
+	
+	// ----- PERSISTENCE -----
+    public static List<Joke> retrieveAll() {
+        // This is how you execute a query
+        List<Joke> result = new Select()
+          .all()
+          .from(User.class)
+          //.where("Category = ?", category.getId())
+          .orderBy("objectId DESC")
+          .execute();
+        if(result==null) result = new ArrayList<Joke>();
+        return result;
+    }
 
 }

@@ -14,8 +14,8 @@ import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.yahoo.bananas.JokesApplication;
 import com.yahoo.bananas.R;
-import com.yahoo.bananas.Bananas;
 import com.yahoo.bananas.fragments.UserJokeStreamFragment;
 import com.yahoo.bananas.models.TweetUser;
 import com.yahoo.bananas.util.InternetStatus;
@@ -60,7 +60,7 @@ public class ProfileActivity extends FragmentActivity {
 			loadProfileOffline();
 		}else{
 			final ProfileActivity parentThis = this;
-			Bananas.getRestClient().getMyProfile(new JsonHttpResponseHandler(){
+			JokesApplication.getTwitterClient().getMyProfile(new JsonHttpResponseHandler(){
 				@Override
 				public void onSuccess(JSONObject json) {
 					Log.d("json", "MyInfo JSON: "+json.toString());

@@ -18,16 +18,16 @@ import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.yahoo.bananas.Bananas;
+import com.yahoo.bananas.JokesApplication;
 import com.yahoo.bananas.R;
 import com.yahoo.bananas.adapters.JokeArrayAdapter;
-import com.yahoo.bananas.clients.OldClient;
+import com.yahoo.bananas.clients.TwitterClient;
 import com.yahoo.bananas.listeners.EndlessScrollListener;
 import com.yahoo.bananas.models.Tweet;
 import com.yahoo.bananas.util.InternetStatus;
 
 abstract public class JokesListFragment extends Fragment {
-	private OldClient      client;
+	private TwitterClient      client;
 	private ArrayList<Tweet>   jokes;
 	private JokeArrayAdapter  aJokes;
 	private ListView		   lvJokes;
@@ -40,7 +40,7 @@ abstract public class JokesListFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// Non-view initialization
-		client         = Bananas.getRestClient();
+		client         = JokesApplication.getTwitterClient();
 		internetStatus = new InternetStatus(getActivity());
 		lastItemId     = 0; // Always start from 0.
 		jokes         = new ArrayList<Tweet>();
@@ -115,7 +115,7 @@ abstract public class JokesListFragment extends Fragment {
 	}
 	
 	/** Subclasses can get the JokeClient instance. */
-	protected OldClient getClient(){
+	protected TwitterClient getClient(){
 		return client;
 	}
 	

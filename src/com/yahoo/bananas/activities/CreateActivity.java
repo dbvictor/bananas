@@ -14,13 +14,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.yahoo.bananas.Bananas;
+import com.yahoo.bananas.JokesApplication;
 import com.yahoo.bananas.R;
-import com.yahoo.bananas.clients.OldClient;
+import com.yahoo.bananas.clients.TwitterClient;
 import com.yahoo.bananas.models.Tweet;
 
 public class CreateActivity extends Activity {
-	private OldClient client;
+	private TwitterClient client;
 	private Tweet joke;
 	// Remembered Views
 	private EditText etBody;
@@ -32,7 +32,7 @@ public class CreateActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create);
-		client = Bananas.getRestClient();
+		client = JokesApplication.getTwitterClient();
 		// Remember views for easy access later.
 		etBody           = (EditText) findViewById(R.id.etNewJoke      );
 		tvCharsRemaining = (TextView) findViewById(R.id.tvCharsRemaining);

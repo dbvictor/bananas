@@ -21,9 +21,9 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.yahoo.bananas.Bananas;
 import com.yahoo.bananas.R;
 import com.yahoo.bananas.adapters.JokeArrayAdapter;
+import com.yahoo.bananas.clients.JokeClient;
 import com.yahoo.bananas.listeners.EndlessScrollListener;
 import com.yahoo.bananas.models.Tweet;
-import com.yahoo.bananas.networking.JokeClient;
 import com.yahoo.bananas.util.InternetStatus;
 
 abstract public class JokesListFragment extends Fragment {
@@ -52,10 +52,10 @@ abstract public class JokesListFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// Inflate Layout
-		View v = inflater.inflate(R.layout.fragment_tweets_list, container, false); // false = don't attach to container yet.
+		View v = inflater.inflate(R.layout.fragment_jokes_list, container, false); // false = don't attach to container yet.
 		// Assign view preferences
 		setupSwipeContainer(v);
-		lvJokes = (ListView) v.findViewById(R.id.lvTweets);
+		lvJokes = (ListView) v.findViewById(R.id.lvJokes);
 		lvJokes.setAdapter(aJokes);
 		setupEndlessScroll();
 		// Return layout view

@@ -33,12 +33,12 @@ public final class R {
         public static final int actionProfile=0x7f080013;
         public static final int action_settings=0x7f080011;
         public static final int bSubmit=0x7f080001;
-        public static final int etNewTweet=0x7f080000;
+        public static final int etNewJoke=0x7f080000;
         public static final int flContainer=0x7f080003;
-        public static final int flProfileTimelineContainer=0x7f08000b;
+        public static final int flProfileJokeStreamContainer=0x7f08000b;
         public static final int ivProfileImage=0x7f080005;
         public static final int llCounts=0x7f080008;
-        public static final int lvTweets=0x7f08000d;
+        public static final int lvJokes=0x7f08000d;
         public static final int rlHeader=0x7f080004;
         public static final int swipeContainer=0x7f08000c;
         public static final int tvBody=0x7f080010;
@@ -52,11 +52,12 @@ public final class R {
     }
     public static final class layout {
         public static final int activity_create=0x7f030000;
-        public static final int activity_joke_stream=0x7f030001;
-        public static final int activity_login=0x7f030002;
-        public static final int activity_profile=0x7f030003;
-        public static final int fragment_tweets_list=0x7f030004;
-        public static final int tweet_item=0x7f030005;
+        public static final int activity_detail=0x7f030001;
+        public static final int activity_joke_stream=0x7f030002;
+        public static final int activity_login=0x7f030003;
+        public static final int activity_profile=0x7f030004;
+        public static final int fragment_jokes_list=0x7f030005;
+        public static final int joke_item=0x7f030006;
     }
     public static final class menu {
         public static final int login=0x7f070000;
@@ -71,9 +72,10 @@ public final class R {
         public static final int app_name=0x7f050000;
         public static final int hello_world=0x7f050001;
         public static final int login_label=0x7f050007;
-        public static final int new_tweet_button=0x7f05000c;
-        public static final int new_tweet_hint=0x7f05000b;
+        public static final int new_joke_button=0x7f05000c;
+        public static final int new_joke_hint=0x7f05000b;
         public static final int title_activity_create=0x7f050009;
+        public static final int title_activity_detail=0x7f05000d;
         public static final int title_activity_photos=0x7f050006;
         public static final int title_activity_profile=0x7f05000a;
         public static final int title_activity_timeline=0x7f050008;

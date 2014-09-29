@@ -30,9 +30,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/tvRealName"
+        android:maxLines="1"
         android:paddingLeft="7dp"
         android:paddingRight="0dp"
-        android:maxLines="1"
         android:text="\@Username" />
 
     <TextView
@@ -53,9 +53,10 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tvRealName"
         android:layout_below="@+id/tvRealName"
+        android:autoLink="all"
+        android:onClick="onJokeClick"
         android:paddingLeft="5dp"
         android:paddingRight="0dp"
-        android:autoLink="all"
-        android:text="Tweet body..." />
+        android:text="Joke body..." />
 
 </RelativeLayout>

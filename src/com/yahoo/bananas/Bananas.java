@@ -6,7 +6,7 @@ import android.util.Log;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.yahoo.bananas.networking.JokeClient;
+import com.yahoo.bananas.clients.JokeClient;
 
 /*
  * This is the Android application itself and is used to configure various settings

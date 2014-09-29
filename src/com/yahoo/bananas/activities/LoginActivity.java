@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 import com.codepath.oauth.OAuthLoginActivity;
 import com.yahoo.bananas.R;
-import com.yahoo.bananas.networking.JokeClient;
+import com.yahoo.bananas.clients.JokeClient;
 
 public class LoginActivity extends OAuthLoginActivity<JokeClient> {
 

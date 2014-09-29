@@ -26,7 +26,7 @@ public class JokeArrayAdapter extends ArrayAdapter<Tweet> {
 		View v;
 		if (convertView == null) {
 			LayoutInflater inflator = LayoutInflater.from(getContext());
-			v = inflator.inflate(R.layout.tweet_item, parent, false);
+			v = inflator.inflate(R.layout.joke_item, parent, false);
 		} else {
 			v = convertView;
 		}
@@ -45,6 +45,7 @@ public class JokeArrayAdapter extends ArrayAdapter<Tweet> {
 		tvUserName.setText("@"+joke.getUser().getScreenName());
 		tvTime.setText("("+Util.getRelativeTimeAgo(joke.getCreatedAt())+")");
 		tvBody.setText(joke.getBody());
+//		tvBody.setTag(joke);
 		// Store the user into the image so that when they click on it, we can know which user to show profile.
 		ivProfileImage.setTag(joke.getUser());
 		return v;

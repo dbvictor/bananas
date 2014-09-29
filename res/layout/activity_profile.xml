@@ -72,23 +72,9 @@
         
     </LinearLayout>
     
-    <!-- Statically loaded fragment (cannot change dynamically) -->
-	<!-- Switched to dynamically loaded so we can use the constructor to pass arguments.
-    <fragment
-        android:id="@+id/fragmentUserTimeline"
-        android:name="com.dvictor.twitter.fragments.UserTimelineFragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/llCounts"
-        tools:layout="@layout/fragment_tweets_list" />
-    -->
-    
 	<!-- Frame Layout for Dynamically Loaded Fragments -->
     <FrameLayout
-        android:id="@+id/flProfileTimelineContainer"
+        android:id="@+id/flProfileJokeStreamContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

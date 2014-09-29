@@ -16,8 +16,8 @@ import android.widget.Toast;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.yahoo.bananas.Bananas;
 import com.yahoo.bananas.R;
+import com.yahoo.bananas.clients.JokeClient;
 import com.yahoo.bananas.models.Tweet;
-import com.yahoo.bananas.networking.JokeClient;
 
 public class CreateActivity extends Activity {
 	private JokeClient client;
@@ -34,7 +34,7 @@ public class CreateActivity extends Activity {
 		setContentView(R.layout.activity_create);
 		client = Bananas.getRestClient();
 		// Remember views for easy access later.
-		etBody           = (EditText) findViewById(R.id.etNewTweet      );
+		etBody           = (EditText) findViewById(R.id.etNewJoke      );
 		tvCharsRemaining = (TextView) findViewById(R.id.tvCharsRemaining);
 		tvCharsRemaining.setText(""+MAX_LENGTH+" remaining" );
 		// Setup events

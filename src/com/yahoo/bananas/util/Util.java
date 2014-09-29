@@ -7,6 +7,7 @@ import java.util.Locale;
 
 import android.text.format.DateUtils;
 
+
 public class Util {
 	// getRelativeTimeAgo("Mon Apr 01 21:16:23 +0000 2014");
 	public static String getRelativeTimeAgo(String rawJsonDate) {

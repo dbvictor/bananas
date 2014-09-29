@@ -127,6 +127,19 @@ public class JokeStreamActivity extends FragmentActivity {
 		i.putExtra("user", u);
 		startActivityForResult(i, ACTIVITY_PROFILE);
 	}
+	
+	public void onJokeClick(View v) {
+		Toast.makeText(this, "body clicked, getting tag", Toast.LENGTH_SHORT).show();
+//		Tweet j = (Tweet) v.getTag();
+//		if (j == null) {
+//			Toast.makeText(this, "missing joke data", Toast.LENGTH_SHORT).show();
+//			return;
+//		}
+//		Toast.makeText(this, "body clicked, going to Detail Activity", Toast.LENGTH_SHORT).show();
+//		Intent i = new Intent(this, DetailActivity.class);
+//		i.putExtra("joke", j);
+//		startActivity(i);
+	}
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){

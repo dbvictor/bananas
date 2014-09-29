@@ -1,4 +1,4 @@
-package com.yahoo.bananas.networking;
+package com.yahoo.bananas.clients;
 
 import org.scribe.builder.api.Api;
 import org.scribe.builder.api.TwitterApi;

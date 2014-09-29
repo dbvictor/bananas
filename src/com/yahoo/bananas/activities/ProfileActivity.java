@@ -35,7 +35,7 @@ public class ProfileActivity extends FragmentActivity {
 		// - Load dynamically so we can control the constructor to pass arguments to it.
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		UserJokeStreamFragment userTimeline = UserJokeStreamFragment.newInstance(optUser);
-		ft.replace(R.id.flProfileTimelineContainer, userTimeline);
+		ft.replace(R.id.flProfileJokeStreamContainer, userTimeline);
 		ft.commit();
 		// - Otherwise we could have statically loaded and set info by a custom method.
 		//STATIC ALTERNATIVE: UserJokeStreamFragment userTimeline = (UserJokeStreamFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentUserTimeline);

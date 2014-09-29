@@ -21,6 +21,7 @@ import com.yahoo.bananas.util.InternetStatus;
 
 public class JokeStreamActivity extends FragmentActivity {
 	public static final String JOKE = "joke";
+	public static final String TWEET = "tweet";
 	// Constants
 	private static final String FRAGMENTTAG_NEWEST     = "newest";
 	private static final String FRAGMENTTAG_POPULAR = "popular";

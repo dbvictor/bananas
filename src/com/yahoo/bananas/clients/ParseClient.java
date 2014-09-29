@@ -15,6 +15,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.yahoo.bananas.models.Category;
 import com.yahoo.bananas.models.Joke;
 import com.yahoo.bananas.models.User;
 
@@ -73,21 +74,26 @@ public class ParseClient {
 	 * @param optUserId
 	 *          (Optional) Limit jokes to only those created by a specific user.
 	 *          NULL: defaults all users.
+	 * @param optCategories
+	 *          (Optional) Limit jokes to specific categories.
+	 *          NULL: defaults to all categories.
+	 *          EMPTY: Empy list results in no categories (0 results)
 	 * @param handler
 	 *          Asynchronous callback mechanism for you to handle results. 
 	 * @param handler - callback handler to return results when they are ready.
 	 */
-	public void getJokesNewest(Date lastDate, String lastObjectId, String optUserId, final ParseClient.FindJokes handler){
-		getJokesNewest(lastDate,lastObjectId,optUserId,FindJokes.fromParseObjects(handler));
+	public void getJokesNewest(Date lastDate, String lastObjectId, String optUserId, List<Category> optCategories, final ParseClient.FindJokes handler){
+		getJokesNewest(lastDate,lastObjectId,optUserId,optCategories,FindJokes.fromParseObjects(handler));
 	}
 	/** Same as getJokesNewest(...,ParseClient.FindJokes), except returns the unconverted ParseObjects for you. */
-	public void getJokesNewest(Date lastDate, String lastObjectId, String optUserId, FindCallback<ParseObject> handler){
+	public void getJokesNewest(Date lastDate, String lastObjectId, String optUserId, List<Category> optCategories, FindCallback<ParseObject> handler){
 		ParseQuery<ParseObject> query = ParseQuery.getQuery(Joke.TABLE);
 		query.setLimit(PAGESIZE);
 		if(lastDate!=null) query.whereLessThan(Joke.COL.CREATEDAT, lastDate);
 		// We will have to consider that multiple can have the same date, but objectId isn't sequential
 		// - so we also sort secondarily by objectid.
 		if(lastObjectId!=null) query.whereLessThan(Joke.COL.OBJECTID , lastObjectId);
+		if(optCategories!=null) query.whereContainedIn(Joke.COL.CATEGORY, Category.toDbValue(optCategories));
 		query.orderByDescending(Joke.COL.CREATEDAT);
 		query.orderByDescending(Joke.COL.OBJECTID);
 		query.findInBackground(handler);
@@ -104,21 +110,26 @@ public class ParseClient {
 	 * @param optUserId
 	 *          (Optional) Limit jokes to only those created by a specific user.
 	 *          NULL: defaults all users.
+	 * @param optCategories
+	 *          (Optional) Limit jokes to specific categories.
+	 *          NULL: defaults to all categories.
+	 *          EMPTY: Empy list results in no categories (0 results)
 	 * @param handler
 	 *          Asynchronous callback mechanism for you to handle results. 
 	 * @param handler - callback handler to return results when they are ready.
 	 */
-	public void getJokesPopular(int lastVotesUp, String lastObjectId, final ParseClient.FindJokes handler){
-		getJokesPopular(lastVotesUp,lastObjectId,FindJokes.fromParseObjects(handler));
+	public void getJokesPopular(int lastVotesUp, String lastObjectId, List<Category> optCategories, final ParseClient.FindJokes handler){
+		getJokesPopular(lastVotesUp,lastObjectId,optCategories,FindJokes.fromParseObjects(handler));
 	}
 	/** Same as getJokesNewest(...,ParseClient.FindJokes), except returns the unconverted ParseObjects. */
-	public void getJokesPopular(int lastVotesUp, String lastObjectId, FindCallback<ParseObject> handler){
+	public void getJokesPopular(int lastVotesUp, String lastObjectId, List<Category> optCategories, FindCallback<ParseObject> handler){
 		ParseQuery<ParseObject> query = ParseQuery.getQuery(Joke.TABLE);
 		query.setLimit(PAGESIZE);
 		if(lastVotesUp>=0) query.whereLessThan(Joke.COL.VOTESUP, lastVotesUp);
 		// We will have to consider that multiple can have the same date, but objectId isn't sequential
 		// - so we also sort secondarily by objectid.
 		if(lastObjectId!=null) query.whereLessThan(Joke.COL.OBJECTID , lastObjectId);
+		if(optCategories!=null) query.whereContainedIn(Joke.COL.CATEGORY, Category.toDbValue(optCategories));
 		query.orderByDescending(Joke.COL.VOTESUP);
 		query.orderByDescending(Joke.COL.OBJECTID);
 		query.findInBackground(handler);

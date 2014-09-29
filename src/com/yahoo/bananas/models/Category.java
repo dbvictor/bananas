@@ -1,6 +1,9 @@
 package com.yahoo.bananas.models;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 public enum Category {
 	Animal(0,"Animal"),
@@ -17,6 +20,11 @@ public enum Category {
 	}
 	// Methods
 	public String  getDisplayName(){ return displayName; }
+	public static List<Integer> toDbValue(Collection<Category> enums){
+		List<Integer> categoryDbValues = new ArrayList<Integer>(enums.size());
+		for(Category c : enums) categoryDbValues.add(c.toDbValue());
+		return categoryDbValues;
+	}
 	public Integer toDbValue(){ return dbValue; }
 	/**
 	 * Get the enum from the DB value int.

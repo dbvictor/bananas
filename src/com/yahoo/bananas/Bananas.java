@@ -6,7 +6,7 @@ import android.util.Log;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.yahoo.bananas.clients.JokeClient;
+import com.yahoo.bananas.clients.OldClient;
 
 /*
  * This is the Android application itself and is used to configure various settings
@@ -34,7 +34,7 @@ public class Bananas extends com.activeandroid.app.Application {
 		ImageLoader.getInstance().init(config);
 	}
 
-	public static JokeClient getRestClient() {
-		return (JokeClient) JokeClient.getInstance(JokeClient.class, Bananas.context);
+	public static OldClient getRestClient() {
+		return (OldClient) OldClient.getInstance(OldClient.class, Bananas.context);
 	}
 }

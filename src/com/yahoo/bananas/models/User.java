@@ -120,7 +120,7 @@ public class User extends Model implements Serializable{
           .all()
           .from(User.class)
           //.where("Category = ?", category.getId())
-          .orderBy("objectId DESC")
+          .orderBy("createdAt DESC")
           .execute();
         if(result==null) result = new ArrayList<Joke>();
         return result;

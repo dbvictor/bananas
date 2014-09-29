@@ -16,11 +16,11 @@ import android.widget.Toast;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.yahoo.bananas.Bananas;
 import com.yahoo.bananas.R;
-import com.yahoo.bananas.clients.JokeClient;
+import com.yahoo.bananas.clients.OldClient;
 import com.yahoo.bananas.models.Tweet;
 
 public class CreateActivity extends Activity {
-	private JokeClient client;
+	private OldClient client;
 	private Tweet joke;
 	// Remembered Views
 	private EditText etBody;

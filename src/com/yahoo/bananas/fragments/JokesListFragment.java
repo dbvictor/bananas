@@ -21,13 +21,13 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.yahoo.bananas.Bananas;
 import com.yahoo.bananas.R;
 import com.yahoo.bananas.adapters.JokeArrayAdapter;
-import com.yahoo.bananas.clients.JokeClient;
+import com.yahoo.bananas.clients.OldClient;
 import com.yahoo.bananas.listeners.EndlessScrollListener;
 import com.yahoo.bananas.models.Tweet;
 import com.yahoo.bananas.util.InternetStatus;
 
 abstract public class JokesListFragment extends Fragment {
-	private JokeClient      client;
+	private OldClient      client;
 	private ArrayList<Tweet>   jokes;
 	private JokeArrayAdapter  aJokes;
 	private ListView		   lvJokes;
@@ -115,7 +115,7 @@ abstract public class JokesListFragment extends Fragment {
 	}
 	
 	/** Subclasses can get the JokeClient instance. */
-	protected JokeClient getClient(){
+	protected OldClient getClient(){
 		return client;
 	}
 	

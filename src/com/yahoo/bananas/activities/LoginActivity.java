@@ -8,9 +8,9 @@ import android.widget.Toast;
 
 import com.codepath.oauth.OAuthLoginActivity;
 import com.yahoo.bananas.R;
-import com.yahoo.bananas.clients.JokeClient;
+import com.yahoo.bananas.clients.OldClient;
 
-public class LoginActivity extends OAuthLoginActivity<JokeClient> {
+public class LoginActivity extends OAuthLoginActivity<OldClient> {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

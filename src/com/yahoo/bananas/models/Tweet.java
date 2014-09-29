@@ -31,7 +31,7 @@ public class Tweet extends Model implements Serializable {
 	private String createdAt;
 	
 	@Column(name = "user", onUpdate = ForeignKeyAction.CASCADE, onDelete = ForeignKeyAction.CASCADE)
-	private User   user;
+	private TweetUser   user;
 	
 	public static Tweet fromJSON(JSONObject json){
 		Tweet tweet = new Tweet();
@@ -40,7 +40,7 @@ public class Tweet extends Model implements Serializable {
 			tweet.uid       = json.getLong  ("id"  );
 			tweet.body      = json.getString("text");
 			tweet.createdAt = json.getString("created_at");
-			tweet.user      = User.fromJSON(json.getJSONObject("user"));
+			tweet.user      = TweetUser.fromJSON(json.getJSONObject("user"));
 		}catch(JSONException e){
 			e.printStackTrace();
 			return null;
@@ -76,7 +76,7 @@ public class Tweet extends Model implements Serializable {
 		return createdAt;
 	}
 
-	public User getUser() {
+	public TweetUser getUser() {
 		return user;
 	}
 	

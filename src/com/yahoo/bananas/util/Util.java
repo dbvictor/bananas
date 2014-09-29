@@ -27,7 +27,7 @@ public class Util {
 		return relativeDate;
 	}
 	/** Get a URL to a profile image generated from the hash value obtained from userId using gravatar. */
-	public static String getProfileUrl(final String userId) {
+	public static String generateProfileImageUrl(final String userId) {
 		String hex = "";
 		try {
 			final MessageDigest digest = MessageDigest.getInstance("MD5");

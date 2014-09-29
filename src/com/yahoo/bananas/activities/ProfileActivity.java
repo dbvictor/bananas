@@ -17,7 +17,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yahoo.bananas.R;
 import com.yahoo.bananas.Bananas;
 import com.yahoo.bananas.fragments.UserJokeStreamFragment;
-import com.yahoo.bananas.models.User;
+import com.yahoo.bananas.models.TweetUser;
 import com.yahoo.bananas.util.InternetStatus;
 
 public class ProfileActivity extends FragmentActivity {
@@ -29,7 +29,7 @@ public class ProfileActivity extends FragmentActivity {
 		setContentView(R.layout.activity_profile);
 		internetStatus = new InternetStatus(this);
 		// Detect if they want us to load a specific user.
-		User optUser = (User) getIntent().getSerializableExtra("user"); // NULL if no other user.
+		TweetUser optUser = (TweetUser) getIntent().getSerializableExtra("user"); // NULL if no other user.
 		loadProfile(optUser);
 		// Tell the fragment to load a specific user too.
 		// - Load dynamically so we can control the constructor to pass arguments to it.
@@ -49,7 +49,7 @@ public class ProfileActivity extends FragmentActivity {
 	 *          (Optional) Specofic user profile to load if not the current user.
 	 *          NULL: loads current user by default if none specified.
 	 */
-	private void loadProfile(User optUser){
+	private void loadProfile(TweetUser optUser){
 		// If we already have the user object, just display it.
 		if(optUser!=null){
 			// note: we don't need a network check because (1) we already have it, and (2) image url is probably cached if they already displayed it once.
@@ -64,7 +64,7 @@ public class ProfileActivity extends FragmentActivity {
 				@Override
 				public void onSuccess(JSONObject json) {
 					Log.d("json", "MyInfo JSON: "+json.toString());
-					User u = User.fromJSON(json);
+					TweetUser u = TweetUser.fromJSON(json);
 					populateProfileHeader(u);
 				}
 				@Override
@@ -83,7 +83,7 @@ public class ProfileActivity extends FragmentActivity {
 		return;		
 	}
 	
-	private void populateProfileHeader(User u){
+	private void populateProfileHeader(TweetUser u){
 		// Set action bar to this user.
 		getActionBar().setTitle("@"+u.getScreenName());
 		// Get access to our views.

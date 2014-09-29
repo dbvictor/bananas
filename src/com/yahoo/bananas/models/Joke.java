@@ -1,7 +1,7 @@
 package com.yahoo.bananas.models;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,6 +116,24 @@ public class Joke extends Model implements Serializable {
     	po.put(COL.VOTESDOWN ,votesDown);
     	po.put(COL.SHARES    ,shares   );
     	return po;
+    }
+    
+    public static Joke fromParseObject(ParseObject po){
+    	Joke j = new Joke();
+    	j.objectId  = po.getString(COL.OBJECTID  );
+    	j.createdAt = po.getDate  (COL.CREATEDAT );
+    	j.createdBy = po.getString(COL.CREATEDBY );
+    	j.text      = po.getString(COL.TEXT      );
+    	j.votesUp   = po.getInt   (COL.VOTESUP   );
+    	j.votesDown = po.getInt   (COL.VOTESDOWN );
+    	j.shares    = po.getInt   (COL.SHARES    );
+    	return j;
+    }
+    
+    public static List<Joke> fromParseObjects(List<ParseObject> parseList){
+    	ArrayList<Joke> jokeList = new ArrayList<Joke>(parseList.size());
+    	for(ParseObject po : parseList) jokeList.add(Joke.fromParseObject(po));
+    	return jokeList;
     }
 	
 	// ----- PERSISTENCE -----

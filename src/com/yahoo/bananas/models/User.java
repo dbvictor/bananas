@@ -1,12 +1,9 @@
 package com.yahoo.bananas.models;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
@@ -113,6 +110,23 @@ public class User extends Model implements Serializable{
     	po.put(COL.EMAIL     ,email    );
     	po.put(COL.IMAGEURL  ,imageUrl );
     	return po;
+    }
+    
+    public static User fromParseObject(ParseObject po){
+    	User u = new User();
+    	u.objectId  = po.getString(COL.OBJECTID);
+    	u.createdAt = po.getDate  (COL.CREATEDAT );
+    	u.userName  = po.getString(COL.USERNAME  );
+    	u.realName  = po.getString(COL.REALNAME  );
+    	u.email     = po.getString(COL.EMAIL     );
+    	u.imageUrl  = po.getString(COL.IMAGEURL  );
+    	return u;
+    }
+
+    public static List<User> fromParseObjects(List<ParseObject> parseList){
+    	ArrayList<User> userList = new ArrayList<User>(parseList.size());
+    	for(ParseObject po : parseList) userList.add(User.fromParseObject(po));
+    	return userList;
     }
 	
 	// ----- PERSISTENCE -----

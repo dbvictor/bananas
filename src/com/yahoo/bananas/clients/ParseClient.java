@@ -1,6 +1,8 @@
 package com.yahoo.bananas.clients;
 
 import java.sql.Date;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import android.util.Log;
 
@@ -13,6 +15,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.yahoo.bananas.models.Joke;
+import com.yahoo.bananas.models.User;
 
 public class ParseClient {
 	// Constants
@@ -112,9 +115,50 @@ public class ParseClient {
 		query.findInBackground(handler);
 	}
 	
-    /** (Cached) get the user with the specified userid (user object id). */
-    private void getUser(String userObjectId){
-    	// TODO
+    /**
+     * (Cached) (Synchronous) Get the user with the specified userid (user object id).
+     * Use this for most operation when you can most efficiently load from the cache.
+     * @return NULL if not found, else non-null user with this object id.
+     */
+    public User getUser(String userObjectId){
+    	// First look in cache
+    	User u = CACHE_USERS.get(userObjectId);
+    	// If not in cache, retrieve & store in cache
+    	if(u==null){
+    		u = getUserLatest(userObjectId);
+    		CACHE_USERS.put(userObjectId, u);
+    	}
+    	return u;
+    }
+    /** Cache for users retrieved by user's objectId. */
+    private static final ConcurrentHashMap<String,User> CACHE_USERS = new ConcurrentHashMap<String,User>();
+
+    /**
+     * (Non-Cached) Get the latest user info with the specified userid (user object id) from the remote store.
+     * Use this when you really want to get only the latest info, such as to show a profile page updates.
+     * Use getUser() for most other operations, which loads from cache when already retrieved.
+     * @return NULL if not found, else non-null user with this object id.
+     */
+    private User getUserLatest(String userObjectId){
+		ParseQuery<ParseObject> query = ParseQuery.getQuery(User.TABLE);
+		query.setLimit(1);
+		query.whereEqualTo(User.COL.OBJECTID, userObjectId);
+		List<ParseObject> results = null;
+		try{              results = query.find();
+		}catch(ParseException e){ throw new RuntimeException(e.getMessage(),e); }
+		if(results.size()>0) return User.fromParseObject(results.get(0));
+		else                 return null;
+    }
+    /**
+     * (Non-Cached) Get the latest user info with the specified userid (user object id) from the remote store.
+     * Use this when you really want to get only the latest info, such as to show a profile page updates.
+     * Use getUser() for most other operations, which loads from cache when already retrieved.
+     */
+    private void getUserLatest(String userObjectId, FindCallback<ParseObject> handler){
+		ParseQuery<ParseObject> query = ParseQuery.getQuery(User.TABLE);
+		query.setLimit(1);
+		query.whereEqualTo(User.COL.OBJECTID, userObjectId);
+		query.findInBackground(handler);
     }
     
 }

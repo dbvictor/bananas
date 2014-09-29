@@ -67,28 +67,5 @@ public class ParseClient {
     private void getUser(String userObjectId){
     	// TODO
     }
-    
-    private void receiveMessage() {
-		ParseQuery<ParseObject> query = ParseQuery.getQuery("Messages");
-		query.setLimit(PAGESIZE);
-		query.orderByDescending("createdAt");
-		query.findInBackground(new FindCallback<ParseObject>() {
-			public void done(List<ParseObject> messages, ParseException e) {
-				if (e == null) {
-					final ArrayList<Message> newMessages = new ArrayList<Message>();					
-					for (int i = messages.size() - 1; i >= 0; i--) {
-						final Message message = new Message();
-						message.userId = messages.get(i).getString(USER_ID_KEY);
-						message.text = messages.get(i).getString("message");
-						newMessages.add(message);
-					}
-					addItemstoListView(newMessages);
-				} else {
-					Log.d("message", "Error: " + e.getMessage());
-				}
-			}
-		});
-	}
-    
 
 }

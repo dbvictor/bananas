@@ -37,7 +37,7 @@ abstract public class JokesListFragment extends Fragment {
 	private Date lastDate;
 	private String optUserId;
 	private List<Category> optCategories;
-	private int lastVotesUp = 0;
+	private int lastVotesUp = -1;
 
 	/** Non-view / non-UI related initialization. (fires before onCreateView()) */
 	@Override

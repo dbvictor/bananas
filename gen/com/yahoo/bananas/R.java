@@ -28,30 +28,32 @@ public final class R {
         public static final int ic_mentions=0x7f020008;
     }
     public static final class id {
-        public static final int actionCreate=0x7f080015;
-        public static final int actionInternetToggle=0x7f080017;
-        public static final int actionProfile=0x7f080016;
-        public static final int action_settings=0x7f080014;
+        public static final int actionCreate=0x7f080017;
+        public static final int actionInternetToggle=0x7f080019;
+        public static final int actionProfile=0x7f080018;
+        public static final int action_settings=0x7f080016;
+        public static final int bLogin=0x7f080004;
+        public static final int bSkip=0x7f080005;
         public static final int bSubmit=0x7f080001;
         public static final int etNewJoke=0x7f080000;
         public static final int flContainer=0x7f080003;
-        public static final int flProfileJokeStreamContainer=0x7f08000b;
-        public static final int ivProfileImage=0x7f080005;
-        public static final int llCounts=0x7f080008;
-        public static final int lvJokes=0x7f08000d;
-        public static final int rlHeader=0x7f080004;
-        public static final int swipeContainer=0x7f08000c;
-        public static final int tvBody=0x7f080010;
+        public static final int flProfileJokeStreamContainer=0x7f08000d;
+        public static final int ivProfileImage=0x7f080007;
+        public static final int llCounts=0x7f08000a;
+        public static final int lvJokes=0x7f08000f;
+        public static final int rlHeader=0x7f080006;
+        public static final int swipeContainer=0x7f08000e;
+        public static final int tvBody=0x7f080012;
         public static final int tvCharsRemaining=0x7f080002;
-        public static final int tvDownVotes=0x7f080012;
-        public static final int tvFollowers=0x7f080009;
-        public static final int tvFollowing=0x7f08000a;
-        public static final int tvRealName=0x7f080006;
-        public static final int tvShares=0x7f080013;
-        public static final int tvTagline=0x7f080007;
-        public static final int tvTime=0x7f08000f;
-        public static final int tvUpVotes=0x7f080011;
-        public static final int tvUserName=0x7f08000e;
+        public static final int tvDownVotes=0x7f080014;
+        public static final int tvFollowers=0x7f08000b;
+        public static final int tvFollowing=0x7f08000c;
+        public static final int tvRealName=0x7f080008;
+        public static final int tvShares=0x7f080015;
+        public static final int tvTagline=0x7f080009;
+        public static final int tvTime=0x7f080011;
+        public static final int tvUpVotes=0x7f080013;
+        public static final int tvUserName=0x7f080010;
     }
     public static final class layout {
         public static final int activity_create=0x7f030000;
@@ -74,7 +76,8 @@ public final class R {
         public static final int action_settings=0x7f050005;
         public static final int app_name=0x7f050000;
         public static final int hello_world=0x7f050001;
-        public static final int login_label=0x7f050007;
+        public static final int login_skip_button=0x7f05000e;
+        public static final int login_twitter_button=0x7f050007;
         public static final int new_joke_button=0x7f05000c;
         public static final int new_joke_hint=0x7f05000b;
         public static final int title_activity_create=0x7f050009;

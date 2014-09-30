@@ -9,11 +9,23 @@
     tools:context=".LoginActivity" >
 
     <Button
+        android:id="@+id/bLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_margin="20dp"
         android:onClick="loginToRest"
-        android:text="@string/login_label" />
+        android:text="@string/login_twitter_button" />
+
+    <Button
+        android:id="@+id/bSkip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/bLogin"
+        android:layout_alignRight="@+id/bLogin"
+        android:layout_alignTop="@+id/bLogin"
+        android:layout_marginTop="43dp"
+        android:onClick="skipLogin"
+        android:text="@string/login_skip_button" />
 
 </RelativeLayout>

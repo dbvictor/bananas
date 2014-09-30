@@ -44,8 +44,7 @@ public class LoginActivity extends OAuthLoginActivity<TwitterClient> {
 		// Update User Info from Twitter Info
 		updateUserFromTwitterAsync();
 		// Move onto JokeStream
-		Intent i = new Intent(this, JokeStreamActivity.class);
-		startActivity(i);
+		startNextActivity();
 	}
 
 	// OAuth authentication flow failed, handle the error
@@ -125,5 +124,16 @@ public class LoginActivity extends OAuthLoginActivity<TwitterClient> {
 		});
 	}
 	
+	/** Skip logon, stay anonymous, go straight to using app anonymously. */
+	public void skipLogin(View view) {
+		startNextActivity();
+	}
+
+	/** Move onto next activity after logon. */
+	private void startNextActivity(){
+		// Move onto JokeStream
+		Intent i = new Intent(this, JokeStreamActivity.class);
+		startActivity(i);
+	}
 
 }

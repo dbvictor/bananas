@@ -1,11 +1,13 @@
 package com.yahoo.bananas.fragments;
 
+import java.sql.Date;
 import java.util.List;
 
 import android.os.Bundle;
 
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.yahoo.bananas.models.Tweet;
+import com.yahoo.bananas.clients.ParseClient.FindJokes;
+import com.yahoo.bananas.models.Category;
+import com.yahoo.bananas.models.Joke;
 
 public class PopularStreamFragment extends JokesListFragment {
 
@@ -13,17 +15,19 @@ public class PopularStreamFragment extends JokesListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	}
-	
-	/** Call the correct client API method for this fragment's tweets. */
+		
+	/** Query for the correct offline jokes for the particular fragment type. */
 	@Override
-	protected void getJokes(long lastItemId, AsyncHttpResponseHandler handler){
-		getClient().getPopularJokeStream(lastItemId, handler);		
+	protected List<Joke> getOfflineJokes(){
+		return Joke.retrieveAll();
 	}
-	
-	/** Query for the correct offline tweets for the particular fragment type. */
+
 	@Override
-	protected List<Tweet> getOfflineJokes(){
-		return Tweet.retrieveAll();
+	protected void getJokes(Date lastDate, String lastObjectId,
+			String optUserId, List<Category> optCategories, FindJokes handler) {
+		// TODO Auto-generated method stub
+		
 	}
+
 
 }

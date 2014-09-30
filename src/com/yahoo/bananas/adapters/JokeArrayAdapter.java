@@ -10,19 +10,18 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yahoo.bananas.R;
-import com.yahoo.bananas.models.Tweet;
+import com.yahoo.bananas.models.Joke;
 import com.yahoo.bananas.util.Util;
 
-public class JokeArrayAdapter extends ArrayAdapter<Tweet> {
-	public JokeArrayAdapter(Context context, List<Tweet> objects){
+public class JokeArrayAdapter extends ArrayAdapter<Joke> {
+	public JokeArrayAdapter(Context context, List<Joke> objects){
 		super(context, 0, objects);
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		Tweet joke = getItem(position);
+		Joke joke = getItem(position);
 		View v;
 		if (convertView == null) {
 			LayoutInflater inflator = LayoutInflater.from(getContext());
@@ -39,15 +38,16 @@ public class JokeArrayAdapter extends ArrayAdapter<Tweet> {
 		// Clear existing image (needed if it was reused)
 		ivProfileImage.setImageResource(android.R.color.transparent);
 		// Populate views with tweet data.
-		ImageLoader imageLoader = ImageLoader.getInstance();  // Universal loader we will use to get the image for us (asynchronously)
-		imageLoader.displayImage(joke.getUser().getImageUrl(), ivProfileImage); // Asynchronously load image using universal loader.
-		tvRealName.setText(joke.getUser().getRealName());
-		tvUserName.setText("@"+joke.getUser().getScreenName());
-		tvTime.setText("("+Util.getRelativeTimeAgo(joke.getCreatedAt())+")");
-		tvBody.setText(joke.getBody());
+//		ImageLoader imageLoader = ImageLoader.getInstance();  // Universal loader we will use to get the image for us (asynchronously)
+//		imageLoader.displayImage(joke.getUser().getImageUrl(), ivProfileImage); // Asynchronously load image using universal loader.
+//		tvRealName.setText(joke.getUser().getRealName());
+//		tvUserName.setText("@"+joke.getUser().getScreenName());
+		if (joke.getCreatedAt() != null)
+			tvTime.setText("("+Util.getRelativeTimeAgo(joke.getCreatedAt().toString())+")");
+		tvBody.setText(joke.getText());
 //		tvBody.setTag(joke);
 		// Store the user into the image so that when they click on it, we can know which user to show profile.
-		ivProfileImage.setTag(joke.getUser());
+//		ivProfileImage.setTag(joke.getUser());
 		return v;
 	}
 	

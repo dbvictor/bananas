@@ -1,9 +1,8 @@
 package com.yahoo.bananas.fragments;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.json.JSONArray;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,36 +15,39 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.JsonHttpResponseHandler;
+import com.parse.ParseException;
 import com.yahoo.bananas.JokesApplication;
 import com.yahoo.bananas.R;
 import com.yahoo.bananas.adapters.JokeArrayAdapter;
-import com.yahoo.bananas.clients.TwitterClient;
+import com.yahoo.bananas.clients.ParseClient;
+import com.yahoo.bananas.clients.ParseClient.FindJokes;
 import com.yahoo.bananas.listeners.EndlessScrollListener;
-import com.yahoo.bananas.models.Tweet;
+import com.yahoo.bananas.models.Category;
+import com.yahoo.bananas.models.Joke;
 import com.yahoo.bananas.util.InternetStatus;
 
 abstract public class JokesListFragment extends Fragment {
-	private TwitterClient      client;
-	private ArrayList<Tweet>   jokes;
+	private ParseClient			parseClient;
+	private ArrayList<Joke>   jokes;
 	private JokeArrayAdapter  aJokes;
 	private ListView		   lvJokes;
-	private long               lastItemId;
+	private String			lastObjectId;
 	private InternetStatus     internetStatus;
-	private SwipeRefreshLayout swipeContainer;	
+	private SwipeRefreshLayout swipeContainer;
+	private Date lastDate;
+	private String optUserId;
+	private List<Category> optCategories;
 
 	/** Non-view / non-UI related initialization. (fires before onCreateView()) */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// Non-view initialization
-		client         = JokesApplication.getTwitterClient();
+		parseClient = JokesApplication.getParseClient();
 		internetStatus = new InternetStatus(getActivity());
-		lastItemId     = 0; // Always start from 0.
-		jokes         = new ArrayList<Tweet>();
+		lastObjectId     = null; // Always start from null.
+		jokes         = new ArrayList<Joke>();
 		aJokes        = new JokeArrayAdapter(getActivity(), jokes); // WARNING: RARELY USE getActivity().  Other usage is likely improper.
-		populateJokeStream(true);
 	}
 	
 	/** View/UI-related initialization. */
@@ -58,6 +60,7 @@ abstract public class JokesListFragment extends Fragment {
 		lvJokes = (ListView) v.findViewById(R.id.lvJokes);
 		lvJokes.setAdapter(aJokes);
 		setupEndlessScroll();
+		populateJokeStream(true);
 		// Return layout view
 		return v;
 	}
@@ -110,13 +113,12 @@ abstract public class JokesListFragment extends Fragment {
 	//NOT NEEDED:}
 	
 	/** Insert a new tweet at any position. */
-	public void insert(Tweet joke, int position){
+	public void insert(Joke joke, int position){
 		aJokes.insert(joke, position);		
 	}
 	
-	/** Subclasses can get the JokeClient instance. */
-	protected TwitterClient getClient(){
-		return client;
+	protected ParseClient getParseClient() {
+		return parseClient;
 	}
 	
     /** Populate the list with tweets. */
@@ -127,33 +129,29 @@ abstract public class JokesListFragment extends Fragment {
 			if(refresh) populateJokeStreamOffline(refresh);
 		}else{
 			final JokesListFragment parentThis = this;
-			if(refresh) lastItemId = 0; // If told to refresh from beginning, start again from 0.
-			getJokes(lastItemId, new JsonHttpResponseHandler(){
+			if(refresh) lastObjectId = null; // If told to refresh from beginning, start again from 0.
+			getJokes(lastDate, lastObjectId, optUserId, optCategories, new FindJokes() {
 				@Override
-				public void onSuccess(JSONArray json) {
-					Log.d("json", parentThis.getClass().getSimpleName()+" JSON: "+json.toString());
-					if(refresh) aJokes.clear(); // If told to refresh from beginning, clear existing results
-					ArrayList<Tweet> retrievedJokes = Tweet.fromJSON(json);
-					aJokes.addAll(retrievedJokes);
-					lastItemId = jokes.get(jokes.size()-1).getUid(); // record the last item ID we've seen now, so we know where to continue off from next time.
-	                // Now we call setRefreshing(false) to signal refresh has finished
-	                swipeContainer.setRefreshing(false);
-	                // Persist results we found so far.  Save all tweets we ever find.  The specific fragment type only matters later when we query for specific kinds to load offline.
-	                try{
-	                	for(Tweet j : retrievedJokes){
-	                		j.getUser().save();
-	                		j.save();
-	                	}
-						Log.d("persist", "Persisted Timeline Results");
-	                }catch(Exception e){
+				public void done(List<Joke> results, ParseException e) {
+					if (e != null) {
 						Log.e("error", e.toString());
-						Toast.makeText(parentThis.getActivity(), "PERSIST FAILED!", Toast.LENGTH_SHORT).show();
-	                }
-				}
-				@Override
-				public void onFailure(Throwable e, String s) {
-					Log.e("error", e.toString());
-					Log.e("error", s.toString());
+					} else if (results != null){
+						if (refresh) {
+							aJokes.clear();
+							aJokes.addAll(results);
+							lastObjectId = jokes != null && ! jokes.isEmpty() ? jokes.get(jokes.size()-1).getObjectId() : null;
+							swipeContainer.setRefreshing(false);
+							try {
+								for (Joke j : results) {
+									j.save();
+								}
+								Log.d("persist", "Persisted Timeline Results");
+							} catch(Exception ex){
+								Log.e("error", ex.toString());
+								Toast.makeText(parentThis.getActivity(), "PERSIST FAILED!", Toast.LENGTH_SHORT).show();
+			                }
+						}
+					}					
 				}
 			});
 		}
@@ -161,17 +159,17 @@ abstract public class JokesListFragment extends Fragment {
 	
 	/** Populate the timeline based on offline content. */
 	private void populateJokeStreamOffline(final boolean refresh){
-		List<Tweet> retrievedJokes = getOfflineJokes();
+		List<Joke> retrievedJokes = getOfflineJokes();
 		aJokes.addAll(retrievedJokes);
-		lastItemId = jokes.get(jokes.size()-1).getUid(); // record the last item ID we've seen now, so we know where to continue off from next time.
+		lastObjectId = jokes.get(jokes.size()-1).getObjectId(); // record the last item ID we've seen now, so we know where to continue off from next time.
 		Toast.makeText(getActivity(), "Offline Content: "+retrievedJokes.size(), Toast.LENGTH_SHORT).show();
         swipeContainer.setRefreshing(false);
 	}
-
-	/** Call the correct client API method for this fragment's tweets. */
-	abstract protected void getJokes(long lastItemId, AsyncHttpResponseHandler handler);
 	
 	/** Query for the correct offline tweets for the particular fragment type. */
-	abstract protected List<Tweet> getOfflineJokes();
+	abstract protected List<Joke> getOfflineJokes();
+
+	abstract protected void getJokes(Date lastDate, String lastObjectId,
+			String optUserId, List<Category> optCategories, FindJokes handler);
 	
 }

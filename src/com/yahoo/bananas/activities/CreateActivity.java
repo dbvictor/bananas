@@ -1,7 +1,5 @@
 package com.yahoo.bananas.activities;
 
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,19 +11,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.parse.ParseException;
 import com.parse.SaveCallback;
 import com.yahoo.bananas.JokesApplication;
 import com.yahoo.bananas.R;
 import com.yahoo.bananas.clients.ParseClient;
-import com.yahoo.bananas.clients.TwitterClient;
 import com.yahoo.bananas.models.Joke;
 import com.yahoo.bananas.models.Tweet;
 
 public class CreateActivity extends Activity {
-	private ParseClient client;
-	private TwitterClient twitterClient;
+	private ParseClient parseClient;
+//	private TwitterClient twitterClient;
 	private Tweet joke;
 	// Remembered Views
 	private EditText etBody;
@@ -37,7 +33,8 @@ public class CreateActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create);
-		twitterClient = JokesApplication.getTwitterClient();
+//		twitterClient = JokesApplication.getTwitterClient();
+		parseClient = JokesApplication.getParseClient();
 		// Remember views for easy access later.
 		etBody           = (EditText) findViewById(R.id.etNewJoke      );
 		tvCharsRemaining = (TextView) findViewById(R.id.tvCharsRemaining);
@@ -72,7 +69,7 @@ public class CreateActivity extends Activity {
 			joke.setText(etBodyText);
 			// 1. Send text to Joke Service
 			final CreateActivity parentThis = this;
-			client.create(joke, new SaveCallback() {
+			parseClient.create(joke, new SaveCallback() {
 				
 				@Override
 				public void done(ParseException e) {
@@ -92,26 +89,26 @@ public class CreateActivity extends Activity {
 			});
 			
 			
-			twitterClient.createJoke(etBodyText, new JsonHttpResponseHandler(){
-				@Override
-				public void onSuccess(JSONObject json) {
-					Log.d("json", "Created JSON: "+json.toString());
-					Tweet tweet = Tweet.fromJSON(json);
-					Toast.makeText(parentThis, "Posted", Toast.LENGTH_SHORT).show();
-					// 2. Return result to timeline activity
-					Intent i = new Intent();
-					i.putExtra(JokeStreamActivity.TWEET, tweet);
-					setResult(RESULT_OK, i);
-					finish();
-				}
-				@Override
-				public void onFailure(Throwable e, String s) {
-					Log.d("debug", e.toString());
-					Log.d("debug", s.toString());
-					Toast.makeText(parentThis, "FAILED!", Toast.LENGTH_SHORT).show();
-					// Don't return to timeline.  Allow them a chance to retry.  They can always hit the back button.
-				}
-			});
+//			twitterClient.createJoke(etBodyText, new JsonHttpResponseHandler(){
+//				@Override
+//				public void onSuccess(JSONObject json) {
+//					Log.d("json", "Created JSON: "+json.toString());
+//					Tweet tweet = Tweet.fromJSON(json);
+//					Toast.makeText(parentThis, "Posted", Toast.LENGTH_SHORT).show();
+//					// 2. Return result to timeline activity
+//					Intent i = new Intent();
+//					i.putExtra(JokeStreamActivity.TWEET, tweet);
+//					setResult(RESULT_OK, i);
+//					finish();
+//				}
+//				@Override
+//				public void onFailure(Throwable e, String s) {
+//					Log.d("debug", e.toString());
+//					Log.d("debug", s.toString());
+//					Toast.makeText(parentThis, "FAILED!", Toast.LENGTH_SHORT).show();
+//					// Don't return to timeline.  Allow them a chance to retry.  They can always hit the back button.
+//				}
+//			});
 			
 		}
 	}

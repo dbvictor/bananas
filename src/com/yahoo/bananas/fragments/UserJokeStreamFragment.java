@@ -1,12 +1,14 @@
 package com.yahoo.bananas.fragments;
 
+import java.sql.Date;
 import java.util.List;
 
 import android.os.Bundle;
 import android.util.Log;
 
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.yahoo.bananas.models.Tweet;
+import com.yahoo.bananas.clients.ParseClient.FindJokes;
+import com.yahoo.bananas.models.Category;
+import com.yahoo.bananas.models.Joke;
 import com.yahoo.bananas.models.TweetUser;
 
 public class UserJokeStreamFragment extends JokesListFragment {
@@ -40,17 +42,19 @@ public class UserJokeStreamFragment extends JokesListFragment {
 		super.onCreate(savedInstanceState);
 	}
 	
-	/** Call the correct client API method for this fragment's tweets. */
-	@Override
-	protected void getJokes(long lastItemId, AsyncHttpResponseHandler handler){
-		Log.e(DEBUG,"Get Tweets for: "+optCustomUid);
-		getClient().getUserJokeStream(optCustomUid, lastItemId, handler);		
-	}
 	
 	/** Query for the correct offline tweets for the particular fragment type. */
 	@Override
-	protected List<Tweet> getOfflineJokes(){
-		return Tweet.retrieveAll();
+	protected List<Joke> getOfflineJokes(){
+		return Joke.retrieveAll();
 	}
+
+	@Override
+	protected void getJokes(Date lastDate, String lastObjectId,
+			String optUserId, List<Category> optCategories, FindJokes handler) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

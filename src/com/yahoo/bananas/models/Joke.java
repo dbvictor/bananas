@@ -1,8 +1,8 @@
 package com.yahoo.bananas.models;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.activeandroid.Model;
@@ -44,13 +44,13 @@ public class Joke extends Model implements Serializable {
 	private String text;
 
 	@Column(name = COL.VOTESUP)
-	private int votesUp;
+	private int votesUp = 0;
 
 	@Column(name = COL.VOTESDOWN)
-	private int votesDown;
+	private int votesDown = 0;
 
 	@Column(name = COL.SHARES)
-	private int shares;
+	private int shares = 0;
 
 	// ----- ACCESS -----
 	/** (Automatically generated) row ID. */
@@ -120,11 +120,11 @@ public class Joke extends Model implements Serializable {
     // ----- PARSE -----
     public ParseObject toParseObject(){
     	ParseObject po = new ParseObject(TABLE);
-    	po.put(COL.OBJECTID  ,objectId       );
-    	po.put(COL.CREATEDAT ,createdAt      );
-    	po.put(COL.CREATEDBY ,createdBy      );
-    	po.put(COL.CATEGORY  ,categoryDbValue);
-    	po.put(COL.TEXT      ,text           );
+    	if (objectId != null ) po.put(COL.OBJECTID  ,objectId       );
+    	if (createdAt != null ) po.put(COL.CREATEDAT ,createdAt      );
+    	if (createdBy != null ) po.put(COL.CREATEDBY ,createdBy      );
+    	if (categoryDbValue != null ) po.put(COL.CATEGORY  ,categoryDbValue);
+    	if (text != null ) po.put(COL.TEXT      ,text           );
     	po.put(COL.VOTESUP   ,votesUp        );
     	po.put(COL.VOTESDOWN ,votesDown      );
     	po.put(COL.SHARES    ,shares         );

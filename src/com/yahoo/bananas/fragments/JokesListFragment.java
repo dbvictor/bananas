@@ -31,12 +31,13 @@ abstract public class JokesListFragment extends Fragment {
 	private ArrayList<Joke>   jokes;
 	private JokeArrayAdapter  aJokes;
 	private ListView		   lvJokes;
-	private String			lastObjectId;
 	private InternetStatus     internetStatus;
 	private SwipeRefreshLayout swipeContainer;
+	private String			lastObjectId;
 	private Date lastDate;
 	private String optUserId;
 	private List<Category> optCategories;
+	private int lastVotesUp = 0;
 
 	/** Non-view / non-UI related initialization. (fires before onCreateView()) */
 	@Override
@@ -130,7 +131,7 @@ abstract public class JokesListFragment extends Fragment {
 		}else{
 			final JokesListFragment parentThis = this;
 			if(refresh) lastObjectId = null; // If told to refresh from beginning, start again from 0.
-			getJokes(lastDate, lastObjectId, optUserId, optCategories, new FindJokes() {
+			getJokes(new FindJokes() {
 				@Override
 				public void done(List<Joke> results, ParseException e) {
 					if (e != null) {
@@ -169,7 +170,26 @@ abstract public class JokesListFragment extends Fragment {
 	/** Query for the correct offline tweets for the particular fragment type. */
 	abstract protected List<Joke> getOfflineJokes();
 
-	abstract protected void getJokes(Date lastDate, String lastObjectId,
-			String optUserId, List<Category> optCategories, FindJokes handler);
+	abstract protected void getJokes(FindJokes handler);
+
+	public String getLastObjectId() {
+		return lastObjectId;
+	}
+
+	public Date getLastDate() {
+		return lastDate;
+	}
+
+	public String getOptUserId() {
+		return optUserId;
+	}
+
+	public List<Category> getOptCategories() {
+		return optCategories;
+	}
+
+	public int getLastVotesUp() {
+		return lastVotesUp;
+	}
 	
 }

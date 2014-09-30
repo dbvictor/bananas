@@ -35,9 +35,12 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 		TextView  tvUserName     = (TextView ) v.findViewById(R.id.tvUserName);
 		TextView  tvTime         = (TextView ) v.findViewById(R.id.tvTime);
 		TextView  tvBody         = (TextView ) v.findViewById(R.id.tvBody);
+		TextView  tvUpVotes		 = (TextView ) v.findViewById(R.id.tvUpVotes);
+		TextView  tvDownVotes	 = (TextView ) v.findViewById(R.id.tvDownVotes);
+		TextView  tvShares		 = (TextView ) v.findViewById(R.id.tvShares);
 		// Clear existing image (needed if it was reused)
 		ivProfileImage.setImageResource(android.R.color.transparent);
-		// Populate views with tweet data.
+		// Populate views with joke data.
 //		ImageLoader imageLoader = ImageLoader.getInstance();  // Universal loader we will use to get the image for us (asynchronously)
 //		imageLoader.displayImage(joke.getUser().getImageUrl(), ivProfileImage); // Asynchronously load image using universal loader.
 //		tvRealName.setText(joke.getUser().getRealName());
@@ -45,6 +48,9 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 		if (joke.getCreatedAt() != null)
 			tvTime.setText("("+Util.getRelativeTimeAgo(joke.getCreatedAt().toString())+")");
 		tvBody.setText(joke.getText());
+		tvUpVotes.setText(joke.getVotesUp() + " Votes Up");
+		tvDownVotes.setText(joke.getVotesDown() + " Votes Down");
+		tvShares.setText(joke.getShares() + " Shares");
 //		tvBody.setTag(joke);
 		// Store the user into the image so that when they click on it, we can know which user to show profile.
 //		ivProfileImage.setTag(joke.getUser());

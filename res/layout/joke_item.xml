@@ -53,10 +53,41 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tvRealName"
         android:layout_below="@+id/tvRealName"
-        android:autoLink="all"
         android:onClick="onJokeClick"
         android:paddingLeft="5dp"
         android:paddingRight="0dp"
         android:text="Joke body..." />
+
+    <TextView
+        android:id="@+id/tvUpVotes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/ivProfileImage"
+        android:paddingRight="7dp"
+        android:paddingLeft="0dp"
+        android:text="3 Up Votes" />
+
+    <TextView
+        android:id="@+id/tvDownVotes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvUpVotes"
+        android:layout_alignBottom="@+id/tvUpVotes"
+        android:layout_toRightOf="@+id/tvUpVotes"
+        android:paddingLeft="7dp"
+        android:paddingRight="7dp"
+        android:text="0 Down Votes" />
+
+     <TextView
+         android:id="@+id/tvShares"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignBaseline="@+id/tvUpVotes"
+         android:layout_alignBottom="@+id/tvUpVotes"
+         android:layout_toRightOf="@+id/tvDownVotes"
+         android:paddingLeft="7dp"
+         android:paddingRight="7dp"
+         android:text="2 Shares" />
 
 </RelativeLayout>

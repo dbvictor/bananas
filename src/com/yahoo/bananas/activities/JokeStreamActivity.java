@@ -146,7 +146,6 @@ public class JokeStreamActivity extends FragmentActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
     	if(requestCode==ACTIVITY_CREATE){ // CreateActivity Result
     		if(resultCode == RESULT_OK){
-    			Toast.makeText(this, "Returned from CreateActivity, Result OK", Toast.LENGTH_SHORT).show();
     			Joke joke = (Joke) data.getSerializableExtra(JOKE);
     			if(joke!=null){
     				JokesListFragment fragmentHome = (JokesListFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENTTAG_NEWEST);

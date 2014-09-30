@@ -20,6 +20,7 @@ public class Joke extends Model implements Serializable {
 		public static final String OBJECTID  = "objectId";  // (automatic) generated row ID.
 		public static final String CREATEDAT = "createdAt"; // (automatic) timestamp row created
 		public static final String CREATEDBY = "createdBy"; // User table's objectId
+		public static final String CATEGORY  = "category";  // Joke category
 		public static final String TEXT      = "text";      // Joke text
 		public static final String VOTESUP   = "votesUp";   // User up votes / likes
 		public static final String VOTESDOWN = "votesDown"; // User down votes / dislikes
@@ -29,15 +30,18 @@ public class Joke extends Model implements Serializable {
 	// Member Variables
 	@Column(name = COL.OBJECTID, unique = true, onUniqueConflict = Column.ConflictAction.REPLACE) // avoid duplicates
 	private String objectId;
-	
-	@Column(name = COL.TEXT)
-	private String text;
 
 	@Column(name = COL.CREATEDAT)
 	private Date createdAt;
 	
 	@Column(name = COL.CREATEDBY) //We'll manage references manually -- , onUpdate = ForeignKeyAction.CASCADE, onDelete = ForeignKeyAction.CASCADE)
 	private String createdBy; // User table's objectId.
+	
+	@Column(name = COL.CATEGORY)
+	private Integer categoryDbValue;
+	
+	@Column(name = COL.TEXT)
+	private String text;
 
 	@Column(name = COL.VOTESUP)
 	private int votesUp;
@@ -54,14 +58,6 @@ public class Joke extends Model implements Serializable {
 		return objectId;
 	}
 
-	/** Joke text. */
-	public String getText() {
-		return text;
-	}
-	public void setText(String text) {
-		this.text = text;
-	}
-
 	/** (Automatically generated) row creation timestamp. */
 	public Date getCreatedAt() {
 		return createdAt;
@@ -75,6 +71,22 @@ public class Joke extends Model implements Serializable {
 		this.createdBy = createdByUserObjectId;
 	}
 
+	/** Joke category. */
+	public Category getCategory() {
+		return Category.fromDbValue(categoryDbValue);
+	}
+	public void setCategory(Category category) {
+		this.categoryDbValue = category.toDbValue();
+	}
+	
+	/** Joke text. */
+	public String getText() {
+		return text;
+	}
+	public void setText(String text) {
+		this.text = text;
+	}
+	
 	/** User up votes / likes. */
 	public int getVotesUp() {
 		return votesUp;
@@ -108,25 +120,27 @@ public class Joke extends Model implements Serializable {
     // ----- PARSE -----
     public ParseObject toParseObject(){
     	ParseObject po = new ParseObject(TABLE);
-    	po.put(COL.OBJECTID  ,objectId );
-    	po.put(COL.CREATEDAT ,createdAt);
-    	po.put(COL.CREATEDBY ,createdBy);
-    	po.put(COL.TEXT      ,text     );
-    	po.put(COL.VOTESUP   ,votesUp  );
-    	po.put(COL.VOTESDOWN ,votesDown);
-    	po.put(COL.SHARES    ,shares   );
+    	po.put(COL.OBJECTID  ,objectId       );
+    	po.put(COL.CREATEDAT ,createdAt      );
+    	po.put(COL.CREATEDBY ,createdBy      );
+    	po.put(COL.CATEGORY  ,categoryDbValue);
+    	po.put(COL.TEXT      ,text           );
+    	po.put(COL.VOTESUP   ,votesUp        );
+    	po.put(COL.VOTESDOWN ,votesDown      );
+    	po.put(COL.SHARES    ,shares         );
     	return po;
     }
     
     public static Joke fromParseObject(ParseObject po){
     	Joke j = new Joke();
-    	j.objectId  = po.getString(COL.OBJECTID  );
-    	j.createdAt = po.getDate  (COL.CREATEDAT );
-    	j.createdBy = po.getString(COL.CREATEDBY );
-    	j.text      = po.getString(COL.TEXT      );
-    	j.votesUp   = po.getInt   (COL.VOTESUP   );
-    	j.votesDown = po.getInt   (COL.VOTESDOWN );
-    	j.shares    = po.getInt   (COL.SHARES    );
+    	j.objectId        = po.getString(COL.OBJECTID  );
+    	j.createdAt       = po.getDate  (COL.CREATEDAT );
+    	j.createdBy       = po.getString(COL.CREATEDBY );
+    	j.categoryDbValue = po.getInt   (COL.CATEGORY  );
+    	j.text            = po.getString(COL.TEXT      );
+    	j.votesUp         = po.getInt   (COL.VOTESUP   );
+    	j.votesDown       = po.getInt   (COL.VOTESDOWN );
+    	j.shares          = po.getInt   (COL.SHARES    );
     	return j;
     }
     

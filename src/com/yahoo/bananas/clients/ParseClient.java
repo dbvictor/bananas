@@ -1,6 +1,7 @@
 package com.yahoo.bananas.clients;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -14,6 +15,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.yahoo.bananas.models.Category;
 import com.yahoo.bananas.models.Joke;
 import com.yahoo.bananas.models.User;
 
@@ -72,17 +74,26 @@ public class ParseClient {
 	 * @param optUserId
 	 *          (Optional) Limit jokes to only those created by a specific user.
 	 *          NULL: defaults all users.
+	 * @param optCategories
+	 *          (Optional) Limit jokes to specific categories.
+	 *          NULL: defaults to all categories.
+	 *          EMPTY: Empy list results in no categories (0 results)
 	 * @param handler
 	 *          Asynchronous callback mechanism for you to handle results. 
 	 * @param handler - callback handler to return results when they are ready.
 	 */
-	public void getJokesNewest(Date lastDate, String lastObjectId, String optUserId, FindCallback<ParseObject> handler){
+	public void getJokesNewest(Date lastDate, String lastObjectId, String optUserId, List<Category> optCategories, final ParseClient.FindJokes handler){
+		getJokesNewest(lastDate,lastObjectId,optUserId,optCategories,FindJokes.fromParseObjects(handler));
+	}
+	/** Same as getJokesNewest(...,ParseClient.FindJokes), except returns the unconverted ParseObjects for you. */
+	public void getJokesNewest(Date lastDate, String lastObjectId, String optUserId, List<Category> optCategories, FindCallback<ParseObject> handler){
 		ParseQuery<ParseObject> query = ParseQuery.getQuery(Joke.TABLE);
 		query.setLimit(PAGESIZE);
 		if(lastDate!=null) query.whereLessThan(Joke.COL.CREATEDAT, lastDate);
 		// We will have to consider that multiple can have the same date, but objectId isn't sequential
 		// - so we also sort secondarily by objectid.
 		if(lastObjectId!=null) query.whereLessThan(Joke.COL.OBJECTID , lastObjectId);
+		if(optCategories!=null) query.whereContainedIn(Joke.COL.CATEGORY, Category.toDbValue(optCategories));
 		query.orderByDescending(Joke.COL.CREATEDAT);
 		query.orderByDescending(Joke.COL.OBJECTID);
 		query.findInBackground(handler);
@@ -99,36 +110,53 @@ public class ParseClient {
 	 * @param optUserId
 	 *          (Optional) Limit jokes to only those created by a specific user.
 	 *          NULL: defaults all users.
+	 * @param optCategories
+	 *          (Optional) Limit jokes to specific categories.
+	 *          NULL: defaults to all categories.
+	 *          EMPTY: Empy list results in no categories (0 results)
 	 * @param handler
 	 *          Asynchronous callback mechanism for you to handle results. 
 	 * @param handler - callback handler to return results when they are ready.
 	 */
-	public void getJokesNewest(int lastVotesUp, String lastObjectId, FindCallback<ParseObject> handler){
+	public void getJokesPopular(int lastVotesUp, String lastObjectId, List<Category> optCategories, final ParseClient.FindJokes handler){
+		getJokesPopular(lastVotesUp,lastObjectId,optCategories,FindJokes.fromParseObjects(handler));
+	}
+	/** Same as getJokesNewest(...,ParseClient.FindJokes), except returns the unconverted ParseObjects. */
+	public void getJokesPopular(int lastVotesUp, String lastObjectId, List<Category> optCategories, FindCallback<ParseObject> handler){
 		ParseQuery<ParseObject> query = ParseQuery.getQuery(Joke.TABLE);
 		query.setLimit(PAGESIZE);
 		if(lastVotesUp>=0) query.whereLessThan(Joke.COL.VOTESUP, lastVotesUp);
 		// We will have to consider that multiple can have the same date, but objectId isn't sequential
 		// - so we also sort secondarily by objectid.
 		if(lastObjectId!=null) query.whereLessThan(Joke.COL.OBJECTID , lastObjectId);
+		if(optCategories!=null) query.whereContainedIn(Joke.COL.CATEGORY, Category.toDbValue(optCategories));
 		query.orderByDescending(Joke.COL.VOTESUP);
 		query.orderByDescending(Joke.COL.OBJECTID);
 		query.findInBackground(handler);
 	}
 	
     /**
-     * (Cached) (Synchronous) Get the user with the specified userid (user object id).
+     * (Cached) Get the user with the specified userid (user object id).
      * Use this for most operation when you can most efficiently load from the cache.
      * @return NULL if not found, else non-null user with this object id.
      */
-    public User getUser(String userObjectId){
+    public void getUser(final String userObjectId, final ParseClient.FindUser handler){
     	// First look in cache
     	User u = CACHE_USERS.get(userObjectId);
+    	// If found in cache, return that
+    	if(u!=null){
+    		handler.done(u, null);
     	// If not in cache, retrieve & store in cache
-    	if(u==null){
-    		u = getUserLatest(userObjectId);
-    		CACHE_USERS.put(userObjectId, u);
+    	}else{
+    		getUserLatest(userObjectId, new ParseClient.FindUser() {
+				@Override
+				public void done(User user, ParseException e) {
+					// Cache for next time
+					if(user!=null) CACHE_USERS.put(userObjectId, user);
+					handler.done(user, e); // Pass back through the handler they passed to us.
+				}
+			});
     	}
-    	return u;
     }
     /** Cache for users retrieved by user's objectId. */
     private static final ConcurrentHashMap<String,User> CACHE_USERS = new ConcurrentHashMap<String,User>();
@@ -160,5 +188,78 @@ public class ParseClient {
 		query.whereEqualTo(User.COL.OBJECTID, userObjectId);
 		query.findInBackground(handler);
     }
+	/** Same as getJokesNewest(...,FindCallback<ParseObject>), except converts to Jokes for you. */
+	public void getUserLatest(String userObjectId, final ParseClient.FindUser handler){
+		getUserLatest(userObjectId,FindUser.fromParseObject(handler));
+	}
+    
+	// ========================================================================
+    // CONVERSION UTILITIES
+	// ========================================================================
+	public abstract static class FindJokes{
+		public abstract void done(List<Joke> results, ParseException e);
+		static FindCallback<ParseObject> fromParseObjects(final ParseClient.FindJokes handler){
+			return new FindCallback<ParseObject>(){
+				@Override 
+				public void done(List<ParseObject> resultsPO, ParseException e) {
+					if(e!=null)	Log.e("PARSE ERROR","Get Jokes Failed: "+e.getMessage(),e);
+					if(resultsPO==null) resultsPO = new ArrayList<ParseObject>(0); // Avoid NPE or more conditional logic.
+					List<Joke> resultsJokes = Joke.fromParseObjects(resultsPO);
+					handler.done(resultsJokes,e);
+				}
+			};
+		}
+	}
+	
+	public abstract static class FindJoke{
+		public abstract void done(Joke joke, ParseException e);
+		static FindCallback<ParseObject> fromParseObject(final ParseClient.FindJoke handler){
+			return new FindCallback<ParseObject>(){
+				@Override 
+				public void done(List<ParseObject> resultsPO, ParseException e) {
+					if(e!=null)	Log.e("PARSE ERROR","Get Joke Failed: "+e.getMessage(),e);
+					if((resultsPO!=null) && (resultsPO.size()>1)){
+						Log.e("QUERY ERROR","Expected single joke result, instead found '"+resultsPO.size()+"' results.");
+						if(e==null) e = new ParseException(ParseException.OTHER_CAUSE,"Expected single joke result, instead found '"+resultsPO.size()+"' results."); 
+					}
+					Joke joke = (resultsPO!=null)? Joke.fromParseObject(resultsPO.get(0)) : null;
+					handler.done(joke,e);
+				}
+			};
+		}
+	}
+
+	public abstract static class FindUsers{
+		public abstract void done(List<User> results, ParseException e);
+		static FindCallback<ParseObject> fromParseObjects(final ParseClient.FindUsers handler){
+			return new FindCallback<ParseObject>(){
+				@Override 
+				public void done(List<ParseObject> resultsPO, ParseException e) {
+					if(e!=null)	Log.e("PARSE ERROR","Get Users Failed: "+e.getMessage(),e);
+					if(resultsPO==null) resultsPO = new ArrayList<ParseObject>(0); // Avoid NPE or more conditional logic.
+					List<User> resultsUsers = User.fromParseObjects(resultsPO);
+					handler.done(resultsUsers,e);
+				}
+			};
+		}
+	}
+	
+	public abstract static class FindUser{
+		public abstract void done(User user, ParseException e);
+		static FindCallback<ParseObject> fromParseObject(final ParseClient.FindUser handler){
+			return new FindCallback<ParseObject>(){
+				@Override 
+				public void done(List<ParseObject> resultsPO, ParseException e) {
+					if(e!=null)	Log.e("PARSE ERROR","Get User Failed: "+e.getMessage(),e);
+					if((resultsPO!=null) && (resultsPO.size()>1)){
+						Log.e("QUERY ERROR","Expected single user result, instead found '"+resultsPO.size()+"' results.");
+						if(e==null) e = new ParseException(ParseException.OTHER_CAUSE,"Expected single user result, instead found '"+resultsPO.size()+"' results."); 
+					}
+					User user = (resultsPO!=null)? User.fromParseObject(resultsPO.get(0)) : null;
+					handler.done(user,e);
+				}
+			};
+		}
+	}
     
 }

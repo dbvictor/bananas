@@ -28,10 +28,10 @@ public final class R {
         public static final int ic_mentions=0x7f020008;
     }
     public static final class id {
-        public static final int actionCreate=0x7f080012;
-        public static final int actionInternetToggle=0x7f080014;
-        public static final int actionProfile=0x7f080013;
-        public static final int action_settings=0x7f080011;
+        public static final int actionCreate=0x7f080015;
+        public static final int actionInternetToggle=0x7f080017;
+        public static final int actionProfile=0x7f080016;
+        public static final int action_settings=0x7f080014;
         public static final int bSubmit=0x7f080001;
         public static final int etNewJoke=0x7f080000;
         public static final int flContainer=0x7f080003;
@@ -43,11 +43,14 @@ public final class R {
         public static final int swipeContainer=0x7f08000c;
         public static final int tvBody=0x7f080010;
         public static final int tvCharsRemaining=0x7f080002;
+        public static final int tvDownVotes=0x7f080012;
         public static final int tvFollowers=0x7f080009;
         public static final int tvFollowing=0x7f08000a;
         public static final int tvRealName=0x7f080006;
+        public static final int tvShares=0x7f080013;
         public static final int tvTagline=0x7f080007;
         public static final int tvTime=0x7f08000f;
+        public static final int tvUpVotes=0x7f080011;
         public static final int tvUserName=0x7f08000e;
     }
     public static final class layout {

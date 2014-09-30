@@ -23,6 +23,9 @@ public class ParseClient {
 	// Constants
     private static final int PAGESIZE = 20;
 	
+    // ========================================================================
+    // PARSE SETUP
+    // ========================================================================
     /** Create an anonymous user using ParseAnonymousUtils */  
     public void login() {
         ParseAnonymousUtils.logIn(new LogInCallback() {
@@ -35,12 +38,16 @@ public class ParseClient {
 		    }
         });
     }
-
-    /** Get logged-in user ID (not name). */
+    
+    /** Get current logged-in Parse user ID (not name). */
     public String getUserId(){
         String userid = ParseUser.getCurrentUser().getObjectId();
         return userid;
     }
+
+    // ========================================================================
+    // DATA OPERATIONS
+    // ========================================================================
     
     /** Post a new Joke. */
 	public void create(Joke joke, SaveCallback handler){
@@ -86,7 +93,7 @@ public class ParseClient {
 		getJokesNewest(lastDate,lastObjectId,optUserId,optCategories,FindJokes.fromParseObjects(handler));
 	}
 	/** Same as getJokesNewest(...,ParseClient.FindJokes), except returns the unconverted ParseObjects for you. */
-	public void getJokesNewest(Date lastDate, String lastObjectId, String optUserId, List<Category> optCategories, FindCallback<ParseObject> handler){
+	private void getJokesNewest(Date lastDate, String lastObjectId, String optUserId, List<Category> optCategories, FindCallback<ParseObject> handler){
 		ParseQuery<ParseObject> query = ParseQuery.getQuery(Joke.TABLE);
 		query.setLimit(PAGESIZE);
 		if(lastDate!=null) query.whereLessThan(Joke.COL.CREATEDAT, lastDate);
@@ -122,7 +129,7 @@ public class ParseClient {
 		getJokesPopular(lastVotesUp,lastObjectId,optCategories,FindJokes.fromParseObjects(handler));
 	}
 	/** Same as getJokesNewest(...,ParseClient.FindJokes), except returns the unconverted ParseObjects. */
-	public void getJokesPopular(int lastVotesUp, String lastObjectId, List<Category> optCategories, FindCallback<ParseObject> handler){
+	private void getJokesPopular(int lastVotesUp, String lastObjectId, List<Category> optCategories, FindCallback<ParseObject> handler){
 		ParseQuery<ParseObject> query = ParseQuery.getQuery(Joke.TABLE);
 		query.setLimit(PAGESIZE);
 		if(lastVotesUp>=0) query.whereLessThan(Joke.COL.VOTESUP, lastVotesUp);
@@ -143,19 +150,21 @@ public class ParseClient {
     public void getUser(final String userObjectId, final ParseClient.FindUser handler){
     	// First look in cache
     	User u = CACHE_USERS.get(userObjectId);
-    	// If found in cache, return that
+    	// If found in cache, return that, else retrieve & store in cache
     	if(u!=null){
     		handler.done(u, null);
     	// If not in cache, retrieve & store in cache
     	}else{
-    		getUserLatest(userObjectId, new ParseClient.FindUser() {
+    		getUserLatest(userObjectId, handler); // Automatically caches in the FindUser handler.
+    		/* UNECESSARY: Don't need to cache here.  It is automatically cached in the FindUser handler. 
+    		new ParseClient.FindUser() {
 				@Override
 				public void done(User user, ParseException e) {
 					// Cache for next time
 					if(user!=null) CACHE_USERS.put(userObjectId, user);
 					handler.done(user, e); // Pass back through the handler they passed to us.
 				}
-			});
+			}); */
     	}
     }
     /** Cache for users retrieved by user's objectId. */
@@ -192,6 +201,29 @@ public class ParseClient {
 	public void getUserLatest(String userObjectId, final ParseClient.FindUser handler){
 		getUserLatest(userObjectId,FindUser.fromParseObject(handler));
 	}
+	
+    /** Update existing User. */
+	public void update(final User user, final SaveCallback handler){
+    	update(user.toParseObject(), new SaveCallback() {
+			@Override
+			public void done(ParseException e) {
+				// Cache the updated user if it succeeds, or the user will keep seeing the old cached user.
+				if(e==null) CACHE_USERS.put(user.getObjectId(), user);
+				// Report to the caller that it was done.
+				handler.done(e);
+			}
+		});
+	}
+	
+    /** Update existing Joke. */
+	public void update(Joke joke, SaveCallback handler){
+    	update(joke.toParseObject(),handler);
+	}
+	
+    /** Create a new ParseObject, assuming it has been filled out. */
+    private void update(final ParseObject po, SaveCallback handler){
+    	po.saveInBackground(handler);
+    }
     
 	// ========================================================================
     // CONVERSION UTILITIES
@@ -222,7 +254,8 @@ public class ParseClient {
 						Log.e("QUERY ERROR","Expected single joke result, instead found '"+resultsPO.size()+"' results.");
 						if(e==null) e = new ParseException(ParseException.OTHER_CAUSE,"Expected single joke result, instead found '"+resultsPO.size()+"' results."); 
 					}
-					Joke joke = (resultsPO!=null)? Joke.fromParseObject(resultsPO.get(0)) : null;
+					Joke joke = null;
+					if((resultsPO!=null)&&(resultsPO.size()>0)) Joke.fromParseObject(resultsPO.get(0));
 					handler.done(joke,e);
 				}
 			};
@@ -236,8 +269,12 @@ public class ParseClient {
 				@Override 
 				public void done(List<ParseObject> resultsPO, ParseException e) {
 					if(e!=null)	Log.e("PARSE ERROR","Get Users Failed: "+e.getMessage(),e);
+					// Convert to Users
 					if(resultsPO==null) resultsPO = new ArrayList<ParseObject>(0); // Avoid NPE or more conditional logic.
 					List<User> resultsUsers = User.fromParseObjects(resultsPO);
+					// Cache Users (or update in case any changed)
+					for(User u : resultsUsers) CACHE_USERS.put(u.getObjectId(), u); // Update cache with the user.
+					// Report to caller's handler with the converted users.
 					handler.done(resultsUsers,e);
 				}
 			};
@@ -255,7 +292,12 @@ public class ParseClient {
 						Log.e("QUERY ERROR","Expected single user result, instead found '"+resultsPO.size()+"' results.");
 						if(e==null) e = new ParseException(ParseException.OTHER_CAUSE,"Expected single user result, instead found '"+resultsPO.size()+"' results."); 
 					}
-					User user = (resultsPO!=null)? User.fromParseObject(resultsPO.get(0)) : null;
+					// Convert to User
+					User user = null;
+					if((resultsPO!=null)&&(resultsPO.size()>0)) User.fromParseObject(resultsPO.get(0));
+					// Cache Users (or update in case any changed)
+					if(user!=null) CACHE_USERS.put(user.getObjectId(), user); // Update cache with the user.
+					// Report to caller's handler with the converted users.
 					handler.done(user,e);
 				}
 			};

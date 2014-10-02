@@ -21,10 +21,9 @@ import com.yahoo.bananas.util.InternetStatus;
 
 public class JokeStreamActivity extends FragmentActivity {
 	public static final String JOKE = "joke";
-	public static final String TWEET = "tweet";
 	// Constants
-	private static final String FRAGMENTTAG_NEWEST     = "newest";
-	private static final String FRAGMENTTAG_POPULAR = "popular";
+	private static final String FRAGMENTTAG_NEWEST   = "newest";
+	private static final String FRAGMENTTAG_POPULAR  = "popular";
 	private static final int    ACTIVITY_CREATE      = 1;
 	private static final int    ACTIVITY_PROFILE     = 2;
 	// Member Variables

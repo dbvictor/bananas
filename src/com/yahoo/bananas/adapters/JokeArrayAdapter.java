@@ -1,16 +1,18 @@
 package com.yahoo.bananas.adapters;
-
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yahoo.bananas.R;
+import com.yahoo.bananas.activities.DetailActivity;
 import com.yahoo.bananas.models.Joke;
 import com.yahoo.bananas.util.Util;
 
@@ -21,7 +23,7 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		Joke joke = getItem(position);
+		final Joke joke = getItem(position);
 		View v;
 		if (convertView == null) {
 			LayoutInflater inflator = LayoutInflater.from(getContext());
@@ -46,7 +48,7 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 //		tvRealName.setText(joke.getUser().getRealName());
 //		tvUserName.setText("@"+joke.getUser().getScreenName());
 		if (joke.getCreatedAt() != null)
-			tvTime.setText("("+Util.getRelativeTimeAgo(joke.getCreatedAt().toString())+")");
+			tvTime.setText(Util.getRelativeTimeAgo(joke.getCreatedAt().toString()));
 		tvBody.setText(joke.getText());
 		tvUpVotes.setText(joke.getVotesUp() + " Votes Up");
 		tvDownVotes.setText(joke.getVotesDown() + " Votes Down");
@@ -54,8 +56,21 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 //		tvBody.setTag(joke);
 		// Store the user into the image so that when they click on it, we can know which user to show profile.
 //		ivProfileImage.setTag(joke.getUser());
+		
+		tvBody.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(v.getContext(),DetailActivity.class);
+				intent.putExtra("joke", joke);
+				v.getContext().startActivity(intent);
+			}
+		});
+		
 		return v;
 	}
+	
+	
 	
 	
 }

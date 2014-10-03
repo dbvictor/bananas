@@ -18,15 +18,6 @@
         <requestFocus />
     </EditText>
 
-    <Button
-        android:id="@+id/bSubmit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/etNewJoke"
-        android:layout_centerHorizontal="true"
-        android:onClick="create"
-        android:text="@string/new_joke_button" />
-
     <TextView
         android:id="@+id/tvCharsRemaining"
         android:layout_width="wrap_content"
@@ -37,5 +28,22 @@
         android:paddingRight="5dp"
         android:textStyle="italic"
         android:text="N remaining" />
+
+    <Spinner
+        android:id="@+id/spCategories"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvCharsRemaining"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="23dp" />
+
+    <Button
+        android:id="@+id/bSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spCategories"
+        android:layout_centerHorizontal="true"
+        android:onClick="create"
+        android:text="@string/new_joke_button" />
 
 </RelativeLayout>

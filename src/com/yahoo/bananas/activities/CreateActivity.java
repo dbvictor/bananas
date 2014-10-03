@@ -1,8 +1,5 @@
 package com.yahoo.bananas.activities;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,6 +27,7 @@ public class CreateActivity extends Activity {
 	private Joke joke;
 	// Remembered Views
 	private EditText etBody;
+	private Spinner spCategory;
 	private TextView tvCharsRemaining;
 	// Constants
 	private static final int MAX_LENGTH = 500;
@@ -41,6 +39,7 @@ public class CreateActivity extends Activity {
 		parseClient = JokesApplication.getParseClient();
 		// Remember views for easy access later.
 		etBody           = (EditText) findViewById(R.id.etNewJoke      );
+		spCategory		 = (Spinner)  findViewById(R.id.spCategories   );
 		tvCharsRemaining = (TextView) findViewById(R.id.tvCharsRemaining);
 		tvCharsRemaining.setText(""+MAX_LENGTH+" remaining" );
 		// Setup events
@@ -72,6 +71,8 @@ public class CreateActivity extends Activity {
 	
 	public void create(View v){
 		String etBodyText = etBody.getText().toString();
+		String spinnerSelection = spCategory.getSelectedItem().toString();
+
 		// If empty, don't allow send.
 		if((etBodyText==null)||(etBodyText.trim().length()<=0)){
 			Toast.makeText(this, "Nothing to Post!", Toast.LENGTH_SHORT).show();
@@ -79,7 +80,7 @@ public class CreateActivity extends Activity {
 		}else{
 			joke = new Joke();
 			joke.setText(etBodyText);
-//			joke.setCategory(category);
+			joke.setCategory(Category.valueOf(spinnerSelection));
 			// 1. Send text to Joke Service
 			final CreateActivity parentThis = this;
 			parseClient.create(joke, new SaveCallback() {

@@ -55,7 +55,7 @@ public class JokeStreamActivity extends FragmentActivity {
         Tab tab1 = actionBar
             .newTab()
             .setText("Newest")
-            .setIcon(R.drawable.ic_home)
+//            .setIcon(R.drawable.ic_home)
             .setTag("NewestStreamFragment")
             .setTabListener(new FragmentTabListener<NewestStreamFragment>(R.id.flContainer, this, FRAGMENTTAG_NEWEST, NewestStreamFragment.class));
 
@@ -65,7 +65,7 @@ public class JokeStreamActivity extends FragmentActivity {
         Tab tab2 = actionBar
             .newTab()
             .setText("Popular")
-            .setIcon(R.drawable.ic_mentions)
+//            .setIcon(R.drawable.ic_popular)
             .setTag("PopularStreamFragment")
             .setTabListener(new FragmentTabListener<PopularStreamFragment>(R.id.flContainer, this, FRAGMENTTAG_POPULAR, PopularStreamFragment.class));
 

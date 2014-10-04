@@ -11,9 +11,10 @@ public final class R {
     public static final class attr {
     }
     public static final class color {
-        public static final int background_grey=0x7f040002;
-        public static final int darkyellow=0x7f040001;
-        public static final int text_grey=0x7f040003;
+        public static final int background_grey=0x7f040003;
+        public static final int darkyellow=0x7f040002;
+        public static final int mustard=0x7f040001;
+        public static final int text_grey=0x7f040004;
         public static final int yellow=0x7f040000;
     }
     public static final class dimen {
@@ -36,8 +37,9 @@ public final class R {
         public static final int ic_launcher=0x7f02000a;
         public static final int ic_mentions=0x7f02000b;
         public static final int ic_pencil_cartoon_not_a_box=0x7f02000c;
-        public static final int ic_shares=0x7f02000d;
-        public static final int ic_up=0x7f02000e;
+        public static final int ic_popular=0x7f02000d;
+        public static final int ic_shares=0x7f02000e;
+        public static final int ic_up=0x7f02000f;
     }
     public static final class id {
         public static final int actionCreate=0x7f09001e;

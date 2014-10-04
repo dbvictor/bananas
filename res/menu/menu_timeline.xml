@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/actionCreate"
-        android:icon="@drawable/ic_action_create"
+        android:icon="@drawable/ic_pencil_cartoon_not_a_box"
         android:orderInCategory="100"
         android:showAsAction="always"
         android:onClick="create"

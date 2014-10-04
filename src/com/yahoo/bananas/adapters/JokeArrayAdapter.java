@@ -50,9 +50,9 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 		if (joke.getCreatedAt() != null)
 			tvTime.setText(Util.getRelativeTimeAgo(joke.getCreatedAt().toString()));
 		tvBody.setText(joke.getText());
-		tvUpVotes.setText(joke.getVotesUp() + " Votes Up");
-		tvDownVotes.setText(joke.getVotesDown() + " Votes Down");
-		tvShares.setText(joke.getShares() + " Shares");
+		tvUpVotes.setText(String.valueOf(joke.getVotesUp()));
+		tvDownVotes.setText(String.valueOf(joke.getVotesDown()));
+		tvShares.setText(String.valueOf(joke.getShares()));
 //		tvBody.setTag(joke);
 		// Store the user into the image so that when they click on it, we can know which user to show profile.
 //		ivProfileImage.setTag(joke.getUser());

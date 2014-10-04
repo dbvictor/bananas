@@ -9,85 +9,106 @@
         android:layout_height="40dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-		android:onClick="onProfileClick"
+        android:onClick="onProfileClick"
         android:src="@drawable/ic_bananas_logo" />
-
-    <TextView
-        android:id="@+id/tvRealName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/ivProfileImage"
-        android:paddingLeft="5dp"
-        android:paddingRight="0dp"
-        android:textStyle="bold"
-        android:maxLines="1"
-        android:text="Real Name" />
 
     <TextView
         android:id="@+id/tvUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/tvRealName"
+        android:layout_toRightOf="@+id/ivProfileImage"
         android:maxLines="1"
         android:paddingLeft="7dp"
         android:paddingRight="0dp"
         android:text="\@Username" />
 
     <TextView
-        android:id="@+id/tvTime"
+        android:id="@+id/tvUpVotes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/tvUserName"
+        android:layout_marginRight="26dp"
+        android:paddingLeft="0dp"
+        android:paddingRight="7dp"
+        android:text="Up"
+        android:textColor="@color/text_grey" />
+
+    <TextView
+        android:id="@+id/tvDownVotes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/tvUpVotes"
+        android:layout_below="@+id/tvUpVotes"
         android:paddingLeft="7dp"
-        android:paddingRight="0dp"
-        android:textStyle="italic"
-        android:maxLines="1"
-        android:text="Time" />
-    
+        android:paddingRight="7dp"
+        android:text="Down"
+        android:textColor="@color/text_grey" />
+
+    <TextView
+        android:id="@+id/tvShares"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/tvDownVotes"
+        android:layout_below="@+id/tvDownVotes"
+        android:paddingLeft="7dp"
+        android:paddingRight="7dp"
+        android:text="Shares"
+        android:textColor="@color/text_grey" />
+
     <TextView
         android:id="@+id/tvBody"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tvRealName"
-        android:layout_below="@+id/tvRealName"
+        android:layout_alignBottom="@+id/tvShares"
+        android:layout_alignLeft="@+id/tvUserName"
+        android:layout_alignTop="@+id/tvDownVotes"
+        android:layout_toLeftOf="@+id/tvShares"
         android:onClick="onJokeClick"
         android:paddingLeft="5dp"
         android:paddingRight="0dp"
         android:text="Joke body..." />
 
     <TextView
-        android:id="@+id/tvUpVotes"
+        android:id="@+id/tvTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/ivProfileImage"
-        android:paddingRight="7dp"
-        android:paddingLeft="0dp"
-        android:text="3 Up Votes" />
-
-    <TextView
-        android:id="@+id/tvDownVotes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/tvUpVotes"
-        android:layout_alignBottom="@+id/tvUpVotes"
-        android:layout_toRightOf="@+id/tvUpVotes"
+        android:layout_above="@+id/tvBody"
+        android:layout_alignRight="@+id/tvBody"
+        android:maxLines="1"
         android:paddingLeft="7dp"
-        android:paddingRight="7dp"
-        android:text="0 Down Votes" />
+        android:paddingRight="0dp"
+        android:text="Time"
+        android:textStyle="italic" />
 
-     <TextView
-         android:id="@+id/tvShares"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_alignBaseline="@+id/tvUpVotes"
-         android:layout_alignBottom="@+id/tvUpVotes"
-         android:layout_toRightOf="@+id/tvDownVotes"
-         android:paddingLeft="7dp"
-         android:paddingRight="7dp"
-         android:text="2 Shares" />
+    <ImageView
+        android:id="@+id/ivStaticUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvUpVotes"
+        android:layout_alignLeft="@+id/ivStaticDown"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/ic_up" />
+
+    <ImageView
+        android:id="@+id/ivStaticDown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+		android:layout_alignTop="@+id/tvDownVotes"
+		android:layout_alignBottom="@+id/tvDownVotes"
+        android:src="@drawable/ic_down" />
+
+    <ImageView
+        android:id="@+id/ivStaticShares"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+    	android:layout_alignLeft="@+id/ivStaticDown"
+        android:layout_alignBottom="@+id/tvShares"
+        android:layout_alignTop="@+id/tvShares"
+        android:layout_toRightOf="@+id/tvShares"
+        android:src="@drawable/ic_shares" />
 
 </RelativeLayout>

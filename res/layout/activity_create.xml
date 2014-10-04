@@ -13,8 +13,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:ems="10"
-        android:lines="4"
-        android:maxLength="140"
+        android:maxLength="500"
         android:hint="@string/new_joke_hint" >
         <requestFocus />
     </EditText>

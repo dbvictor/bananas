@@ -4,6 +4,8 @@ import org.json.JSONObject;
 
 import android.app.Application;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -27,6 +29,14 @@ public class LoginActivity extends OAuthLoginActivity<TwitterClient> {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
+		setActionBarColor();
+	}
+	
+	private void setActionBarColor() {
+		ColorDrawable colorDrawable = new ColorDrawable();
+		//http://html-color-codes.info
+		colorDrawable.setColor(Color.parseColor("#4099FF"));
+		getActionBar().setBackgroundDrawable(colorDrawable);
 	}
 
 	// Inflate the menu; this adds items to the action bar if it is present.

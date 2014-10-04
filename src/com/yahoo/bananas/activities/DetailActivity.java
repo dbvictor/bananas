@@ -3,6 +3,8 @@ package com.yahoo.bananas.activities;
 import java.util.Date;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,5 +35,14 @@ public class DetailActivity extends Activity {
 		}
 		TextView tvCategory = (TextView) findViewById(R.id.tvCategory);
 		tvCategory.setText(joke.getCategory().getDisplayName());
+		setActionBarColor();
 	}
+	
+	private void setActionBarColor() {
+		ColorDrawable colorDrawable = new ColorDrawable();
+		//http://html-color-codes.info
+		colorDrawable.setColor(Color.parseColor("#4099FF"));
+		getActionBar().setBackgroundDrawable(colorDrawable);
+	}
+	
 }

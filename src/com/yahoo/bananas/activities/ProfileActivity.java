@@ -2,6 +2,8 @@ package com.yahoo.bananas.activities;
 
 import org.json.JSONObject;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -41,6 +43,14 @@ public class ProfileActivity extends FragmentActivity {
 		//STATIC ALTERNATIVE: UserJokeStreamFragment userTimeline = (UserJokeStreamFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentUserTimeline);
 		//STATIC ALTERNATIVE: userTimeline.setCustomUser(optUser);
 		//STATIC ALTERNATIVE: move super.onCreate() to bottom.
+		setActionBarColor();
+	}
+	
+	private void setActionBarColor() {
+		ColorDrawable colorDrawable = new ColorDrawable();
+		//http://html-color-codes.info
+		colorDrawable.setColor(Color.parseColor("#4099FF"));
+		getActionBar().setBackgroundDrawable(colorDrawable);
 	}
 	
 	/**

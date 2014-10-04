@@ -2,6 +2,8 @@ package com.yahoo.bananas.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -45,6 +47,14 @@ public class CreateActivity extends Activity {
 		// Setup events
 		setupTextChangeListener();
 		setupSpinner();
+		setActionBarColor();
+	}
+	
+	private void setActionBarColor() {
+		ColorDrawable colorDrawable = new ColorDrawable();
+		//http://html-color-codes.info
+		colorDrawable.setColor(Color.parseColor("#4099FF"));
+		getActionBar().setBackgroundDrawable(colorDrawable);
 	}
 	
 	private void setupSpinner() {

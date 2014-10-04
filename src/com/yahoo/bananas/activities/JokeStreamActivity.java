@@ -3,6 +3,8 @@ package com.yahoo.bananas.activities;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
@@ -35,6 +37,14 @@ public class JokeStreamActivity extends FragmentActivity {
 		setContentView(R.layout.activity_joke_stream);
 		internetStatus = new InternetStatus(this);
 		setupTabs();
+		setActionBarColor();
+	}
+
+	private void setActionBarColor() {
+		ColorDrawable colorDrawable = new ColorDrawable();
+		//http://html-color-codes.info
+		colorDrawable.setColor(Color.parseColor("#4099FF"));
+		getActionBar().setBackgroundDrawable(colorDrawable);
 	}
 	
 	private void setupTabs() {

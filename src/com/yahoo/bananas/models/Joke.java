@@ -120,7 +120,10 @@ public class Joke extends Model implements Serializable {
     // ----- PARSE -----
     public ParseObject toParseObject(){
     	ParseObject po = new ParseObject(TABLE);
-    	if (objectId != null ) po.put(COL.OBJECTID  ,objectId       );
+    	if (objectId != null ) {
+    		po.put(COL.OBJECTID  ,objectId       );
+        	po.setObjectId(objectId);
+    	}
     	if (createdAt != null ) po.put(COL.CREATEDAT ,createdAt      );
     	if (createdBy != null ) po.put(COL.CREATEDBY ,createdBy      );
     	if (categoryDbValue != null ) po.put(COL.CATEGORY  ,categoryDbValue);
@@ -133,7 +136,7 @@ public class Joke extends Model implements Serializable {
     
     public static Joke fromParseObject(ParseObject po){
     	Joke j = new Joke();
-    	j.objectId        = po.getString(COL.OBJECTID  );
+    	j.objectId        = po.getObjectId();
     	j.createdAt       = po.getDate  (COL.CREATEDAT );
     	j.createdBy       = po.getString(COL.CREATEDBY );
     	j.categoryDbValue = po.getInt   (COL.CATEGORY  );

@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,12 +13,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemLongClickListener;
 
+import com.parse.DeleteCallback;
 import com.parse.ParseException;
+import com.parse.SaveCallback;
 import com.yahoo.bananas.JokesApplication;
 import com.yahoo.bananas.R;
+import com.yahoo.bananas.activities.JokeStreamActivity;
 import com.yahoo.bananas.adapters.JokeArrayAdapter;
 import com.yahoo.bananas.clients.ParseClient;
 import com.yahoo.bananas.clients.ParseClient.FindJokes;
@@ -62,8 +68,38 @@ abstract public class JokesListFragment extends Fragment {
 		lvJokes.setAdapter(aJokes);
 		setupEndlessScroll();
 		populateJokeStream(true);
+		setupListViewListener();
 		// Return layout view
 		return v;
+	}
+	
+	private void setupListViewListener() {
+		lvJokes.setOnItemLongClickListener(new OnItemLongClickListener() {
+			@Override
+			public boolean onItemLongClick(AdapterView<?> adapter, View item,
+					int position, long id) {
+				Joke joke = jokes.get(position);
+				remove(joke);
+				jokes.remove(position);
+				aJokes.notifyDataSetChanged();
+				return true;
+			}
+		});
+	}
+	
+	private void remove(Joke joke){
+		parseClient.delete(joke, new DeleteCallback() {
+			
+			@Override
+			public void done(ParseException e) {
+				if (e != null) {
+					Log.d("debug", e.toString());
+					Toast.makeText(getActivity(), "FAILED!", Toast.LENGTH_SHORT).show();
+				} else {
+					Toast.makeText(getActivity(), "Removed", Toast.LENGTH_SHORT).show();				
+				}
+			}
+		});
 	}
 	
 	/** Setup swipe down to refresh. */

@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import android.util.Log;
 
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseAnonymousUtils;
@@ -303,5 +304,14 @@ public class ParseClient {
 			};
 		}
 	}
+	
+	/** delete an existing Joke. */
+	public void delete(Joke joke, DeleteCallback handler){
+    	delete(joke.toParseObject(),handler);
+	}
+    /** delete an existing joke in background */
+    private void delete(final ParseObject po, DeleteCallback handler){
+    	po.deleteInBackground(handler);
+    }
     
 }

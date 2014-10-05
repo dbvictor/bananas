@@ -111,8 +111,8 @@ public class ParseClient {
 		// - so we also sort secondarily by objectid.
 		if(lastObjectId!=null) query.whereLessThan(Joke.COL.OBJECTID , lastObjectId);
 		if(optCategories!=null) query.whereContainedIn(Joke.COL.CATEGORY, Category.toDbValue(optCategories));
-		query.orderByDescending(Joke.COL.CREATEDAT);
 		query.orderByDescending(Joke.COL.OBJECTID);
+		query.orderByDescending(Joke.COL.CREATEDAT);
 		query.findInBackground(handler);
 	}
 
@@ -147,8 +147,8 @@ public class ParseClient {
 		// - so we also sort secondarily by objectid.
 		if(lastObjectId!=null) query.whereLessThan(Joke.COL.OBJECTID , lastObjectId);
 		if(optCategories!=null) query.whereContainedIn(Joke.COL.CATEGORY, Category.toDbValue(optCategories));
-		query.orderByDescending(Joke.COL.VOTESUP);
 		query.orderByDescending(Joke.COL.OBJECTID);
+		query.orderByDescending(Joke.COL.VOTESUP);
 		query.findInBackground(handler);
 	}
 	

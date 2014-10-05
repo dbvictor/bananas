@@ -86,6 +86,11 @@ public class Joke extends Model implements Serializable {
 	 * @return NULL if not found or not populated, else the non-null user that corresponds to the getCreatedBy() user objectId.
 	 */ 
 	public User getCreatedByUser() {
+		// If no user found, return a dummy user so that an image URL will be generated automatically.
+		if(createdByUser==null){
+			createdByUser = new User();
+			createdByUser.setObjectId(createdBy);
+		}
 		return createdByUser;
 	}
 

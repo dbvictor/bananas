@@ -124,7 +124,7 @@ public class User extends Model implements Serializable{
     	return u;
     }
 
-    public static List<User> fromParseObjects(List<ParseObject> parseList){
+    public static List<User> fromParseObjects(List<ParseUser> parseList){
     	ArrayList<User> userList = new ArrayList<User>(parseList.size());
     	for(ParseObject po : parseList) userList.add(User.fromParseObject(po));
     	return userList;

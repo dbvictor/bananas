@@ -163,7 +163,7 @@ public class ParseClient {
 	 * @param handler - async response handler once we finish populating the jokes with user objects.           
 	 */
 	private void getJokesUsers(final List<Joke> jokes, final ParseClient.FindJokes handler){
-		Log.d("trace", "+getJokesUsers(Collection.size="+jokes.size()+")");
+		Log.d("trace", "ParseClient.getJokesUsers(Collection.size="+jokes.size()+")");
 		// 1. Determine all the users we need.
 		HashSet<String> userObjectIds = new HashSet<String>(jokes.size()); 
 		for(Joke j : jokes) userObjectIds.add(j.getCreatedBy());
@@ -171,8 +171,8 @@ public class ParseClient {
 		getUsers(userObjectIds, new FindUsers() {
 			@Override
 			public void done(List<User> users, ParseException e) {
+				Log.d("trace", "ParseClient.geJokesUsers found users = "+((users!=null)? users.size() : "null"));
 				if(e!=null)	Log.e("PARSE ERROR","Get Users for Jokes Failed: "+e.getMessage(),e);
-				Log.d("debug", "getJokesUsers found users="+((users!=null)? users.size(): "null")+")");
 				// 3. Put the users into Jokes.
 				if(users!=null){
 					// We need a map to quickly find the user given the user ID.
@@ -278,7 +278,7 @@ public class ParseClient {
      * @return NULL if not found, else non-null user with this object id.
      */
 	public void getUsers(Collection<String> userObjectIds, final ParseClient.FindUsers handler){
-		Log.d("trace", "+getUsers(Collection.size="+userObjectIds.size()+")");
+		Log.d("trace", "ParseClient.getUsers(Collection.size="+userObjectIds.size()+")");
 		// 1. First, look in the cache.
 		// + determine what users we still need.
 		final ArrayList<User  > users       = new ArrayList<User  >(userObjectIds.size());
@@ -296,8 +296,8 @@ public class ParseClient {
 			getUsersLatest(usersNeeded, new FindUsers() {
 				@Override
 				public void done(List<User> results, ParseException e) {
+					Log.d("trace", "ParseClient.getUsersLatest() results = "+((results!=null)? results.size() : "null"));
 					if(e!=null)	Log.e("PARSE ERROR","Get Users Latest Failed: "+e.getMessage(),e);
-					Log.d("DEBUG", "getUsersLatest found '"+((results!=null)? results.size() : 0)+"' users.");
 					// Combine the new results with the ones we already had.
 					if(results!=null) users.addAll(results);
 					// Tell the caller we're done
@@ -332,6 +332,7 @@ public class ParseClient {
 		ParseUser.saveAllInBackground(users, new SaveCallback() {
 			@Override
 			public void done(ParseException e) {
+				Log.d("trace", "ParseClient.update(User="+user.getObjectId()+") done");
 				if(e!=null)	Log.e("PARSE ERROR","Update Joke Failed: "+e.getMessage(),e);
 				// Cache the updated user if it succeeds, or the user will keep seeing the old cached user.
 				if(e==null) CACHE_USERS.put(user.getObjectId(), user);
@@ -360,7 +361,7 @@ public class ParseClient {
 			return new FindCallback<ParseObject>(){
 				@Override 
 				public void done(List<ParseObject> resultsPO, ParseException e) {
-					Log.d("trace", "FindJokes.fromParseObjects::done() (Collection.size="+((resultsPO!=null)? resultsPO.size() : "null")+")");
+					Log.d("trace", "ParseClient.FindJokes results = "+((resultsPO!=null)? resultsPO.size() : "null"));
 					if(e!=null)	Log.e("PARSE ERROR","Get Jokes Failed: "+e.getMessage(),e);
 					if(resultsPO==null) resultsPO = new ArrayList<ParseObject>(0); // Avoid NPE or more conditional logic.
 					List<Joke> resultsJokes = Joke.fromParseObjects(resultsPO);
@@ -377,6 +378,7 @@ public class ParseClient {
 			return new FindCallback<ParseObject>(){
 				@Override 
 				public void done(List<ParseObject> resultsPO, ParseException e) {
+					Log.d("trace", "ParseClient.FindJoke results = "+((resultsPO!=null)? resultsPO.size() : "null"));
 					if(e!=null)	Log.e("PARSE ERROR","Get Joke Failed: "+e.getMessage(),e);
 					if((resultsPO!=null) && (resultsPO.size()>1)){
 						Log.e("QUERY ERROR","Expected single joke result, instead found '"+resultsPO.size()+"' results.");
@@ -397,6 +399,7 @@ public class ParseClient {
 			return new FindCallback<ParseUser>(){
 				@Override 
 				public void done(List<ParseUser> resultsPO, ParseException e) {
+					Log.d("trace", "ParseClient.FindUsers results = "+((resultsPO!=null)? resultsPO.size() : "null"));
 					if(e!=null)	Log.e("PARSE ERROR","Get Users Failed: "+e.getMessage(),e);
 					// Convert to Users
 					if(resultsPO==null) resultsPO = new ArrayList<ParseUser>(0); // Avoid NPE or more conditional logic.
@@ -416,6 +419,7 @@ public class ParseClient {
 			return new FindCallback<ParseUser>(){
 				@Override 
 				public void done(List<ParseUser> resultsPO, ParseException e) {
+					Log.d("trace", "ParseClient.FindUser results = "+((resultsPO!=null)? resultsPO.size() : "null"));
 					if(e!=null)	Log.e("PARSE ERROR","Get User Failed: "+e.getMessage(),e);
 					if((resultsPO!=null) && (resultsPO.size()>1)){
 						Log.e("QUERY ERROR","Expected single user result, instead found '"+resultsPO.size()+"' results.");

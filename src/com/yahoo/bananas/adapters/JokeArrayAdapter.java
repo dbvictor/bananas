@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.yahoo.bananas.R;
 import com.yahoo.bananas.activities.DetailActivity;
+import com.yahoo.bananas.models.Category;
 import com.yahoo.bananas.models.Joke;
 import com.yahoo.bananas.util.Util;
 
@@ -42,6 +43,8 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 		TextView  tvUpVotes		 = (TextView ) v.findViewById(R.id.tvUpVotes);
 		TextView  tvDownVotes	 = (TextView ) v.findViewById(R.id.tvDownVotes);
 		TextView  tvShares		 = (TextView ) v.findViewById(R.id.tvShares);
+		TextView  tvTitle		 = (TextView ) v.findViewById(R.id.tvTitle);
+		TextView  tvCategory     = (TextView ) v.findViewById(R.id.tvJokeCategory);
 		// Clear existing image (needed if it was reused)
 		ivProfileImage.setImageResource(android.R.color.transparent);
 		// Populate views with joke data.
@@ -56,7 +59,13 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 			jokeText = jokeText.trim();
 			jokeText = jokeText.substring(0, 30) + "...";
 		}
+		Category category = joke.getCategory();
+		if (category == null) {
+			category = Category.Other;
+		}
+		tvCategory.setText(category.getDisplayName());
 		tvBody.setText(jokeText);
+		tvTitle.setText(joke.getTitle());
 		tvUpVotes.setText(String.valueOf(joke.getVotesUp()));
 		tvDownVotes.setText(String.valueOf(joke.getVotesDown()));
 		tvShares.setText(String.valueOf(joke.getShares()));

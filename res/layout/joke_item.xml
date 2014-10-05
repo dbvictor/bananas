@@ -21,6 +21,7 @@
         android:layout_marginRight="26dp"
         android:paddingLeft="0dp"
         android:paddingRight="7dp"
+        android:textSize="9dp"
         android:text="Up"
         android:textColor="@color/text_grey" />
 
@@ -32,6 +33,7 @@
         android:layout_below="@+id/tvUpVotes"
         android:paddingLeft="7dp"
         android:paddingRight="7dp"
+        android:textSize="9dp"
         android:text="Down"
         android:textColor="@color/text_grey" />
 
@@ -43,6 +45,7 @@
         android:layout_below="@+id/tvDownVotes"
         android:paddingLeft="7dp"
         android:paddingRight="7dp"
+        android:textSize="9dp"
         android:text="Shares"
         android:textColor="@color/text_grey" />
 
@@ -65,12 +68,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/tvBody"
-        android:layout_alignRight="@+id/tvBody"
+        android:layout_toLeftOf="@+id/tvUpVotes"
         android:maxLines="1"
-        android:textSize="10dp"
         android:paddingLeft="7dp"
-        android:paddingRight="0dp"
+        android:paddingRight="10dp"
         android:text="Time"
+        android:textSize="10dp"
         android:textStyle="italic" />
 
     <ImageView
@@ -107,10 +110,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:textSize="12dp"
-        android:layout_toLeftOf="@+id/tvTime"
+        android:layout_alignRight="@+id/tvBody"
         android:layout_toRightOf="@+id/ivProfileImage"
-        android:text="Title" />
+        android:text="Title"
+        android:textSize="12dp" />
 
     <TextView
         android:id="@+id/tvJokeCategory"

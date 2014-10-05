@@ -29,6 +29,7 @@ public class CreateActivity extends Activity {
 	private Joke joke;
 	// Remembered Views
 	private EditText etBody;
+	private EditText etTitle;
 	private Spinner spCategory;
 	private TextView tvCharsRemaining;
 	// Constants
@@ -41,6 +42,7 @@ public class CreateActivity extends Activity {
 		parseClient = JokesApplication.getParseClient();
 		// Remember views for easy access later.
 		etBody           = (EditText) findViewById(R.id.etNewJoke      );
+		etTitle			 = (EditText) findViewById(R.id.etTitle);
 		spCategory		 = (Spinner)  findViewById(R.id.spCategories   );
 		tvCharsRemaining = (TextView) findViewById(R.id.tvCharsRemaining);
 		tvCharsRemaining.setText(""+MAX_LENGTH+" remaining" );
@@ -82,6 +84,7 @@ public class CreateActivity extends Activity {
 	public void create(View v){
 		String etBodyText = etBody.getText().toString();
 		String spinnerSelection = spCategory.getSelectedItem().toString();
+		String etTitleText = etTitle.getText().toString();
 
 		// If empty, don't allow send.
 		if((etBodyText==null)||(etBodyText.trim().length()<=0)){
@@ -91,6 +94,7 @@ public class CreateActivity extends Activity {
 			joke = new Joke();
 			joke.setCreatedBy(JokesApplication.getParseClient().getUserId());
 			joke.setText(etBodyText);
+			joke.setTitle(etTitleText);
 			joke.setCategory(Category.valueOf(spinnerSelection));
 			// 1. Send text to Joke Service
 			final CreateActivity parentThis = this;

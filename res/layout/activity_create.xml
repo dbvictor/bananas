@@ -5,19 +5,6 @@
     android:background="@color/background_grey"
     tools:context="${relativePackage}.${activityClass}" >
 
-    <EditText
-        android:id="@+id/etNewJoke"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:ems="10"
-        android:maxLength="500"
-        android:hint="@string/new_joke_hint" >
-        <requestFocus />
-    </EditText>
-
     <TextView
         android:id="@+id/tvCharsRemaining"
         android:layout_width="wrap_content"
@@ -45,5 +32,54 @@
         android:layout_centerHorizontal="true"
         android:onClick="create"
         android:text="@string/new_joke_button" />
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/etTitle"
+        android:layout_alignBottom="@+id/etTitle"
+        android:layout_alignParentLeft="true"
+        android:text="@string/joke_title" />
+
+    <TextView
+        android:id="@+id/tvJokeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/etTitle"
+        android:layout_marginTop="15dp"
+        android:text="@string/joke_label" />
+
+    <EditText
+        android:id="@+id/etNewJoke"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tvJokeLabel"
+        android:layout_marginTop="15dp"
+        android:ems="10"
+        android:hint="@string/new_joke_hint"
+        android:maxLength="500" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/tvCategoryLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tvCharsRemaining"
+        android:text="@string/category_label" />
+
+    <EditText
+        android:id="@+id/etTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/tvJokeLabel"
+        android:ems="10" />
 
 </RelativeLayout>

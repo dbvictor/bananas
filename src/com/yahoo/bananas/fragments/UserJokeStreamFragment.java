@@ -7,7 +7,6 @@ import android.util.Log;
 
 import com.yahoo.bananas.clients.ParseClient.FindJokes;
 import com.yahoo.bananas.models.Joke;
-import com.yahoo.bananas.models.TwitterUser;
 import com.yahoo.bananas.models.User;
 
 public class UserJokeStreamFragment extends JokesListFragment {
@@ -25,7 +24,7 @@ public class UserJokeStreamFragment extends JokesListFragment {
 	
 	/** [For dynamic loading] The activity can pass a custom user instead of defaulting to the current user.
 	 *  Set to NULL (default) for current user. */
-    public static UserJokeStreamFragment newInstance(TwitterUser user) {
+    public static UserJokeStreamFragment newInstance(User user) {
     	UserJokeStreamFragment f = new UserJokeStreamFragment();
         Bundle args = new Bundle();
         if(user!=null) args.putLong(UID, user.getId());

@@ -78,7 +78,7 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 		
 		//		tvBody.setTag(joke);
 		// Store the user into the image so that when they click on it, we can know which user to show profile.
-//		ivProfileImage.setTag(joke.getUser());
+		ivProfileImage.setTag(joke.getCreatedByUser());
 		
 		tvBody.setOnClickListener(new OnClickListener()
 		{

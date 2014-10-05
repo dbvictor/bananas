@@ -11,14 +11,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yahoo.bananas.R;
 import com.yahoo.bananas.activities.DetailActivity;
 import com.yahoo.bananas.models.Category;
 import com.yahoo.bananas.models.Joke;
+import com.yahoo.bananas.models.User;
 import com.yahoo.bananas.util.Util;
 
 public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 	private static final int JOKE_BODY_READABLE_LIMIT = 30;
+	private ImageLoader imageLoader = ImageLoader.getInstance();  // Universal loader we will use to get the image for us (asynchronously)
 
 	public JokeArrayAdapter(Context context, List<Joke> objects){
 		super(context, 0, objects);
@@ -36,7 +39,6 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 		}
 		// Find views within template
 		ImageView ivProfileImage = (ImageView) v.findViewById(R.id.ivProfileImage);
-		TextView  tvRealName     = (TextView ) v.findViewById(R.id.tvRealName);
 		TextView  tvUserName     = (TextView ) v.findViewById(R.id.tvUserName);
 		TextView  tvTime         = (TextView ) v.findViewById(R.id.tvTime);
 		TextView  tvBody         = (TextView ) v.findViewById(R.id.tvBody);
@@ -48,8 +50,12 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 		// Clear existing image (needed if it was reused)
 		ivProfileImage.setImageResource(android.R.color.transparent);
 		// Populate views with joke data.
-//		ImageLoader imageLoader = ImageLoader.getInstance();  // Universal loader we will use to get the image for us (asynchronously)
-//		imageLoader.displayImage(joke.getUser().getImageUrl(), ivProfileImage); // Asynchronously load image using universal loader.
+		User createdByUser = joke.getCreatedByUser();
+		if (createdByUser != null) {
+			 //username will be a string of random characters, so using real name, which the user can set to whatever they want
+			tvUserName.setText(createdByUser.getRealName());	
+			imageLoader.displayImage(createdByUser.getImageUrl(), ivProfileImage); // Asynchronously load image using universal loader.
+		}
 //		tvRealName.setText(joke.getUser().getRealName());
 //		tvUserName.setText("@"+joke.getUser().getScreenName());
 		if (joke.getCreatedAt() != null)
@@ -57,7 +63,7 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 		String jokeText = joke.getText();
 		if(jokeText.length()>JOKE_BODY_READABLE_LIMIT){
 			jokeText = jokeText.trim();
-			jokeText = jokeText.substring(0, 30) + "...";
+			jokeText = jokeText.substring(0, JOKE_BODY_READABLE_LIMIT) + "...";
 		}
 		Category category = joke.getCategory();
 		if (category == null) {
@@ -69,7 +75,8 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 		tvUpVotes.setText(String.valueOf(joke.getVotesUp()));
 		tvDownVotes.setText(String.valueOf(joke.getVotesDown()));
 		tvShares.setText(String.valueOf(joke.getShares()));
-//		tvBody.setTag(joke);
+		
+		//		tvBody.setTag(joke);
 		// Store the user into the image so that when they click on it, we can know which user to show profile.
 //		ivProfileImage.setTag(joke.getUser());
 		

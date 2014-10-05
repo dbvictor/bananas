@@ -32,6 +32,8 @@
         android:layout_alignBaseline="@+id/etTitle"
         android:layout_alignBottom="@+id/etTitle"
         android:layout_marginLeft="10dp"
+        android:textSize="12dp"
+        android:textStyle="bold"
         android:layout_alignParentLeft="true"
         android:text="@string/joke_title" />
 
@@ -41,8 +43,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/etTitle"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="15dp"
-        android:text="@string/joke_label" />
+        android:text="@string/joke_label"
+        android:textSize="12dp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/etNewJoke"
@@ -53,6 +58,10 @@
         android:layout_below="@+id/tvJokeLabel"
         android:layout_marginTop="15dp"
         android:ems="10"
+        android:textAlignment="textStart"
+        android:gravity="start"
+        android:textSize="10dp"
+        android:minLines="8"
         android:hint="@string/new_joke_hint"
         android:maxLength="500" >
 
@@ -63,9 +72,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-                android:layout_marginLeft="10dp"
-        
         android:layout_below="@+id/tvCharsRemaining"
+        android:layout_marginLeft="10dp"
+        android:textStyle="bold"
         android:text="@string/category_label" />
 
     <Spinner
@@ -81,8 +90,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/tvCharsRemaining"
         android:layout_toRightOf="@+id/tvTitle"
-        android:ems="10">
+        android:maxLines="1"
+        android:ems="10"
+        android:textSize="12dp" >
+
                 <requestFocus />
         </EditText>
 

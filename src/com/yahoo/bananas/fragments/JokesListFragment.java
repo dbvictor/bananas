@@ -1,7 +1,7 @@
 package com.yahoo.bananas.fragments;
 
-import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.os.Bundle;
@@ -163,7 +163,11 @@ abstract public class JokesListFragment extends Fragment {
 			if(refresh) populateJokeStreamOffline(refresh);
 		}else{
 			final JokesListFragment parentThis = this;
-			if(refresh) lastObjectId = null; // If told to refresh from beginning, start again from 0.
+			if(refresh) {
+				lastObjectId = null; // If told to refresh from beginning, start again from 0.
+				lastVotesUp = -1;
+				lastDate = null;
+			}
 			getJokes(new FindJokes() {
 				@Override
 				public void done(List<Joke> results, ParseException e) {
@@ -173,7 +177,16 @@ abstract public class JokesListFragment extends Fragment {
 						if (refresh) {
 							aJokes.clear();
 							aJokes.addAll(results);
-							lastObjectId = jokes != null && ! jokes.isEmpty() ? jokes.get(jokes.size()-1).getObjectId() : null;
+							if (jokes != null && ! jokes.isEmpty()) {
+								Joke lastJoke = jokes.get(jokes.size()-1);
+								lastObjectId = lastJoke.getObjectId();
+								lastVotesUp = lastJoke.getVotesUp();
+								lastDate = lastJoke.getCreatedAt();
+							} else {
+								lastObjectId = null;
+								lastVotesUp = -1;
+								lastDate = null;
+							}
 							swipeContainer.setRefreshing(false);
 							try {
 								for (Joke j : results) {

@@ -8,6 +8,7 @@ import android.util.Log;
 import com.yahoo.bananas.clients.ParseClient.FindJokes;
 import com.yahoo.bananas.models.Joke;
 import com.yahoo.bananas.models.TwitterUser;
+import com.yahoo.bananas.models.User;
 
 public class UserJokeStreamFragment extends JokesListFragment {
 	private static final String DEBUG = "B_DEBUG";
@@ -17,9 +18,9 @@ public class UserJokeStreamFragment extends JokesListFragment {
 
 	/** [For static loading] The activity can tell the jokestream to show a custom user instead
 	 *  of defaulting to the current user.  Set to NULL (default) for current user. */
-	public void setCustomUser(TwitterUser user){ // Needed if we do the static loading alternative.
+	public void setCustomUser(User user){ // Needed if we do the static loading alternative.
 		if(user==null) optCustomUid  = -1;
-		else           optCustomUid = user.getUid();
+		else           optCustomUid = user.getId();
 	}
 	
 	/** [For dynamic loading] The activity can pass a custom user instead of defaulting to the current user.
@@ -27,10 +28,10 @@ public class UserJokeStreamFragment extends JokesListFragment {
     public static UserJokeStreamFragment newInstance(TwitterUser user) {
     	UserJokeStreamFragment f = new UserJokeStreamFragment();
         Bundle args = new Bundle();
-        if(user!=null) args.putLong(UID, user.getUid());
+        if(user!=null) args.putLong(UID, user.getId());
         f.setArguments(args);
         Log.e(DEBUG,"new fragment: "+user);
-        if(user!=null) Log.e(DEBUG,"new fragment: "+user.getUid());
+        if(user!=null) Log.e(DEBUG,"new fragment: "+user.getId());
         return f;
     }	
 	
@@ -49,6 +50,7 @@ public class UserJokeStreamFragment extends JokesListFragment {
 
 	@Override
 	protected void getJokes(FindJokes handler) {
+		getParseClient().getJokesNewest(getLastDate(), getLastObjectId(), String.valueOf(optCustomUid), getOptCategories(), handler);
 	}
 
 

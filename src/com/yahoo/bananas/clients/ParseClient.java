@@ -1,10 +1,10 @@
 package com.yahoo.bananas.clients;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -116,7 +116,7 @@ public class ParseClient {
 		if(lastObjectId!=null) query.whereLessThan(Joke.COL.OBJECTID , lastObjectId);
 		if(optCategories!=null) query.whereContainedIn(Joke.COL.CATEGORY, Category.toDbValue(optCategories));
 		query.orderByDescending(Joke.COL.CREATEDAT);
-		query.orderByDescending(Joke.COL.OBJECTID);
+		query.addDescendingOrder(Joke.COL.OBJECTID);
 		query.findInBackground(handler);
 	}
 
@@ -152,7 +152,7 @@ public class ParseClient {
 		if(lastObjectId!=null) query.whereLessThan(Joke.COL.OBJECTID , lastObjectId);
 		if(optCategories!=null) query.whereContainedIn(Joke.COL.CATEGORY, Category.toDbValue(optCategories));
 		query.orderByDescending(Joke.COL.VOTESUP);
-		query.orderByDescending(Joke.COL.OBJECTID);
+		query.addDescendingOrder(Joke.COL.OBJECTID);
 		query.findInBackground(handler);
 	}
 	
@@ -162,19 +162,21 @@ public class ParseClient {
 	 * @param handler - async response handler once we finish populating the jokes with user objects.           
 	 */
 	private void getJokesUsers(final List<Joke> jokes, final ParseClient.FindJokes handler){
+		Log.d("trace", "+getJokesUsers(Collection.size="+jokes.size()+")");
 		// 1. Determine all the users we need.
 		HashSet<String> userObjectIds = new HashSet<String>(jokes.size()); 
 		for(Joke j : jokes) userObjectIds.add(j.getCreatedBy());
 		// 2. Get Users (from cache or retrieve and put in cache)
 		getUsers(userObjectIds, new FindUsers() {
 			@Override
-			public void done(List<User> results, ParseException e) {
+			public void done(List<User> users, ParseException e) {
 				if(e!=null)	Log.e("PARSE ERROR","Get Users for Jokes Failed: "+e.getMessage(),e);
+				Log.d("debug", "getJokesUsers found users="+((users!=null)? users.size(): "null")+")");
 				// 3. Put the users into Jokes.
-				if(results!=null){
+				if(users!=null){
 					// We need a map to quickly find the user given the user ID.
-					HashMap<String,User> mapIdToUser = new HashMap<String,User>(results.size());
-					for(User u : results) mapIdToUser.put(u.getObjectId(), u);
+					HashMap<String,User> mapIdToUser = new HashMap<String,User>(users.size());
+					for(User u : users) mapIdToUser.put(u.getObjectId(), u);
 					// Now just populate users we found into jokes
 					for(Joke j : jokes) j.setCreatedBy(mapIdToUser.get(j.getCreatedBy()));
 				}
@@ -275,6 +277,7 @@ public class ParseClient {
      * @return NULL if not found, else non-null user with this object id.
      */
 	public void getUsers(Collection<String> userObjectIds, final ParseClient.FindUsers handler){
+		Log.d("trace", "+getUsers(Collection.size="+userObjectIds.size()+")");
 		// 1. First, look in the cache.
 		// + determine what users we still need.
 		final ArrayList<User  > users       = new ArrayList<User  >(userObjectIds.size());
@@ -293,6 +296,7 @@ public class ParseClient {
 				@Override
 				public void done(List<User> results, ParseException e) {
 					if(e!=null)	Log.e("PARSE ERROR","Get Users Latest Failed: "+e.getMessage(),e);
+					Log.d("DEBUG", "getUsersLatest found '"+((results!=null)? results.size() : 0)+"' users.");
 					// Combine the new results with the ones we already had.
 					if(results!=null) users.addAll(results);
 					// Tell the caller we're done
@@ -355,10 +359,11 @@ public class ParseClient {
 			return new FindCallback<ParseObject>(){
 				@Override 
 				public void done(List<ParseObject> resultsPO, ParseException e) {
+					Log.d("trace", "FindJokes.fromParseObjects::done() (Collection.size="+((resultsPO!=null)? resultsPO.size() : "null")+")");
 					if(e!=null)	Log.e("PARSE ERROR","Get Jokes Failed: "+e.getMessage(),e);
 					if(resultsPO==null) resultsPO = new ArrayList<ParseObject>(0); // Avoid NPE or more conditional logic.
 					List<Joke> resultsJokes = Joke.fromParseObjects(resultsPO);
-					if(e!=null) JokesApplication.getParseClient().getJokesUsers(resultsJokes,handler);
+					if(e==null) JokesApplication.getParseClient().getJokesUsers(resultsJokes,handler);
 					else        handler.done(resultsJokes, e);
 				}
 			};

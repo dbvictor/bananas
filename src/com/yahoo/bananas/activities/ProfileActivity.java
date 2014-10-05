@@ -1,25 +1,21 @@
 package com.yahoo.bananas.activities;
 
-import org.json.JSONObject;
-
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yahoo.bananas.JokesApplication;
 import com.yahoo.bananas.R;
 import com.yahoo.bananas.fragments.UserJokeStreamFragment;
-import com.yahoo.bananas.models.TwitterUser;
+import com.yahoo.bananas.models.User;
 import com.yahoo.bananas.util.InternetStatus;
 
 public class ProfileActivity extends FragmentActivity {
@@ -31,7 +27,7 @@ public class ProfileActivity extends FragmentActivity {
 		setContentView(R.layout.activity_profile);
 		internetStatus = new InternetStatus(this);
 		// Detect if they want us to load a specific user.
-		TwitterUser optUser = (TwitterUser) getIntent().getSerializableExtra("user"); // NULL if no other user.
+		User optUser = (User) getIntent().getSerializableExtra("user"); // NULL if no other user.
 		loadProfile(optUser);
 		// Tell the fragment to load a specific user too.
 		// - Load dynamically so we can control the constructor to pass arguments to it.
@@ -59,7 +55,7 @@ public class ProfileActivity extends FragmentActivity {
 	 *          (Optional) Specofic user profile to load if not the current user.
 	 *          NULL: loads current user by default if none specified.
 	 */
-	private void loadProfile(TwitterUser optUser){
+	private void loadProfile(User optUser){
 		// If we already have the user object, just display it.
 		if(optUser!=null){
 			// note: we don't need a network check because (1) we already have it, and (2) image url is probably cached if they already displayed it once.
@@ -69,21 +65,7 @@ public class ProfileActivity extends FragmentActivity {
 			Toast.makeText(this, "Network Not Available!", Toast.LENGTH_SHORT).show();
 			loadProfileOffline();
 		}else{
-			final ProfileActivity parentThis = this;
-			JokesApplication.getTwitterClient().getMyProfile(new JsonHttpResponseHandler(){
-				@Override
-				public void onSuccess(JSONObject json) {
-					Log.d("json", "MyInfo JSON: "+json.toString());
-					TwitterUser u = TwitterUser.fromJSON(json);
-					populateProfileHeader(u);
-				}
-				@Override
-				public void onFailure(Throwable e, String s) {
-					Log.d("debug", e.toString());
-					Log.d("debug", s.toString());
-					Toast.makeText(parentThis, "PROFILE FAILED!", Toast.LENGTH_SHORT).show();
-				}
-			});
+			populateProfileHeader(JokesApplication.getParseClient().getUser());
 		}
 	}
 	
@@ -93,21 +75,16 @@ public class ProfileActivity extends FragmentActivity {
 		return;		
 	}
 	
-	private void populateProfileHeader(TwitterUser u){
+	private void populateProfileHeader(User u){
 		// Set action bar to this user.
-		getActionBar().setTitle("@"+u.getScreenName());
+		getActionBar().setTitle(u.getRealName());
 		// Get access to our views.
-		TextView  tvRealName     = (TextView)  findViewById(R.id.tvRealName    );
-		TextView  tvTagline      = (TextView)  findViewById(R.id.tvTagline     );
-		TextView  tvFollowers    = (TextView)  findViewById(R.id.tvFollowers   );
-		TextView  tvFollowing    = (TextView)  findViewById(R.id.tvFollowing   );
 		ImageView ivProfileImage = (ImageView) findViewById(R.id.ivProfileImage);
 		// Set the user values to these views.
-		tvRealName .setText(u.getRealName());
-		tvTagline  .setText(u.getDescription());
-		tvFollowers.setText(u.getFollowersCount() + " Followers");
-		tvFollowing.setText(u.getFriendsCount() + " Following");
 		ImageLoader.getInstance().displayImage(u.getImageUrl(), ivProfileImage);
+		
+		TextView tvUserName = (TextView) findViewById(R.id.tvRealName);
+		tvUserName.setText(u.getRealName());
 	}
 	
 	@Override

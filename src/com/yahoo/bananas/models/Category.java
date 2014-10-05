@@ -10,7 +10,7 @@ public enum Category {
 	Bar   		(1,"Bar"   		),
 	Food   		(2,"Food"   	),
 	Blonde   	(3,"Blonde"   	),
-	Your_Momma  (4,"Your_Momma" ),
+	Your_Momma  (4,"Your Momma" ),
 	Lawyer   	(5,"Lawyer"   	),
 	Doctor   	(6,"Doctor"   	),
 	Other 		(7,"Other" 		);

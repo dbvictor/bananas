@@ -16,14 +16,6 @@
         android:textStyle="italic"
         android:text="N remaining" />
 
-    <Spinner
-        android:id="@+id/spCategories"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvCharsRemaining"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="23dp" />
-
     <Button
         android:id="@+id/bSubmit"
         android:layout_width="wrap_content"
@@ -39,6 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/etTitle"
         android:layout_alignBottom="@+id/etTitle"
+        android:layout_marginLeft="10dp"
         android:layout_alignParentLeft="true"
         android:text="@string/joke_title" />
 
@@ -63,7 +56,6 @@
         android:hint="@string/new_joke_hint"
         android:maxLength="500" >
 
-        <requestFocus />
     </EditText>
 
     <TextView
@@ -71,15 +63,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
+        
         android:layout_below="@+id/tvCharsRemaining"
         android:text="@string/category_label" />
+
+    <Spinner
+        android:id="@+id/spCategories"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tvCategoryLabel"
+        android:layout_toLeftOf="@+id/tvCharsRemaining"
+        android:layout_toRightOf="@+id/tvCategoryLabel" />
 
     <EditText
         android:id="@+id/etTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/tvJokeLabel"
-        android:ems="10" />
+        android:layout_toRightOf="@+id/tvTitle"
+        android:ems="10">
+                <requestFocus />
+        </EditText>
 
 </RelativeLayout>

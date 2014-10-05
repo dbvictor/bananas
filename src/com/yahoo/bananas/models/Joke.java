@@ -1,5 +1,6 @@
 package com.yahoo.bananas.models;
 
+import android.util.Log;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;

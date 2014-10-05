@@ -4,7 +4,6 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -14,16 +13,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemLongClickListener;
 
 import com.parse.DeleteCallback;
 import com.parse.ParseException;
-import com.parse.SaveCallback;
 import com.yahoo.bananas.JokesApplication;
 import com.yahoo.bananas.R;
-import com.yahoo.bananas.activities.JokeStreamActivity;
 import com.yahoo.bananas.adapters.JokeArrayAdapter;
 import com.yahoo.bananas.clients.ParseClient;
 import com.yahoo.bananas.clients.ParseClient.FindJokes;

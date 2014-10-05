@@ -13,17 +13,6 @@
         android:src="@drawable/ic_bananas_logo" />
 
     <TextView
-        android:id="@+id/tvUserName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/ivProfileImage"
-        android:maxLines="1"
-        android:paddingLeft="7dp"
-        android:paddingRight="0dp"
-        android:text="\@Username" />
-
-    <TextView
         android:id="@+id/tvUpVotes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -61,14 +50,15 @@
         android:id="@+id/tvBody"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/tvShares"
-        android:layout_alignLeft="@+id/tvUserName"
+        android:layout_alignBottom="@+id/ivProfileImage"
         android:layout_alignTop="@+id/tvDownVotes"
         android:layout_toLeftOf="@+id/tvShares"
+        android:layout_toRightOf="@+id/ivProfileImage"
         android:onClick="onJokeClick"
         android:paddingLeft="5dp"
         android:paddingRight="0dp"
-        android:text="Joke body..." />
+        android:text="Joke body..."
+        android:textSize="10dp" />
 
     <TextView
         android:id="@+id/tvTime"
@@ -77,6 +67,7 @@
         android:layout_above="@+id/tvBody"
         android:layout_alignRight="@+id/tvBody"
         android:maxLines="1"
+        android:textSize="10dp"
         android:paddingLeft="7dp"
         android:paddingRight="0dp"
         android:text="Time"
@@ -110,5 +101,36 @@
         android:layout_alignTop="@+id/tvShares"
         android:layout_toRightOf="@+id/tvShares"
         android:src="@drawable/ic_shares" />
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:textSize="12dp"
+        android:layout_toLeftOf="@+id/tvTime"
+        android:layout_toRightOf="@+id/ivProfileImage"
+        android:text="Title" />
+
+    <TextView
+        android:id="@+id/tvJokeCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="11dp"
+        android:layout_alignBottom="@+id/tvUserName"
+        android:layout_toRightOf="@+id/ivProfileImage"
+        android:text="Category" />
+
+    <TextView
+        android:id="@+id/tvUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/tvBody"
+        android:layout_below="@+id/tvDownVotes"
+        android:maxLines="1"
+        android:textSize="10dp"
+        android:paddingLeft="7dp"
+        android:paddingRight="0dp"
+        android:text="\@Username" />
 
 </RelativeLayout>

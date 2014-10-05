@@ -17,6 +17,8 @@ import com.yahoo.bananas.models.Joke;
 import com.yahoo.bananas.util.Util;
 
 public class JokeArrayAdapter extends ArrayAdapter<Joke> {
+	private static final int JOKE_BODY_READABLE_LIMIT = 30;
+
 	public JokeArrayAdapter(Context context, List<Joke> objects){
 		super(context, 0, objects);
 	}
@@ -49,7 +51,12 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 //		tvUserName.setText("@"+joke.getUser().getScreenName());
 		if (joke.getCreatedAt() != null)
 			tvTime.setText(Util.getRelativeTimeAgo(joke.getCreatedAt().toString()));
-		tvBody.setText(joke.getText());
+		String jokeText = joke.getText();
+		if(jokeText.length()>JOKE_BODY_READABLE_LIMIT){
+			jokeText = jokeText.trim();
+			jokeText = jokeText.substring(0, 30) + "...";
+		}
+		tvBody.setText(jokeText);
 		tvUpVotes.setText(String.valueOf(joke.getVotesUp()));
 		tvDownVotes.setText(String.valueOf(joke.getVotesDown()));
 		tvShares.setText(String.valueOf(joke.getShares()));

@@ -16,5 +16,8 @@
     <string name="new_joke_button">Submit</string>
     <string name="title_activity_detail">DetailActivity</string>
     <string name="login_skip_button">Skip</string>
+    <string name="joke_title">Title:</string>
+    <string name="joke_label">Joke:</string>
+    <string name="category_label">Category:</string>
 
 </resources>

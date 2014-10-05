@@ -58,29 +58,29 @@ public final class R {
         public static final int flCategoryFilters=0x7f090012;
         public static final int flContainer=0x7f09000b;
         public static final int flProfileJokeStreamContainer=0x7f090011;
+        public static final int ivCategoryImage=0x7f090017;
         public static final int ivProfileImage=0x7f09000f;
-        public static final int ivStaticDown=0x7f09001d;
-        public static final int ivStaticShares=0x7f09001e;
-        public static final int ivStaticUp=0x7f09001c;
+        public static final int ivStaticDown=0x7f09001e;
+        public static final int ivStaticShares=0x7f09001f;
+        public static final int ivStaticUp=0x7f09001d;
         public static final int lvCategoryFilters=0x7f090013;
         public static final int lvJokes=0x7f090015;
         public static final int rlHeader=0x7f09000e;
         public static final int spCategories=0x7f090003;
         public static final int swipeContainer=0x7f090014;
-        public static final int tvBody=0x7f09001a;
+        public static final int tvBody=0x7f09001c;
         public static final int tvCategory=0x7f09000a;
         public static final int tvCategoryLabel=0x7f090007;
         public static final int tvCharsRemaining=0x7f090000;
         public static final int tvCreatedAt=0x7f090009;
-        public static final int tvDownVotes=0x7f090018;
+        public static final int tvDownVotes=0x7f090019;
         public static final int tvJoke=0x7f090008;
-        public static final int tvJokeCategory=0x7f09001f;
         public static final int tvJokeLabel=0x7f090006;
         public static final int tvRealName=0x7f090010;
-        public static final int tvShares=0x7f090019;
+        public static final int tvShares=0x7f09001a;
         public static final int tvTime=0x7f09001b;
         public static final int tvTitle=0x7f090004;
-        public static final int tvUpVotes=0x7f090017;
+        public static final int tvUpVotes=0x7f090018;
         public static final int tvUserName=0x7f090020;
     }
     public static final class layout {

@@ -90,6 +90,16 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 			}
 		});
 		
+		tvTitle.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(v.getContext(),DetailActivity.class);
+				intent.putExtra("joke", joke);
+				v.getContext().startActivity(intent);
+			}
+		});
+		
 		return v;
 	}
 	

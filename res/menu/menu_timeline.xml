@@ -23,7 +23,7 @@
         android:orderInCategory="100"
         android:showAsAction="always"
         android:onClick="internetToggle"
-        android:visible="true"
+        android:visible="false"
         android:title="@string/action_internet_toggle"/>
     
 </menu>

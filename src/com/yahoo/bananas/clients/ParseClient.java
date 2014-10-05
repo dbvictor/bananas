@@ -2,6 +2,9 @@ package com.yahoo.bananas.clients;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -16,6 +19,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.yahoo.bananas.JokesApplication;
 import com.yahoo.bananas.models.Category;
 import com.yahoo.bananas.models.Joke;
 import com.yahoo.bananas.models.User;
@@ -99,7 +103,7 @@ public class ParseClient {
 	 *          Asynchronous callback mechanism for you to handle results. 
 	 * @param handler - callback handler to return results when they are ready.
 	 */
-	public void getJokesNewest(Date lastDate, String lastObjectId, String optUserId, List<Category> optCategories, final ParseClient.FindJokes handler){
+	public void getJokesNewest(Date lastDate, String lastObjectId, String optUserId, List<Category> optCategories, ParseClient.FindJokes handler){
 		getJokesNewest(lastDate,lastObjectId,optUserId,optCategories,FindJokes.fromParseObjects(handler));
 	}
 	/** Same as getJokesNewest(...,ParseClient.FindJokes), except returns the unconverted ParseObjects for you. */
@@ -135,7 +139,7 @@ public class ParseClient {
 	 *          Asynchronous callback mechanism for you to handle results. 
 	 * @param handler - callback handler to return results when they are ready.
 	 */
-	public void getJokesPopular(int lastVotesUp, String lastObjectId, List<Category> optCategories, final ParseClient.FindJokes handler){
+	public void getJokesPopular(int lastVotesUp, String lastObjectId, List<Category> optCategories, ParseClient.FindJokes handler){
 		getJokesPopular(lastVotesUp,lastObjectId,optCategories,FindJokes.fromParseObjects(handler));
 	}
 	/** Same as getJokesNewest(...,ParseClient.FindJokes), except returns the unconverted ParseObjects. */
@@ -151,6 +155,52 @@ public class ParseClient {
 		query.orderByDescending(Joke.COL.OBJECTID);
 		query.findInBackground(handler);
 	}
+	
+	/**
+	 * Get User objects for any userid value specified in the Jokes.
+	 * @param jokes - the jokes you already retrieved but without User objects populated yet.
+	 * @param handler - async response handler once we finish populating the jokes with user objects.           
+	 */
+	private void getJokesUsers(final List<Joke> jokes, final ParseClient.FindJokes handler){
+		// 1. Determine all the users we need.
+		HashSet<String> userObjectIds = new HashSet<String>(jokes.size()); 
+		for(Joke j : jokes) userObjectIds.add(j.getCreatedBy());
+		// 2. Get Users (from cache or retrieve and put in cache)
+		getUsers(userObjectIds, new FindUsers() {
+			@Override
+			public void done(List<User> results, ParseException e) {
+				if(e!=null)	Log.e("PARSE ERROR","Get Users for Jokes Failed: "+e.getMessage(),e);
+				// 3. Put the users into Jokes.
+				if(results!=null){
+					// We need a map to quickly find the user given the user ID.
+					HashMap<String,User> mapIdToUser = new HashMap<String,User>(results.size());
+					for(User u : results) mapIdToUser.put(u.getObjectId(), u);
+					// Now just populate users we found into jokes
+					for(Joke j : jokes) j.setCreatedBy(mapIdToUser.get(j.getCreatedBy()));
+				}
+				// 4. Return to caller the original jokes (now filled out)
+				handler.done(jokes, e);
+			}
+		});
+	}
+	/**
+	 * Get User objects for any userid value specified in the Joke.
+	 * @param joke - the jokes you already retrieved but without User objects populated yet.
+	 * @param handler - async response handler once we finish populating the jokes with user objects.           
+	 */
+	private void getJokesUsers(final Joke joke, final ParseClient.FindJoke handler){
+		// Reuse list-based method, just convert the interface.
+		ArrayList<Joke> jokes = new ArrayList<Joke>(1);
+		jokes.add(joke);
+		getJokesUsers(jokes, new FindJokes() {
+			@Override
+			public void done(List<Joke> results, ParseException e) {
+				// ignore list result, we already have the joke, it would have been updated within the list.
+				handler.done(joke, e);
+			}
+		});
+	}
+	
 	
     /**
      * (Cached) Get the user with the specified userid (user object id).
@@ -204,6 +254,10 @@ public class ParseClient {
      * Use this when you really want to get only the latest info, such as to show a profile page updates.
      * Use getUser() for most other operations, which loads from cache when already retrieved.
      */
+	public void getUserLatest(String userObjectId, final ParseClient.FindUser handler){
+		getUserLatest(userObjectId,FindUser.fromParseObject(handler));
+	}
+	/** Same as getUserLatest(...,ParseClient.FindUser), except returns unconverted ParseObjects. */
     private void getUserLatest(String userObjectId, FindCallback<ParseUser> handler){
     	try{
     		// To query for System table User, we have to use a special ParseUser.getQuery()
@@ -214,10 +268,57 @@ public class ParseClient {
 			query.findInBackground(handler);
 		}catch(ParseException e){ throw new RuntimeException(e.getMessage(),e); } // Just propagate as unchecked runtime exception.
     }
-	/** Same as getJokesNewest(...,FindCallback<ParseObject>), except converts to Jokes for you. */
-	public void getUserLatest(String userObjectId, final ParseClient.FindUser handler){
-		getUserLatest(userObjectId,FindUser.fromParseObject(handler));
+
+    /**
+     * (Cached) Get the users with the specified userids (user object id).
+     * Use this for most operation when you can most efficiently load from the cache.
+     * @return NULL if not found, else non-null user with this object id.
+     */
+	public void getUsers(Collection<String> userObjectIds, final ParseClient.FindUsers handler){
+		// 1. First, look in the cache.
+		// + determine what users we still need.
+		final ArrayList<User  > users       = new ArrayList<User  >(userObjectIds.size());
+		final ArrayList<String> usersNeeded = new ArrayList<String>(userObjectIds.size());
+		for(String userObjectId : userObjectIds){
+			User u = CACHE_USERS.get(userObjectId);
+			if(u!=null) users.add(u);
+			else        usersNeeded.add(userObjectId);
+		}
+		// 2. If all found, return
+		if(usersNeeded.size()<=0){
+			handler.done(users,null);
+		// 3. Else retrieve users we are missing.
+		}else{
+			getUsersLatest(usersNeeded, new FindUsers() {
+				@Override
+				public void done(List<User> results, ParseException e) {
+					if(e!=null)	Log.e("PARSE ERROR","Get Users Latest Failed: "+e.getMessage(),e);
+					// Combine the new results with the ones we already had.
+					if(results!=null) users.addAll(results);
+					// Tell the caller we're done
+					handler.done(users, e);
+				}
+			});
+		}
 	}
+    
+    /**
+     * (Non-Cached) Get the latest user info with the specified userids (user object ids) from the remote store.
+     * Use this when you really want to get only the latest info, such as to show a profile page updates.
+     * Use getUser() for most other operations, which loads from cache when already retrieved.
+     */
+	public void getUsersLatest(Collection<String> userObjectIds, ParseClient.FindUsers handler){
+		getUsersLatest(userObjectIds,FindUsers.fromParseObjects(handler));
+	}
+	/** Same as getUserLatest(...,ParseClient.FindUser), except returns unconverted ParseObjects. */
+    private void getUsersLatest(Collection<String> userObjectIds, FindCallback<ParseUser> handler){
+		// To query for System table User, we have to use a special ParseUser.getQuery()
+		//NO: ParseQuery<ParseObject> query = ParseQuery.getQuery(User.TABLE);
+		ParseQuery<ParseUser> query = ParseUser.getQuery();
+		query.setLimit(userObjectIds.size());
+		query.whereContainedIn(User.COL.OBJECTID, userObjectIds);
+		query.findInBackground(handler);
+    }
 	
     /** Update existing User. */
 	public void update(final User user, final SaveCallback handler){
@@ -226,6 +327,7 @@ public class ParseClient {
 		ParseUser.saveAllInBackground(users, new SaveCallback() {
 			@Override
 			public void done(ParseException e) {
+				if(e!=null)	Log.e("PARSE ERROR","Update Joke Failed: "+e.getMessage(),e);
 				// Cache the updated user if it succeeds, or the user will keep seeing the old cached user.
 				if(e==null) CACHE_USERS.put(user.getObjectId(), user);
 				// Report to the caller that it was done.
@@ -256,7 +358,8 @@ public class ParseClient {
 					if(e!=null)	Log.e("PARSE ERROR","Get Jokes Failed: "+e.getMessage(),e);
 					if(resultsPO==null) resultsPO = new ArrayList<ParseObject>(0); // Avoid NPE or more conditional logic.
 					List<Joke> resultsJokes = Joke.fromParseObjects(resultsPO);
-					handler.done(resultsJokes,e);
+					if(e!=null) JokesApplication.getParseClient().getJokesUsers(resultsJokes,handler);
+					else        handler.done(resultsJokes, e);
 				}
 			};
 		}
@@ -275,7 +378,8 @@ public class ParseClient {
 					}
 					Joke joke = null;
 					if((resultsPO!=null)&&(resultsPO.size()>0)) Joke.fromParseObject(resultsPO.get(0));
-					handler.done(joke,e);
+					if(e!=null) JokesApplication.getParseClient().getJokesUsers(joke,handler);
+					else        handler.done(joke,e);
 				}
 			};
 		}
@@ -283,13 +387,13 @@ public class ParseClient {
 
 	public abstract static class FindUsers{
 		public abstract void done(List<User> results, ParseException e);
-		static FindCallback<ParseObject> fromParseObjects(final ParseClient.FindUsers handler){
-			return new FindCallback<ParseObject>(){
+		static FindCallback<ParseUser> fromParseObjects(final ParseClient.FindUsers handler){
+			return new FindCallback<ParseUser>(){
 				@Override 
-				public void done(List<ParseObject> resultsPO, ParseException e) {
+				public void done(List<ParseUser> resultsPO, ParseException e) {
 					if(e!=null)	Log.e("PARSE ERROR","Get Users Failed: "+e.getMessage(),e);
 					// Convert to Users
-					if(resultsPO==null) resultsPO = new ArrayList<ParseObject>(0); // Avoid NPE or more conditional logic.
+					if(resultsPO==null) resultsPO = new ArrayList<ParseUser>(0); // Avoid NPE or more conditional logic.
 					List<User> resultsUsers = User.fromParseObjects(resultsPO);
 					// Cache Users (or update in case any changed)
 					for(User u : resultsUsers) CACHE_USERS.put(u.getObjectId(), u); // Update cache with the user.

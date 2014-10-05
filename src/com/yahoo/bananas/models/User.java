@@ -10,13 +10,14 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 import com.yahoo.bananas.util.Util;
 
 @Table(name = "Users")
 public class User extends Model implements Serializable{
 	// Constants
 	private static final long serialVersionUID = 8667788773549950232L;
-	public static final String TABLE         = "Users";
+	public static final String TABLE         = "User";
 	public static final class COL{
 		public static final String OBJECTID  = "objectId";  // (automatic) generated row ID.
 		public static final String CREATEDAT = "createdAt"; // (automatic) timestamp row created
@@ -101,8 +102,8 @@ public class User extends Model implements Serializable{
 	}
 
     // ----- PARSE -----
-    public ParseObject toParseObject(){
-    	ParseObject po = new ParseObject(TABLE);
+    public ParseUser toParseObject(){
+    	ParseUser po = new ParseUser(); //Special class for system table, not: new ParseObject(TABLE);
     	if(objectId!=null) po.setObjectId(objectId); // Use built-in for system column, not: po.put(COL.OBJECTID  ,objectId );
     	// Cannot set system-controlled column: if(createdAt!=null) po.put(COL.CREATEDAT ,createdAt);
     	if(userName!=null) po.put(COL.USERNAME  ,userName );

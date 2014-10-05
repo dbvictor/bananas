@@ -192,11 +192,15 @@ public class ParseClient {
      * Use this when you really want to get only the latest info, such as to show a profile page updates.
      * Use getUser() for most other operations, which loads from cache when already retrieved.
      */
-    private void getUserLatest(String userObjectId, FindCallback<ParseObject> handler){
-		ParseQuery<ParseObject> query = ParseQuery.getQuery(User.TABLE);
-		query.setLimit(1);
-		query.whereEqualTo(User.COL.OBJECTID, userObjectId);
-		query.findInBackground(handler);
+    private void getUserLatest(String userObjectId, FindCallback<ParseUser> handler){
+    	try{
+    		// To query for System table User, we have to use a special ParseUser.getQuery()
+			//NO: ParseQuery<ParseObject> query = ParseQuery.getQuery(User.TABLE);
+    		ParseQuery<ParseUser> query = ParseUser.getQuery();
+			query.setLimit(1);
+			query.get(userObjectId); // Use built-in for objectId, not custom column: query.whereEqualTo(User.COL.OBJECTID, userObjectId);
+			query.findInBackground(handler);
+		}catch(ParseException e){ throw new RuntimeException(e.getMessage(),e); } // Just propagate as unchecked runtime exception.
     }
 	/** Same as getJokesNewest(...,FindCallback<ParseObject>), except converts to Jokes for you. */
 	public void getUserLatest(String userObjectId, final ParseClient.FindUser handler){
@@ -205,7 +209,9 @@ public class ParseClient {
 	
     /** Update existing User. */
 	public void update(final User user, final SaveCallback handler){
-    	update(user.toParseObject(), new SaveCallback() {
+		List<ParseUser> users = new ArrayList<ParseUser>(1);
+		users.add(user.toParseObject());
+		ParseUser.saveAllInBackground(users, new SaveCallback() {
 			@Override
 			public void done(ParseException e) {
 				// Cache the updated user if it succeeds, or the user will keep seeing the old cached user.
@@ -284,10 +290,10 @@ public class ParseClient {
 	
 	public abstract static class FindUser{
 		public abstract void done(User user, ParseException e);
-		static FindCallback<ParseObject> fromParseObject(final ParseClient.FindUser handler){
-			return new FindCallback<ParseObject>(){
+		static FindCallback<ParseUser> fromParseObject(final ParseClient.FindUser handler){
+			return new FindCallback<ParseUser>(){
 				@Override 
-				public void done(List<ParseObject> resultsPO, ParseException e) {
+				public void done(List<ParseUser> resultsPO, ParseException e) {
 					if(e!=null)	Log.e("PARSE ERROR","Get User Failed: "+e.getMessage(),e);
 					if((resultsPO!=null) && (resultsPO.size()>1)){
 						Log.e("QUERY ERROR","Expected single user result, instead found '"+resultsPO.size()+"' results.");
@@ -295,7 +301,7 @@ public class ParseClient {
 					}
 					// Convert to User
 					User user = null;
-					if((resultsPO!=null)&&(resultsPO.size()>0)) User.fromParseObject(resultsPO.get(0));
+					if((resultsPO!=null)&&(resultsPO.size()>0)) user = User.fromParseObject(resultsPO.get(0));
 					// Cache Users (or update in case any changed)
 					if(user!=null) CACHE_USERS.put(user.getObjectId(), user); // Update cache with the user.
 					// Report to caller's handler with the converted users.

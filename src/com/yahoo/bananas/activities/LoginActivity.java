@@ -1,5 +1,7 @@
 package com.yahoo.bananas.activities;
 
+import java.util.List;
+
 import org.json.JSONObject;
 
 import android.app.Application;
@@ -89,7 +91,7 @@ public class LoginActivity extends OAuthLoginActivity<TwitterClient> {
 			public void done(final User userP, ParseException e) {
 				if(e!=null){ // If error, just report
 					Log.e("PARSE", e.toString());
-					Toast.makeText(toastContext, "Parse Profile FAILED!", Toast.LENGTH_SHORT).show();
+					Toast.makeText(toastContext, "Get Parse Profile FAILED!", Toast.LENGTH_SHORT).show();
 				}else if(userP==null){ // If not found, just report
 					Log.e("PARSE", "Parse User '"+parseClient.getUserId()+"' not found.");
 					Toast.makeText(toastContext, "Parse User NOT FOUND!", Toast.LENGTH_SHORT).show();
@@ -113,7 +115,7 @@ public class LoginActivity extends OAuthLoginActivity<TwitterClient> {
 									public void done(ParseException e) {
 										if(e!=null){ // If error, just report
 											Log.e("PARSE", e.toString());
-											Toast.makeText(toastContext, "Parse Profile FAILED!", Toast.LENGTH_SHORT).show();
+											Toast.makeText(toastContext, "Update Parse Profile FAILED!", Toast.LENGTH_SHORT).show();
 										}else{
 											Log.d("PARSE", "Updated Parse User from Twitter");
 											Toast.makeText(toastContext, "User Updated from Twitter", Toast.LENGTH_SHORT).show();

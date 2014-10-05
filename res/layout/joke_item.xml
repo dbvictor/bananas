@@ -21,7 +21,7 @@
         android:layout_marginRight="26dp"
         android:paddingLeft="0dp"
         android:paddingRight="7dp"
-        android:textSize="9dp"
+        android:textSize="10dp"
         android:text="Up"
         android:textColor="@color/text_grey" />
 
@@ -33,7 +33,7 @@
         android:layout_below="@+id/tvUpVotes"
         android:paddingLeft="7dp"
         android:paddingRight="7dp"
-        android:textSize="9dp"
+        android:textSize="10dp"
         android:text="Down"
         android:textColor="@color/text_grey" />
 
@@ -45,7 +45,7 @@
         android:layout_below="@+id/tvDownVotes"
         android:paddingLeft="7dp"
         android:paddingRight="7dp"
-        android:textSize="9dp"
+        android:textSize="10dp"
         android:text="Shares"
         android:textColor="@color/text_grey" />
 
@@ -74,6 +74,7 @@
         android:paddingRight="10dp"
         android:text="Time"
         android:textSize="10dp"
+        android:textColor="@color/text_grey"
         android:textStyle="italic" />
 
     <ImageView
@@ -134,6 +135,7 @@
         android:textSize="10dp"
         android:paddingLeft="7dp"
         android:paddingRight="0dp"
+        android:textColor="@color/text_grey"
         android:text="\@Username" />
 
 </RelativeLayout>

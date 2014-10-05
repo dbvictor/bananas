@@ -25,57 +25,63 @@ public final class R {
     }
     public static final class drawable {
         public static final int ic_action_create=0x7f020000;
-        public static final int ic_action_internet_off=0x7f020001;
-        public static final int ic_action_internet_on=0x7f020002;
-        public static final int ic_action_profile=0x7f020003;
-        public static final int ic_action_settings=0x7f020004;
-        public static final int ic_action_share=0x7f020005;
-        public static final int ic_action_user=0x7f020006;
-        public static final int ic_bananas_logo=0x7f020007;
-        public static final int ic_down=0x7f020008;
-        public static final int ic_home=0x7f020009;
-        public static final int ic_launcher=0x7f02000a;
-        public static final int ic_mentions=0x7f02000b;
-        public static final int ic_pencil_cartoon_not_a_box=0x7f02000c;
-        public static final int ic_popular=0x7f02000d;
-        public static final int ic_shares=0x7f02000e;
-        public static final int ic_up=0x7f02000f;
+        public static final int ic_action_done=0x7f020001;
+        public static final int ic_action_internet_off=0x7f020002;
+        public static final int ic_action_internet_on=0x7f020003;
+        public static final int ic_action_profile=0x7f020004;
+        public static final int ic_action_settings=0x7f020005;
+        public static final int ic_action_share=0x7f020006;
+        public static final int ic_action_user=0x7f020007;
+        public static final int ic_bananas_logo=0x7f020008;
+        public static final int ic_down=0x7f020009;
+        public static final int ic_home=0x7f02000a;
+        public static final int ic_launcher=0x7f02000b;
+        public static final int ic_mentions=0x7f02000c;
+        public static final int ic_pencil_cartoon_not_a_box=0x7f02000d;
+        public static final int ic_popular=0x7f02000e;
+        public static final int ic_shares=0x7f02000f;
+        public static final int ic_up=0x7f020010;
     }
     public static final class id {
-        public static final int actionCreate=0x7f09001f;
-        public static final int actionInternetToggle=0x7f090021;
-        public static final int actionProfile=0x7f090020;
-        public static final int action_settings=0x7f09001e;
+        public static final int actionCreate=0x7f090023;
+        public static final int actionDone=0x7f090022;
+        public static final int actionInternetToggle=0x7f090026;
+        public static final int actionProfile=0x7f090024;
+        public static final int actionSettings=0x7f090025;
+        public static final int action_settings=0x7f090021;
         public static final int bLogin=0x7f09000c;
         public static final int bSkip=0x7f09000d;
         public static final int bSubmit=0x7f090002;
+        public static final int cbCategory=0x7f090016;
         public static final int etNewJoke=0x7f090001;
         public static final int etTitle=0x7f090005;
+        public static final int flCategoryFilters=0x7f090012;
         public static final int flContainer=0x7f09000b;
         public static final int flProfileJokeStreamContainer=0x7f090011;
         public static final int ivProfileImage=0x7f09000f;
-        public static final int ivStaticDown=0x7f09001a;
-        public static final int ivStaticShares=0x7f09001b;
-        public static final int ivStaticUp=0x7f090019;
-        public static final int lvJokes=0x7f090013;
+        public static final int ivStaticDown=0x7f09001d;
+        public static final int ivStaticShares=0x7f09001e;
+        public static final int ivStaticUp=0x7f09001c;
+        public static final int lvCategoryFilters=0x7f090013;
+        public static final int lvJokes=0x7f090015;
         public static final int rlHeader=0x7f09000e;
         public static final int spCategories=0x7f090003;
-        public static final int swipeContainer=0x7f090012;
-        public static final int tvBody=0x7f090017;
+        public static final int swipeContainer=0x7f090014;
+        public static final int tvBody=0x7f09001a;
         public static final int tvCategory=0x7f09000a;
         public static final int tvCategoryLabel=0x7f090007;
         public static final int tvCharsRemaining=0x7f090000;
         public static final int tvCreatedAt=0x7f090009;
-        public static final int tvDownVotes=0x7f090015;
+        public static final int tvDownVotes=0x7f090018;
         public static final int tvJoke=0x7f090008;
-        public static final int tvJokeCategory=0x7f09001c;
+        public static final int tvJokeCategory=0x7f09001f;
         public static final int tvJokeLabel=0x7f090006;
         public static final int tvRealName=0x7f090010;
-        public static final int tvShares=0x7f090016;
-        public static final int tvTime=0x7f090018;
+        public static final int tvShares=0x7f090019;
+        public static final int tvTime=0x7f09001b;
         public static final int tvTitle=0x7f090004;
-        public static final int tvUpVotes=0x7f090014;
-        public static final int tvUserName=0x7f09001d;
+        public static final int tvUpVotes=0x7f090017;
+        public static final int tvUserName=0x7f090020;
     }
     public static final class layout {
         public static final int activity_create=0x7f030000;
@@ -83,33 +89,39 @@ public final class R {
         public static final int activity_joke_stream=0x7f030002;
         public static final int activity_login=0x7f030003;
         public static final int activity_profile=0x7f030004;
-        public static final int fragment_jokes_list=0x7f030005;
-        public static final int joke_item=0x7f030006;
+        public static final int activity_settings=0x7f030005;
+        public static final int fragment_category_filters=0x7f030006;
+        public static final int fragment_jokes_list=0x7f030007;
+        public static final int item_category_filter=0x7f030008;
+        public static final int joke_item=0x7f030009;
     }
     public static final class menu {
         public static final int login=0x7f080000;
-        public static final int menu_timeline=0x7f080001;
-        public static final int photos=0x7f080002;
+        public static final int menu_settings=0x7f080001;
+        public static final int menu_timeline=0x7f080002;
+        public static final int photos=0x7f080003;
     }
     public static final class string {
         public static final int action_create=0x7f060002;
         public static final int action_internet_toggle=0x7f060003;
         public static final int action_profile=0x7f060004;
-        public static final int action_settings=0x7f060005;
+        public static final int action_save=0x7f060005;
+        public static final int action_settings=0x7f060006;
         public static final int app_name=0x7f060000;
-        public static final int category_label=0x7f060011;
+        public static final int category_label=0x7f060013;
         public static final int hello_world=0x7f060001;
-        public static final int joke_label=0x7f060010;
-        public static final int joke_title=0x7f06000f;
-        public static final int login_skip_button=0x7f06000e;
-        public static final int login_twitter_button=0x7f060007;
-        public static final int new_joke_button=0x7f06000c;
-        public static final int new_joke_hint=0x7f06000b;
-        public static final int title_activity_create=0x7f060009;
-        public static final int title_activity_detail=0x7f06000d;
-        public static final int title_activity_photos=0x7f060006;
-        public static final int title_activity_profile=0x7f06000a;
-        public static final int title_activity_timeline=0x7f060008;
+        public static final int joke_label=0x7f060012;
+        public static final int joke_title=0x7f060011;
+        public static final int login_skip_button=0x7f060010;
+        public static final int login_twitter_button=0x7f060008;
+        public static final int new_joke_button=0x7f06000e;
+        public static final int new_joke_hint=0x7f06000d;
+        public static final int title_activity_create=0x7f06000a;
+        public static final int title_activity_detail=0x7f06000f;
+        public static final int title_activity_photos=0x7f060007;
+        public static final int title_activity_profile=0x7f06000b;
+        public static final int title_activity_settings=0x7f06000c;
+        public static final int title_activity_timeline=0x7f060009;
     }
     public static final class style {
         /** 

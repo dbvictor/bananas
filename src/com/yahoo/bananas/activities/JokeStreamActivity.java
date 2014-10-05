@@ -151,6 +151,13 @@ public class JokeStreamActivity extends FragmentActivity {
 ////		startActivity(i);
 //	}
 
+	/** Menu selection to modify settings. */
+	public void modifySettings(MenuItem menuItem){
+		Intent i = new Intent(this,SettingsActivity.class);
+		//no args: i.putExtra("settings", searchFilters);
+		startActivityForResult(i, ACTIVITY_PROFILE);
+	}
+	
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
     	if(requestCode==ACTIVITY_CREATE){ // CreateActivity Result

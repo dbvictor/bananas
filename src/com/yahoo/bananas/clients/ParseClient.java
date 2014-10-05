@@ -115,6 +115,7 @@ public class ParseClient {
 		// - so we also sort secondarily by objectid.
 		if(lastObjectId!=null) query.whereLessThan(Joke.COL.OBJECTID , lastObjectId);
 		if(optCategories!=null) query.whereContainedIn(Joke.COL.CATEGORY, Category.toDbValue(optCategories));
+		if(optUserId!=null) query.whereEqualTo(Joke.COL.CREATEDAT, optUserId);
 		query.orderByDescending(Joke.COL.CREATEDAT);
 		query.addDescendingOrder(Joke.COL.OBJECTID);
 		query.findInBackground(handler);

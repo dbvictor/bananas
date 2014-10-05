@@ -21,6 +21,7 @@ public class Joke extends Model implements Serializable {
 		public static final String CREATEDAT = "createdAt"; // (automatic) timestamp row created
 		public static final String CREATEDBY = "createdBy"; // User table's objectId
 		public static final String CATEGORY  = "category";  // Joke category
+		public static final String TITLE     = "title";     // Joke title
 		public static final String TEXT      = "text";      // Joke text
 		public static final String VOTESUP   = "votesUp";   // User up votes / likes
 		public static final String VOTESDOWN = "votesDown"; // User down votes / dislikes
@@ -38,7 +39,10 @@ public class Joke extends Model implements Serializable {
 	private String createdBy; // User table's objectId.
 	
 	@Column(name = COL.CATEGORY)
-	private Integer categoryDbValue;
+	private Integer categoryDbValue = Category.Other.toDbValue();
+
+	@Column(name = COL.TITLE)
+	private String title;
 	
 	@Column(name = COL.TEXT)
 	private String text;
@@ -77,6 +81,14 @@ public class Joke extends Model implements Serializable {
 	}
 	public void setCategory(Category category) {
 		this.categoryDbValue = category.toDbValue();
+	}
+
+	/** Joke title. */
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	
 	/** Joke text. */
@@ -120,14 +132,12 @@ public class Joke extends Model implements Serializable {
     // ----- PARSE -----
     public ParseObject toParseObject(){
     	ParseObject po = new ParseObject(TABLE);
-    	if (objectId != null ) {
-    		po.put(COL.OBJECTID  ,objectId       );
-        	po.setObjectId(objectId);
-    	}
-    	if (createdAt != null ) po.put(COL.CREATEDAT ,createdAt      );
-    	if (createdBy != null ) po.put(COL.CREATEDBY ,createdBy      );
-    	if (categoryDbValue != null ) po.put(COL.CATEGORY  ,categoryDbValue);
-    	if (text != null ) po.put(COL.TEXT      ,text           );
+    	if (objectId !=null) po.setObjectId(objectId); // Use built-in for system column, not: po.put(COL.OBJECTID  ,objectId );
+    	// Cannot set system-controlled column: if (createdAt != null ) po.put(COL.CREATEDAT ,createdAt      );
+    	po.put(COL.CREATEDBY ,createdBy      );
+    	po.put(COL.CATEGORY  ,categoryDbValue);
+    	po.put(COL.TITLE     ,title          );
+    	po.put(COL.TEXT      ,text           );
     	po.put(COL.VOTESUP   ,votesUp        );
     	po.put(COL.VOTESDOWN ,votesDown      );
     	po.put(COL.SHARES    ,shares         );
@@ -136,10 +146,11 @@ public class Joke extends Model implements Serializable {
     
     public static Joke fromParseObject(ParseObject po){
     	Joke j = new Joke();
-    	j.objectId        = po.getObjectId();
-    	j.createdAt       = po.getDate  (COL.CREATEDAT );
+    	j.objectId        = po.getObjectId();  // Use built-in for system column, not: po.getstring(COL.OBJECTID  );
+    	j.createdAt       = po.getCreatedAt(); // Use built-in for system column, not: po.getDate  (COL.CREATEDAT );
     	j.createdBy       = po.getString(COL.CREATEDBY );
     	j.categoryDbValue = po.getInt   (COL.CATEGORY  );
+    	j.title           = po.getString(COL.TITLE     );
     	j.text            = po.getString(COL.TEXT      );
     	j.votesUp         = po.getInt   (COL.VOTESUP   );
     	j.votesDown       = po.getInt   (COL.VOTESDOWN );

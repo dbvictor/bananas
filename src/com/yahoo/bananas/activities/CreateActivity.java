@@ -89,6 +89,7 @@ public class CreateActivity extends Activity {
 		// Else send joke!
 		}else{
 			joke = new Joke();
+			joke.setCreatedBy(JokesApplication.getParseClient().getUserId());
 			joke.setText(etBodyText);
 			joke.setCategory(Category.valueOf(spinnerSelection));
 			// 1. Send text to Joke Service

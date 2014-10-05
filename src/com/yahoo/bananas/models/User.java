@@ -103,19 +103,19 @@ public class User extends Model implements Serializable{
     // ----- PARSE -----
     public ParseObject toParseObject(){
     	ParseObject po = new ParseObject(TABLE);
-    	po.put(COL.OBJECTID  ,objectId );
-    	po.put(COL.CREATEDAT ,createdAt);
-    	po.put(COL.USERNAME  ,userName );
-    	po.put(COL.REALNAME  ,realName );
-    	po.put(COL.EMAIL     ,email    );
-    	po.put(COL.IMAGEURL  ,imageUrl );
+    	if(objectId!=null) po.setObjectId(objectId); // Use built-in for system column, not: po.put(COL.OBJECTID  ,objectId );
+    	// Cannot set system-controlled column: if(createdAt!=null) po.put(COL.CREATEDAT ,createdAt);
+    	if(userName!=null) po.put(COL.USERNAME  ,userName );
+    	if(realName!=null) po.put(COL.REALNAME  ,realName );
+    	if(email   !=null) po.put(COL.EMAIL     ,email    );
+    	if(imageUrl!=null) po.put(COL.IMAGEURL  ,imageUrl );
     	return po;
     }
     
     public static User fromParseObject(ParseObject po){
     	User u = new User();
-    	u.objectId  = po.getString(COL.OBJECTID);
-    	u.createdAt = po.getDate  (COL.CREATEDAT );
+    	u.objectId  = po.getObjectId();  // Use built-in for system column, not: po.getstring(COL.OBJECTID  );
+    	u.createdAt = po.getCreatedAt(); // Use built-in for system column, not: po.getDate  (COL.CREATEDAT );
     	u.userName  = po.getString(COL.USERNAME  );
     	u.realName  = po.getString(COL.REALNAME  );
     	u.email     = po.getString(COL.EMAIL     );

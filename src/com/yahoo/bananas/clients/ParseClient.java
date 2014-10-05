@@ -45,6 +45,15 @@ public class ParseClient {
         String userid = ParseUser.getCurrentUser().getObjectId();
         return userid;
     }
+    /**
+     * (Cached) Get the current logged-in User.  This should be a cached lookup, but if it isn't,
+     * this method will synchronously retrieve it.
+     */
+    public User getUser(){
+    	User user = CACHE_USERS.get(getUserId());
+    	if(user==null) user = getUserLatest(getUserId()); // Automatically caches it if found.
+    	return user;
+    }
 
     // ========================================================================
     // DATA OPERATIONS
@@ -178,14 +187,17 @@ public class ParseClient {
      * @return NULL if not found, else non-null user with this object id.
      */
     private User getUserLatest(String userObjectId){
-		ParseQuery<ParseObject> query = ParseQuery.getQuery(User.TABLE);
-		query.setLimit(1);
-		query.whereEqualTo(User.COL.OBJECTID, userObjectId);
-		List<ParseObject> results = null;
-		try{              results = query.find();
+    	User user = null;
+    	try{
+			ParseQuery<ParseUser> query = ParseUser.getQuery(); //NO: ParseQuery.getQuery(User.TABLE);
+			query.setLimit(1);
+			query.get(userObjectId); // Use built-in for objectId, not custom column: query.whereEqualTo(User.COL.OBJECTID, userObjectId);
+			List<ParseUser> results = null;
+		    results = query.find();
+		    if(results.size()>0) user = User.fromParseObject(results.get(0));
 		}catch(ParseException e){ throw new RuntimeException(e.getMessage(),e); }
-		if(results.size()>0) return User.fromParseObject(results.get(0));
-		else                 return null;
+    	if(user!=null) CACHE_USERS.put(userObjectId, user);
+    	return user;
     }
     /**
      * (Non-Cached) Get the latest user info with the specified userid (user object id) from the remote store.

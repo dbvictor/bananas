@@ -38,6 +38,7 @@ public class Joke extends Model implements Serializable {
 	
 	@Column(name = COL.CREATEDBY) //We'll manage references manually -- , onUpdate = ForeignKeyAction.CASCADE, onDelete = ForeignKeyAction.CASCADE)
 	private String createdBy; // User table's objectId.
+	private User   createdByUser; // User retrieved from createdBy value.
 	
 	@Column(name = COL.CATEGORY)
 	private Integer categoryDbValue = Category.Other.toDbValue();
@@ -72,8 +73,20 @@ public class Joke extends Model implements Serializable {
 	public String getCreatedBy() {
 		return createdBy;
 	}
-	public void setCreatedBy(String createdByUserObjectId) {
-		this.createdBy = createdByUserObjectId;
+	//NOT NEEDED: public void setCreatedBy(String createdByUserObjectId) {
+	//NOT NEEDED:	this.createdBy = createdByUserObjectId;
+	//NOT NEEDED:}
+	/** Sets both CreatedBy and CreatedByUser based on the User and its objectId value. */
+	public void setCreatedBy(User createdByUser) {
+		this.createdBy     = createdByUser.getObjectId();
+		this.createdByUser = createdByUser;
+	}
+	/**
+	 * Get the full user object that corresponds to the getCreatedBy() user objectId.
+	 * @return NULL if not found or not populated, else the non-null user that corresponds to the getCreatedBy() user objectId.
+	 */ 
+	public User getCreatedByUser() {
+		return createdByUser;
 	}
 
 	/** Joke category. */

@@ -48,7 +48,7 @@ public final class R {
         public static final int action_settings=0x7f090022;
         public static final int bLogin=0x7f09000c;
         public static final int bSkip=0x7f09000d;
-        public static final int bSubmit=0x7f090003;
+        public static final int bSubmit=0x7f090002;
         public static final int etNewJoke=0x7f090001;
         public static final int etTitle=0x7f090005;
         public static final int flContainer=0x7f09000b;
@@ -60,7 +60,7 @@ public final class R {
         public static final int llCounts=0x7f090012;
         public static final int lvJokes=0x7f090017;
         public static final int rlHeader=0x7f09000e;
-        public static final int spCategories=0x7f090002;
+        public static final int spCategories=0x7f090003;
         public static final int swipeContainer=0x7f090016;
         public static final int tvBody=0x7f09001b;
         public static final int tvCategory=0x7f09000a;

@@ -46,15 +46,17 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 		TextView  tvDownVotes	 = (TextView ) v.findViewById(R.id.tvDownVotes);
 		TextView  tvShares		 = (TextView ) v.findViewById(R.id.tvShares);
 		TextView  tvTitle		 = (TextView ) v.findViewById(R.id.tvTitle);
-		TextView  tvCategory     = (TextView ) v.findViewById(R.id.tvJokeCategory);
+		ImageView ivCategoryImage = (ImageView) v.findViewById(R.id.ivCategoryImage);
+
+//		TextView  tvCategory     = (TextView ) v.findViewById(R.id.tvJokeCategory);
 		// Clear existing image (needed if it was reused)
-		ivProfileImage.setImageResource(android.R.color.transparent);
+//		ivProfileImage.setImageResource(android.R.color.transparent);
 		// Populate views with joke data.
 		User createdByUser = joke.getCreatedByUser();
 		if (createdByUser != null) {
 			 //username will be a string of random characters, so using real name, which the user can set to whatever they want
 			tvUserName.setText(createdByUser.getRealName());	
-			imageLoader.displayImage(createdByUser.getImageUrl(), ivProfileImage); // Asynchronously load image using universal loader.
+//			imageLoader.displayImage(createdByUser.getImageUrl(), ivProfileImage); // Asynchronously load image using universal loader.
 		}
 //		tvRealName.setText(joke.getUser().getRealName());
 //		tvUserName.setText("@"+joke.getUser().getScreenName());
@@ -69,7 +71,9 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 		if (category == null) {
 			category = Category.Other;
 		}
-		tvCategory.setText(category.getDisplayName());
+//		tvCategory.setText(category.getDisplayName());
+		//TODO -add conditions here
+		ivCategoryImage.setImageResource(R.drawable.ic_bananas_logo);
 		tvBody.setText(jokeText);
 		tvTitle.setText(joke.getTitle());
 		tvUpVotes.setText(String.valueOf(joke.getVotesUp()));
@@ -78,7 +82,7 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 		
 		//		tvBody.setTag(joke);
 		// Store the user into the image so that when they click on it, we can know which user to show profile.
-		ivProfileImage.setTag(joke.getCreatedByUser());
+//		ivProfileImage.setTag(joke.getCreatedByUser());
 		
 		tvBody.setOnClickListener(new OnClickListener()
 		{

@@ -1,8 +1,11 @@
 package com.yahoo.bananas.adapters;
 import java.util.List;
 
+import org.json.JSONObject;
+
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -10,12 +13,18 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.parse.ParseException;
+import com.parse.SaveCallback;
+import com.yahoo.bananas.JokesApplication;
 import com.yahoo.bananas.R;
 import com.yahoo.bananas.activities.DetailActivity;
 import com.yahoo.bananas.models.Category;
 import com.yahoo.bananas.models.Joke;
+import com.yahoo.bananas.models.Tweet;
 import com.yahoo.bananas.models.User;
 import com.yahoo.bananas.util.Util;
 
@@ -120,9 +129,56 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 			}
 		});
 		
+		setupShareListener(v, joke, this);
+		
 		return v;
 	}
 	
+	public static void setupShareListener(View v, final Joke joke, final JokeArrayAdapter adapter){
+		ImageView iv = (ImageView) v.findViewById(R.id.ivStaticShares);
+		iv.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(final View v) {
+				// Create Tweet Message
+				String tweetText = "See this Bananas joke at www.bananas.yahoo.com/"+joke.getObjectId()+": "+joke.getTitle();
+				if(tweetText.length()>140) tweetText = tweetText.substring(0,140-3)+"...";
+				// Post Tweet
+				JokesApplication.getTwitterClient().createTweet(tweetText, new JsonHttpResponseHandler(){
+					@Override
+					public void onSuccess(JSONObject json) {
+						Log.d("json", "Created JSON: "+json.toString());
+						Tweet tweet = Tweet.fromJSON(json);
+						Toast.makeText(v.getContext(), "Tweeted", Toast.LENGTH_SHORT).show();
+						// Record Share Event
+						recordShareEvent(v.getContext(),joke,adapter);
+					}
+					@Override
+					public void onFailure(Throwable e, String s) {
+						Log.d("debug", e.toString());
+						Log.d("debug", s.toString());
+						Toast.makeText(v.getContext(), "Tweet FAILED!", Toast.LENGTH_SHORT).show();
+					}
+				});
+			}
+		});
+	}
+
+	/** Record that a share has happened so people can see how many shares. */
+	private static void recordShareEvent(final Context context, final Joke joke, final JokeArrayAdapter adapter){
+		JokesApplication.getParseClient().jokeShare(joke, new SaveCallback() {
+			@Override
+			public void done(ParseException e) {
+				if(e!=null){
+					Log.e("ERROR", "Failed to update share count: "+e.getMessage(),e);
+					Toast.makeText(context, "Update Share Count FAILED!", Toast.LENGTH_SHORT).show();
+				}else{
+					// Make it show a +1 to the user, which isn't the actual latest if others shared in the meanwhile, but will look appropriate to the user until they do a refresh.
+					joke.setShares(joke.getShares()+1);
+					adapter.notifyDataSetChanged();
+				}
+			}
+		});
+	}
 	
 	
 	

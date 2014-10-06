@@ -16,6 +16,14 @@
         android:showAsAction="always"
         android:onClick="viewProfile"
         android:title="@string/action_profile"/>
+
+    <item
+        android:id="@+id/actionSettings"
+        android:icon="@drawable/ic_action_settings"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:onClick="modifySettings"
+        android:title="@string/action_settings"/>
     
     <item
         android:id="@+id/actionInternetToggle"

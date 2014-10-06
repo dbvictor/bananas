@@ -340,28 +340,56 @@ public class ParseClient {
     }
     
     /** Record a share event for a joke, incrementing the share number by one. */
-    public void jokeShare(final Joke jokeOld, final SaveCallback handler){
-		Log.d("trace", "ParseClient.jokeShare(Joke="+jokeOld.getObjectId()+")");
+    public void jokeShare(final String jokeObjectId, final SaveCallback handler){
+		Log.d("trace", "ParseClient.jokeShare(Joke="+jokeObjectId+")");
     	// Get the latest copy of the existing joke (so we increment a current number).
     	// NOTE: This is flawed, we need to lock the row or rely on the DB to increment by 1, not retrieve-update-set.
-    	getJoke(jokeOld.getObjectId(), new FindJoke() {
+    	getJoke(jokeObjectId, new FindJoke() {
 			@Override
-			public void done(Joke jokeNew, ParseException e) {
-				Log.d("trace", "ParseClient.jokeShare(Joke="+jokeOld.getObjectId()+") retrieved");
+			public void done(Joke joke, ParseException e) {
+				Log.d("trace", "ParseClient.jokeShare(Joke="+jokeObjectId+") retrieved");
 				if(e!=null)	Log.e("PARSE ERROR","Get Joke Failed: "+e.getMessage(),e);
 				if(e!=null){ // If failed, just stop now.
 					handler.done(e);
-				}else if(jokeNew==null){ // If not found, error now.
-					Log.e("ERROR","Cannot record share event.  Get Joke '"+jokeOld.getObjectId()+"' Not Found.");
+				}else if(joke==null){ // If not found, error now.
+					Log.e("ERROR","Cannot record share event.  Get Joke '"+jokeObjectId+"' Not Found.");
 					handler.done(null);
 				}else{ // Else proceed to update.
-					jokeNew.setShares(jokeNew.getShares()+1);
-					update(jokeNew,handler);
+					joke.setShares(joke.getShares()+1);
+					update(joke,handler);
 				}
 			}
 		});
     }
-	
+
+    /**
+     * Record voting up/down for a joke, incrementing the up/down vote number by one.
+     * @param jokeObjectId   - the ID of the joke for which you want to change the voting counts.
+     * @param voteDifference - Number of votes to add or subtract.  Positive = Votes Up, Negative = Votes Down.
+     **/
+    public void jokeVote(final String jokeObjectId, final int voteDifference, final SaveCallback handler){
+		Log.d("trace", "ParseClient.jokeVote(Joke="+jokeObjectId+","+voteDifference+")");
+    	// Get the latest copy of the existing joke (so we increment a current number).
+    	// NOTE: This is flawed, we need to lock the row or rely on the DB to increment by 1, not retrieve-update-set.
+    	getJoke(jokeObjectId, new FindJoke() {
+			@Override
+			public void done(Joke joke, ParseException e) {
+				Log.d("trace", "ParseClient.jokeVote(Joke="+jokeObjectId+") retrieved");
+				if(e!=null)	Log.e("PARSE ERROR","Get Joke Failed: "+e.getMessage(),e);
+				if(e!=null){ // If failed, just stop now.
+					handler.done(e);
+				}else if(joke==null){ // If not found, error now.
+					Log.e("ERROR","Cannot record vote.  Get Joke '"+jokeObjectId+"' Not Found.");
+					handler.done(null);
+				}else{ // Else proceed to update.
+					if(voteDifference>0) joke.setVotesUp  (joke.getVotesUp  ()+voteDifference);
+					else                 joke.setVotesDown(joke.getVotesDown()-voteDifference);
+					update(joke,handler);
+				}
+			}
+		});
+    }
+    
     /** Update existing User. */
 	public void update(final User user, final SaveCallback handler){
 		List<ParseUser> users = new ArrayList<ParseUser>(1);

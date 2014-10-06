@@ -109,32 +109,35 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 		// Store the user into the image so that when they click on it, we can know which user to show profile.
 //		ivProfileImage.setTag(joke.getCreatedByUser());
 		
-		tvBody.setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(v.getContext(),DetailActivity.class);
-				intent.putExtra("joke", joke);
-				v.getContext().startActivity(intent);
-			}
-		});
-		
-		tvTitle.setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(v.getContext(),DetailActivity.class);
-				intent.putExtra("joke", joke);
-				v.getContext().startActivity(intent);
-			}
-		});
-		
+		setupDetailViewListeners(v, joke);
 		setupShareListener(v, joke, this);
+		setupVoteListeners(v, joke, this);
 		
 		return v;
 	}
 	
-	public static void setupShareListener(View v, final Joke joke, final JokeArrayAdapter adapter){
+	private static void setupDetailViewListeners(View v, final Joke joke){
+		TextView  tvBody         = (TextView ) v.findViewById(R.id.tvBody);
+		TextView  tvTitle		 = (TextView ) v.findViewById(R.id.tvTitle);
+		tvBody.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(v.getContext(),DetailActivity.class);
+				intent.putExtra("joke", joke);
+				v.getContext().startActivity(intent);
+			}
+		});
+		tvTitle.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(v.getContext(),DetailActivity.class);
+				intent.putExtra("joke", joke);
+				v.getContext().startActivity(intent);
+			}
+		});
+	}
+	
+	private static void setupShareListener(View v, final Joke joke, final JokeArrayAdapter adapter){
 		ImageView iv = (ImageView) v.findViewById(R.id.ivStaticShares);
 		iv.setOnClickListener(new OnClickListener() {
 			@Override
@@ -163,9 +166,26 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 		});
 	}
 
+	private static void setupVoteListeners(View v, final Joke joke, final JokeArrayAdapter adapter){
+		ImageView ivUp = (ImageView) v.findViewById(R.id.ivStaticUp);
+		ImageView ivDn = (ImageView) v.findViewById(R.id.ivStaticDown);
+		ivUp.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(final View v) {
+				recordVote(v.getContext(),joke,+1,adapter);
+			}
+		});
+		ivDn.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(final View v) {
+				recordVote(v.getContext(),joke,-1,adapter);
+			}
+		});
+	}
+	
 	/** Record that a share has happened so people can see how many shares. */
 	private static void recordShareEvent(final Context context, final Joke joke, final JokeArrayAdapter adapter){
-		JokesApplication.getParseClient().jokeShare(joke, new SaveCallback() {
+		JokesApplication.getParseClient().jokeShare(joke.getObjectId(), new SaveCallback() {
 			@Override
 			public void done(ParseException e) {
 				if(e!=null){
@@ -179,7 +199,23 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 			}
 		});
 	}
-	
-	
+
+	/** Record the user's vote. */
+	private static void recordVote(final Context context, final Joke joke, final int voteDifference, final JokeArrayAdapter adapter){
+		JokesApplication.getParseClient().jokeVote(joke.getObjectId(), voteDifference, new SaveCallback() {
+			@Override
+			public void done(ParseException e) {
+				if(e!=null){
+					Log.e("ERROR", "Failed to update share count: "+e.getMessage(),e);
+					Toast.makeText(context, "Update Share Count FAILED!", Toast.LENGTH_SHORT).show();
+				}else{
+					// Make it show a +1 to the user, which isn't the actual latest if others shared in the meanwhile, but will look appropriate to the user until they do a refresh.
+					if(voteDifference>0) joke.setVotesUp  (joke.getVotesUp  ()+voteDifference);
+					else                 joke.setVotesDown(joke.getVotesDown()-voteDifference);
+					adapter.notifyDataSetChanged();
+				}
+			}
+		});
+	}
 	
 }

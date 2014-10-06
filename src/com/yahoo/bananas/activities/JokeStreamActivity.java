@@ -19,23 +19,29 @@ import com.yahoo.bananas.fragments.NewestStreamFragment;
 import com.yahoo.bananas.fragments.PopularStreamFragment;
 import com.yahoo.bananas.listeners.FragmentTabListener;
 import com.yahoo.bananas.models.Joke;
+import com.yahoo.bananas.models.Settings;
 import com.yahoo.bananas.models.User;
 import com.yahoo.bananas.util.InternetStatus;
 
 public class JokeStreamActivity extends FragmentActivity {
-	public static final String JOKE = "joke";
 	// Constants
 	private static final String FRAGMENTTAG_NEWEST   = "newest";
 	private static final String FRAGMENTTAG_POPULAR  = "popular";
 	private static final int    ACTIVITY_CREATE      = 1;
 	private static final int    ACTIVITY_PROFILE     = 2;
+	private static final int    ACTIVITY_DETAIL      = 3;
+	private static final int    ACTIVITY_SETTINGS    = 4;
+	public  static final String INTENT_JOKE          = "joke";
+	public  static final String INTENT_SETTINGS      = "settings";
 	// Member Variables
 	private InternetStatus     internetStatus;
+	private Settings           settings;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_joke_stream);
+		settings       = Settings.load(this);
 		internetStatus = new InternetStatus(this);
 		setupTabs();
 		setActionBarColor();
@@ -147,15 +153,15 @@ public class JokeStreamActivity extends FragmentActivity {
 	/** Menu selection to modify settings. */
 	public void modifySettings(MenuItem menuItem){
 		Intent i = new Intent(this,SettingsActivity.class);
-		//no args: i.putExtra("settings", searchFilters);
-		startActivityForResult(i, ACTIVITY_PROFILE);
+		i.putExtra(INTENT_SETTINGS, settings);
+		startActivityForResult(i, ACTIVITY_SETTINGS);
 	}
 	
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
     	if(requestCode==ACTIVITY_CREATE){ // CreateActivity Result
     		if(resultCode == RESULT_OK){
-    			Joke joke = (Joke) data.getSerializableExtra(JOKE);
+    			Joke joke = (Joke) data.getSerializableExtra(INTENT_JOKE);
     			if(joke!=null){
     				JokesListFragment fragmentHome = (JokesListFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENTTAG_NEWEST);
     				if(fragmentHome!=null){
@@ -163,6 +169,10 @@ public class JokeStreamActivity extends FragmentActivity {
     					Toast.makeText(this, "Timeline Updated", Toast.LENGTH_SHORT).show();
     				}
     			}else Toast.makeText(this, "MISSING RESULT", Toast.LENGTH_SHORT).show();    				
+    		}
+    	}else if(requestCode==ACTIVITY_SETTINGS){
+    		if(resultCode == RESULT_OK){
+    			settings = (Settings) data.getSerializableExtra(INTENT_SETTINGS);
     		}
     	}
     }

@@ -17,19 +17,24 @@ import android.widget.ListView;
 import com.yahoo.bananas.R;
 import com.yahoo.bananas.adapters.CategoryFilterArrayAdapter;
 import com.yahoo.bananas.models.Category;
+import com.yahoo.bananas.models.Settings;
 
 public class CategoryFiltersFragment extends Fragment {
+	// Static Constants
+	// Member Variables
 	private List<Category>             categories;
 	private CategoryFilterArrayAdapter aCategories;
 	private ListView		           lvCategoryFilters;
+	private Settings                   settings;
 
 	/** Non-view / non-UI related initialization. (fires before onCreateView()) */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// Non-view initialization
+		settings    = (Settings) getArguments().getSerializable(Settings.class.getSimpleName());
 		categories  = new ArrayList<Category>();
-		aCategories = new CategoryFilterArrayAdapter(getActivity(), categories); // WARNING: RARELY USE getActivity().  Other usage is likely improper.
+		aCategories = new CategoryFilterArrayAdapter(getActivity(), categories, settings); // WARNING: RARELY USE getActivity().  Other usage is likely improper.
 	}
 	
 	/** View/UI-related initialization. */
@@ -47,15 +52,11 @@ public class CategoryFiltersFragment extends Fragment {
 	
 	/** [For dynamic loading] The activity can pass a custom user instead of defaulting to the current user.
 	 *  Set to NULL (default) for current user. */
-    public static CategoryFiltersFragment newInstance() { // TODO pass settings
+    public static CategoryFiltersFragment newInstance(Settings settings) {
     	CategoryFiltersFragment f = new CategoryFiltersFragment();
-    	/* TODO
         Bundle args = new Bundle();
-        if(user!=null) args.putLong(UID, user.getId());
+        if(settings!=null) args.putSerializable(Settings.class.getSimpleName(), settings);
         f.setArguments(args);
-        Log.e(DEBUG,"new fragment: "+user);
-        if(user!=null) Log.e(DEBUG,"new fragment: "+user.getId());
-        */
         return f;
     }	
 	

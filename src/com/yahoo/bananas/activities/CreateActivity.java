@@ -110,7 +110,7 @@ public class CreateActivity extends Activity {
 						Toast.makeText(parentThis, "Posted", Toast.LENGTH_SHORT).show();
 						// 2. Return result to timeline activity
 						Intent i = new Intent();
-						i.putExtra(JokeStreamActivity.JOKE, joke);
+						i.putExtra(JokeStreamActivity.INTENT_JOKE, joke);
 						setResult(RESULT_OK, i);
 						finish();					
 					}

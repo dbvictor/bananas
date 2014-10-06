@@ -347,7 +347,7 @@ public class ParseClient {
     	getJoke(jokeObjectId, new FindJoke() {
 			@Override
 			public void done(Joke joke, ParseException e) {
-				Log.d("trace", "ParseClient.jokeShare(Joke="+jokeObjectId+") retrieved");
+				Log.d("trace", "ParseClient.jokeShare(Joke="+jokeObjectId+") retrieved = "+joke);
 				if(e!=null)	Log.e("PARSE ERROR","Get Joke Failed: "+e.getMessage(),e);
 				if(e!=null){ // If failed, just stop now.
 					handler.done(e);
@@ -374,7 +374,7 @@ public class ParseClient {
     	getJoke(jokeObjectId, new FindJoke() {
 			@Override
 			public void done(Joke joke, ParseException e) {
-				Log.d("trace", "ParseClient.jokeVote(Joke="+jokeObjectId+") retrieved");
+				Log.d("trace", "ParseClient.jokeVote("+jokeObjectId+") retrieved = "+joke);
 				if(e!=null)	Log.e("PARSE ERROR","Get Joke Failed: "+e.getMessage(),e);
 				if(e!=null){ // If failed, just stop now.
 					handler.done(e);
@@ -450,7 +450,7 @@ public class ParseClient {
 						if(e==null) e = new ParseException(ParseException.OTHER_CAUSE,"Expected single joke result, instead found '"+resultsPO.size()+"' results."); 
 					}
 					Joke joke = null;
-					if((resultsPO!=null)&&(resultsPO.size()>0)) Joke.fromParseObject(resultsPO.get(0));
+					if((resultsPO!=null)&&(resultsPO.size()>0)) joke = Joke.fromParseObject(resultsPO.get(0));
 					if(e!=null) JokesApplication.getParseClient().getJokesUsers(joke,handler);
 					else        handler.done(joke,e);
 				}

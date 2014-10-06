@@ -38,7 +38,7 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 			v = convertView;
 		}
 		// Find views within template
-		ImageView ivProfileImage = (ImageView) v.findViewById(R.id.ivProfileImage);
+//		ImageView ivProfileImage = (ImageView) v.findViewById(R.id.ivProfileImage);
 		TextView  tvUserName     = (TextView ) v.findViewById(R.id.tvUserName);
 		TextView  tvTime         = (TextView ) v.findViewById(R.id.tvTime);
 		TextView  tvBody         = (TextView ) v.findViewById(R.id.tvBody);
@@ -72,8 +72,24 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 			category = Category.Other;
 		}
 //		tvCategory.setText(category.getDisplayName());
-		//TODO -add conditions here
-		ivCategoryImage.setImageResource(R.drawable.ic_bananas_logo);
+		if(category==Category.Animal){
+			ivCategoryImage.setImageResource(R.drawable.ic_animal);
+		}else if(category==Category.Bar){
+			ivCategoryImage.setImageResource(R.drawable.ic_bar);
+		}else if(category==Category.Blonde){
+			ivCategoryImage.setImageResource(R.drawable.ic_blonde);
+		}else if(category==Category.Doctor){
+			ivCategoryImage.setImageResource(R.drawable.ic_doctor);
+		}else if(category==Category.Food){
+			ivCategoryImage.setImageResource(R.drawable.ic_food);
+		}else if(category==Category.Lawyer){
+			ivCategoryImage.setImageResource(R.drawable.ic_lawyer);
+		}else if(category==Category.Other){
+			ivCategoryImage.setImageResource(R.drawable.ic_others);
+		}else if(category==Category.Yo_Mama){
+			ivCategoryImage.setImageResource(R.drawable.ic_yomama);
+		}
+		
 		tvBody.setText(jokeText);
 		tvTitle.setText(joke.getTitle());
 		tvUpVotes.setText(String.valueOf(joke.getVotesUp()));

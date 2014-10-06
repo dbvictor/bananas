@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.yahoo.bananas.JokesApplication;
 import com.yahoo.bananas.R;
 import com.yahoo.bananas.fragments.UserJokeStreamFragment;
 import com.yahoo.bananas.models.User;
@@ -20,26 +19,26 @@ import com.yahoo.bananas.util.InternetStatus;
 
 public class ProfileActivity extends FragmentActivity {
 	private InternetStatus internetStatus;
+	private User user;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_profile);
-		internetStatus = new InternetStatus(this);
-		// Detect if they want us to load a specific user.
-		User optUser = (User) getIntent().getSerializableExtra("user"); // NULL if no other user.
-		loadProfile(optUser);
-		// Tell the fragment to load a specific user too.
-		// - Load dynamically so we can control the constructor to pass arguments to it.
-		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-		UserJokeStreamFragment userTimeline = UserJokeStreamFragment.newInstance(optUser);
-		ft.replace(R.id.flProfileJokeStreamContainer, userTimeline);
-		ft.commit();
-		// - Otherwise we could have statically loaded and set info by a custom method.
-		//STATIC ALTERNATIVE: UserJokeStreamFragment userTimeline = (UserJokeStreamFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentUserTimeline);
-		//STATIC ALTERNATIVE: userTimeline.setCustomUser(optUser);
-		//STATIC ALTERNATIVE: move super.onCreate() to bottom.
 		setActionBarColor();
+		internetStatus = new InternetStatus(this);
+		user = (User) getIntent().getSerializableExtra("user");
+		if (user == null) {
+			Toast.makeText(getApplicationContext(), "User is unavailable", Toast.LENGTH_SHORT).show();
+		} else {
+			loadProfile();
+			// Tell the fragment to load a specific user too.
+			// - Load dynamically so we can control the constructor to pass arguments to it.
+			FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+			UserJokeStreamFragment userTimeline = UserJokeStreamFragment.newInstance(user);
+			ft.replace(R.id.flProfileJokeStreamContainer, userTimeline);
+			ft.commit();
+		}
 	}
 	
 	private void setActionBarColor() {
@@ -55,17 +54,15 @@ public class ProfileActivity extends FragmentActivity {
 	 *          (Optional) Specofic user profile to load if not the current user.
 	 *          NULL: loads current user by default if none specified.
 	 */
-	private void loadProfile(User optUser){
+	private void loadProfile(){
 		// If we already have the user object, just display it.
-		if(optUser!=null){
+		if(user!=null){
 			// note: we don't need a network check because (1) we already have it, and (2) image url is probably cached if they already displayed it once.
-			populateProfileHeader(optUser);			
+			populateProfileHeader();			
 		// Otherwise we'll have to look it up.
-		}else if(!internetStatus.isAvailable()){ // If no network, don't allow create tweet.
+		}else if(!internetStatus.isAvailable()){ // If no network, load offline profile
 			Toast.makeText(this, "Network Not Available!", Toast.LENGTH_SHORT).show();
 			loadProfileOffline();
-		}else{
-			populateProfileHeader(JokesApplication.getParseClient().getUser());
 		}
 	}
 	
@@ -75,16 +72,16 @@ public class ProfileActivity extends FragmentActivity {
 		return;		
 	}
 	
-	private void populateProfileHeader(User u){
+	private void populateProfileHeader(){
 		// Set action bar to this user.
-		getActionBar().setTitle(u.getRealName());
+		getActionBar().setTitle(user.getRealName());
 		// Get access to our views.
 		ImageView ivProfileImage = (ImageView) findViewById(R.id.ivProfileImage);
 		// Set the user values to these views.
-		ImageLoader.getInstance().displayImage(u.getImageUrl(), ivProfileImage);
+		ImageLoader.getInstance().displayImage(user.getImageUrl(), ivProfileImage);
 		
 		TextView tvUserName = (TextView) findViewById(R.id.tvRealName);
-		tvUserName.setText(u.getRealName());
+		tvUserName.setText(user.getRealName());
 	}
 	
 	@Override

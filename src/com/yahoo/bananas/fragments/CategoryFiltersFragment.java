@@ -32,9 +32,9 @@ public class CategoryFiltersFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// Non-view initialization
+		settings    = (Settings) getArguments().getSerializable(Settings.class.getSimpleName());
 		categories  = new ArrayList<Category>();
 		aCategories = new CategoryFilterArrayAdapter(getActivity(), categories, settings); // WARNING: RARELY USE getActivity().  Other usage is likely improper.
-		settings = (Settings) getArguments().getSerializable(Settings.class.getSimpleName());
 	}
 	
 	/** View/UI-related initialization. */

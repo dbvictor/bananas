@@ -153,7 +153,7 @@ public class JokeStreamActivity extends FragmentActivity {
 	/** Menu selection to modify settings. */
 	public void modifySettings(MenuItem menuItem){
 		Intent i = new Intent(this,SettingsActivity.class);
-		i.putExtra("settings", settings);
+		i.putExtra(INTENT_SETTINGS, settings);
 		startActivityForResult(i, ACTIVITY_SETTINGS);
 	}
 	
@@ -170,7 +170,7 @@ public class JokeStreamActivity extends FragmentActivity {
     				}
     			}else Toast.makeText(this, "MISSING RESULT", Toast.LENGTH_SHORT).show();    				
     		}
-    	}else if(requestCode==ACTIVITY_CREATE){
+    	}else if(requestCode==ACTIVITY_SETTINGS){
     		if(resultCode == RESULT_OK){
     			settings = (Settings) data.getSerializableExtra(INTENT_SETTINGS);
     		}

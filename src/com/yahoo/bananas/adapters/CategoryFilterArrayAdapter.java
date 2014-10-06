@@ -1,5 +1,6 @@
 package com.yahoo.bananas.adapters;
 import java.util.List;
+import java.util.Set;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -18,7 +19,7 @@ public class CategoryFilterArrayAdapter extends ArrayAdapter<Category> {
 
 	public CategoryFilterArrayAdapter(Context context, List<Category> objects, Settings settings){
 		super(context, 0, objects);
-		this.settings = settings;
+		this.settings = settings; 
 	}
 
 	@Override
@@ -32,7 +33,7 @@ public class CategoryFilterArrayAdapter extends ArrayAdapter<Category> {
 			v = convertView;
 		}
 		// Find views within template
-		CheckBox cbCategory = (CheckBox) v.findViewById(R.id.cbCategory);
+		final CheckBox cbCategory = (CheckBox) v.findViewById(R.id.cbCategory);
 		// Initialize to correct initial state.
 		cbCategory.setChecked(settings.getCategoriesSelected().contains(category));
 		// Set Name
@@ -44,6 +45,9 @@ public class CategoryFilterArrayAdapter extends ArrayAdapter<Category> {
 		{
 			@Override
 			public void onClick(View v) {
+				Set<Category> selected = settings.getCategoriesSelected();
+				if(cbCategory.isChecked()) selected.add(category);
+				else                       selected.remove(category);
 				/*
 				Intent intent = new Intent(v.getContext(),DetailActivity.class);
 				intent.putExtra("joke", joke);

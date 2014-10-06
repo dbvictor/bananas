@@ -37,7 +37,7 @@ abstract public class JokesListFragment extends Fragment {
 	private InternetStatus     internetStatus;
 	private SwipeRefreshLayout swipeContainer;
 	private String			lastObjectId;
-	private Date lastDate;
+	private Date lastDate = null;
 	private String optUserId;
 	private List<Category> optCategories;
 	private int lastVotesUp = -1;

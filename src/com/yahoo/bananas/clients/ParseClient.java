@@ -2,9 +2,9 @@ package com.yahoo.bananas.clients;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -115,7 +115,7 @@ public class ParseClient {
 		// - so we also sort secondarily by objectid.
 		if(lastObjectId!=null) query.whereLessThan(Joke.COL.OBJECTID , lastObjectId);
 		if(optCategories!=null) query.whereContainedIn(Joke.COL.CATEGORY, Category.toDbValue(optCategories));
-		if(optUserId!=null) query.whereEqualTo(Joke.COL.CREATEDAT, optUserId);
+		if(optUserId!=null) query.whereEqualTo(Joke.COL.CREATEDBY, optUserId);
 		query.orderByDescending(Joke.COL.CREATEDAT);
 		query.addDescendingOrder(Joke.COL.OBJECTID);
 		query.findInBackground(handler);

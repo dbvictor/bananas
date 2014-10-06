@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Model;
+import com.activeandroid.util.Log;
 
 
 public class Util {
@@ -73,14 +74,19 @@ public class Util {
 	
 	/** Save multiple Model subclass instances to SQLite (local persistence). */
 	private static void save(Collection<? extends Model> list){
-		// TODO add async task.
-		ActiveAndroid.beginTransaction();
 		try{
-		        for (Model m : list) m.save();
-		        ActiveAndroid.setTransactionSuccessful();
-		}finally{
-		        ActiveAndroid.endTransaction();
-		}	
+			ActiveAndroid.beginTransaction();
+			try{
+			        for (Model m : list) m.save();
+			        ActiveAndroid.setTransactionSuccessful();
+			}finally{
+			        ActiveAndroid.endTransaction();
+			}
+			Log.d("sqlite","persisted "+((list.size()>0)? (""+list.iterator().next().getClass().getSimpleName()) : "Model")+" x "+list.size());
+		}catch(RuntimeException e){ // Log & rethrow
+			Log.e("sqlite","Error persisting "+((list.size()>0)? (""+list.iterator().next().getClass().getSimpleName()) : "Model")+" x "+list.size()+": "+e.getMessage(),e);
+			throw e;
+		}
 	}
 
 	/** Save multiple Model subclass instances asynchronously to SQLite (local persistence). */

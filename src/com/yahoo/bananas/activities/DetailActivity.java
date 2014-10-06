@@ -28,6 +28,8 @@ public class DetailActivity extends Activity {
 		
 		TextView tvBody = (TextView) findViewById(R.id.tvJoke);
 		tvBody.setText(joke.getText());
+		TextView tvJokeTitle = (TextView)findViewById(R.id.tvJokeTitle);
+		tvJokeTitle.setText(joke.getTitle());
 		TextView tvCreatedAt = (TextView) findViewById(R.id.tvCreatedAt);
 		Date createdAt = joke.getCreatedAt();
 		if (createdAt != null) {

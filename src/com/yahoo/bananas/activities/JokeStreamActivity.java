@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.yahoo.bananas.JokesApplication;
 import com.yahoo.bananas.R;
 import com.yahoo.bananas.fragments.JokesListFragment;
 import com.yahoo.bananas.fragments.NewestStreamFragment;
@@ -121,35 +122,27 @@ public class JokeStreamActivity extends FragmentActivity {
 
 	/** Menu selection to view profile. */
 	public void viewProfile(MenuItem menuItem){
-		Intent i = new Intent(this,ProfileActivity.class);
-		//no args: i.putExtra("settings", searchFilters);
-		startActivityForResult(i, ACTIVITY_PROFILE);
+		User user = JokesApplication.getParseClient().getUser();
+		if (user != null) {
+			Intent i = new Intent(this,ProfileActivity.class);
+			i.putExtra("user", user);
+			startActivityForResult(i, ACTIVITY_PROFILE);
+		} else {
+			Toast.makeText(this, "User information not available at this time.", Toast.LENGTH_SHORT).show();
+		}
 	}
 	
 	public void onProfileClick(View v){
 		// Get the user that they clicked on.
 		User u = (User) v.getTag(); // We stored the user object in JokeArrayAdapter when the image is created.
-		if(u==null){ // Error if not there.
+		if(u!=null){ // Error if not there.
+			Intent i = new Intent(this,ProfileActivity.class);
+			i.putExtra("user", u);
+			startActivityForResult(i, ACTIVITY_PROFILE);
+		} else {
 			Toast.makeText(this, "Image Missing User Info!", Toast.LENGTH_SHORT).show();
-			return;
 		}
-		Intent i = new Intent(this,ProfileActivity.class);
-		i.putExtra("user", u);
-		startActivityForResult(i, ACTIVITY_PROFILE);
 	}
-	
-//	public void onJokeClick(View v) {
-//		Toast.makeText(this, "body clicked, getting tag", Toast.LENGTH_SHORT).show();
-////		Tweet j = (Tweet) v.getTag();
-////		if (j == null) {
-////			Toast.makeText(this, "missing joke data", Toast.LENGTH_SHORT).show();
-////			return;
-////		}
-////		Toast.makeText(this, "body clicked, going to Detail Activity", Toast.LENGTH_SHORT).show();
-////		Intent i = new Intent(this, DetailActivity.class);
-////		i.putExtra("joke", j);
-////		startActivity(i);
-//	}
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){

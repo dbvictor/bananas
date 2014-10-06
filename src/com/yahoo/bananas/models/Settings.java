@@ -52,5 +52,11 @@ public class Settings implements Serializable{
 		}
 		prefEdit.commit();
 	}
+	public void save(Activity anyActivity, Category category, boolean selected){
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(anyActivity);
+		Editor prefEdit = pref.edit();
+		prefEdit.putBoolean(Category.class.getSimpleName()+"."+category.name(), selected);
+		prefEdit.commit();
+	}
 	
 }

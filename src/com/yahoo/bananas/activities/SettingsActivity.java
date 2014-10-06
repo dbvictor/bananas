@@ -58,4 +58,11 @@ public class SettingsActivity extends FragmentActivity {
 		finish();					
 	}
 	
+	/** Override the back button behavior to save as well. */
+	@Override
+	public void onBackPressed(){
+		// Do the same as save and return.
+		save(null);
+	}	
+	
 }

@@ -51,7 +51,6 @@ public final class R {
         public static final int ic_shares=0x7f020016;
         public static final int ic_up=0x7f020017;
         public static final int ic_yomama=0x7f020018;
-        public static final int sticky_note=0x7f020019;
     }
     public static final class id {
         public static final int actionCreate=0x7f090025;

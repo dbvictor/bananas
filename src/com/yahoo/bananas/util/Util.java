@@ -3,9 +3,16 @@ package com.yahoo.bananas.util;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Locale;
 
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.text.format.DateUtils;
+import android.widget.ProgressBar;
+
+import com.activeandroid.ActiveAndroid;
+import com.activeandroid.Model;
 
 
 public class Util {
@@ -49,6 +56,7 @@ public class Util {
 
 		return relativeDate;
 	}
+	
 	/** Get a URL to a profile image generated from the hash value obtained from userId using gravatar. */
 	public static String generateProfileImageUrl(final String userId) {
 		String hex = "";
@@ -62,4 +70,61 @@ public class Util {
 		}
 		return "http://www.gravatar.com/avatar/" + hex + "?d=identicon";
 	}
+	
+	/** Save multiple Model subclass instances to SQLite (local persistence). */
+	private static void save(Collection<? extends Model> list){
+		// TODO add async task.
+		ActiveAndroid.beginTransaction();
+		try{
+		        for (Model m : list) m.save();
+		        ActiveAndroid.setTransactionSuccessful();
+		}finally{
+		        ActiveAndroid.endTransaction();
+		}	
+	}
+
+	/** Save multiple Model subclass instances asynchronously to SQLite (local persistence). */
+	public static void saveAsync(final Collection<? extends Model> list){
+		new AsyncTask<Void,Void,Void>(){
+			@Override
+		    protected Void doInBackground(Void... ignore) { // Type is first one in template.
+		         // Some long-running task like downloading an image.
+		         save(list);
+		         return null;
+		     }
+		}.execute();
+	}
+	
+	/* ASYNC TEMPLATE START
+	// The types specified here are the input data type, the progress type, and the result type
+	private class MyAsyncTask extends AsyncTask<String, Void, Bitmap> {
+	     protected void onPreExecute() {
+	         // Runs on the UI thread before doInBackground
+	         // Good for toggling visibility of a progress indicator
+	         progressBar.setVisibility(ProgressBar.VISIBLE);
+	     }
+	     protected Bitmap doInBackground(String... strings) { // Type is first one in template.
+	         // Some long-running task like downloading an image.
+	         Bitmap = downloadImageFromUrl(strings[0]);
+	         return someBitmap;
+	     }
+	     protected void onProgressUpdate(ProgressType... values) { // Type is middle one in template.
+	        // Executes whenever publishProgress is called from doInBackground
+	        // Used to update the progress indicator
+	        progressBar.setProgress(values[0]);
+	     } 
+	     protected void onPostExecute(Bitmap result) { // Type is the 3rd one in template.
+	         // This method is executed in the UIThread
+	         // with access to the result of the long running task
+	         imageView.setImageBitmap(result);
+	         // Hide the progress bar
+	         progressBar.setVisibility(ProgressBar.INVISIBLE);
+	     }
+	}
+	private void downloadImageAsync() {
+	    // Now we can execute the long-running task at any time.
+	    new MyAsyncTask().execute("http://images.com/image.jpg");
+	}
+	ASYNC TEMPLATE END */
+	
 }

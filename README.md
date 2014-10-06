@@ -29,6 +29,9 @@ Jokes app for users to get their daily fix of laughter, engage in a community of
  - Jokes List (by latest, by greatest)
  - Read Full Joke (detail view)
  - Write Joke
+ - **(Optional)** View Author Profile (and jokes written)
+ - **(Optional)** Settings
+ - **(Optional)** Login
 
 ## Basic Principles
  - Extremely easy to navigate.

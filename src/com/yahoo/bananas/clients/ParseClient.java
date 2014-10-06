@@ -103,11 +103,11 @@ public class ParseClient {
 	 *          Asynchronous callback mechanism for you to handle results. 
 	 * @param handler - callback handler to return results when they are ready.
 	 */
-	public void getJokesNewest(Date lastDate, String lastObjectId, String optUserId, List<Category> optCategories, ParseClient.FindJokes handler){
+	public void getJokesNewest(Date lastDate, String lastObjectId, String optUserId, Collection<Category> optCategories, ParseClient.FindJokes handler){
 		getJokesNewest(lastDate,lastObjectId,optUserId,optCategories,FindJokes.fromParseObjects(handler));
 	}
 	/** Same as getJokesNewest(...,ParseClient.FindJokes), except returns the unconverted ParseObjects for you. */
-	private void getJokesNewest(Date lastDate, String lastObjectId, String optUserId, List<Category> optCategories, FindCallback<ParseObject> handler){
+	private void getJokesNewest(Date lastDate, String lastObjectId, String optUserId, Collection<Category> optCategories, FindCallback<ParseObject> handler){
 		ParseQuery<ParseObject> query = ParseQuery.getQuery(Joke.TABLE);
 		query.setLimit(PAGESIZE);
 		if(lastDate!=null) query.whereLessThan(Joke.COL.CREATEDAT, lastDate);

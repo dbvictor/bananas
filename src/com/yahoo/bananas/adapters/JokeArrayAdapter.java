@@ -213,6 +213,7 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 					if(voteDifference>0) joke.setVotesUp  (joke.getVotesUp  ()+voteDifference);
 					else                 joke.setVotesDown(joke.getVotesDown()-voteDifference);
 					adapter.notifyDataSetChanged();
+					Toast.makeText(context, "Voted", Toast.LENGTH_SHORT).show();
 				}
 			}
 		});

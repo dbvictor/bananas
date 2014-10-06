@@ -22,7 +22,7 @@ public class PopularStreamFragment extends JokesListFragment {
 
 	@Override
 	protected void getJokes(FindJokes handler) {
-		getParseClient().getJokesPopular(getLastVotesUp(), getLastObjectId(), getOptCategories(), handler);
+		getParseClient().getJokesPopular(getLastVotesUp(), getLastObjectId(), getSettings().getCategoriesSelected(), handler);
 	}
 
 

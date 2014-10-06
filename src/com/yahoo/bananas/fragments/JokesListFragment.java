@@ -27,6 +27,7 @@ import com.yahoo.bananas.clients.ParseClient.FindJokes;
 import com.yahoo.bananas.listeners.EndlessScrollListener;
 import com.yahoo.bananas.models.Category;
 import com.yahoo.bananas.models.Joke;
+import com.yahoo.bananas.models.Settings;
 import com.yahoo.bananas.util.InternetStatus;
 
 abstract public class JokesListFragment extends Fragment {
@@ -41,12 +42,14 @@ abstract public class JokesListFragment extends Fragment {
 	private String optUserId;
 	private List<Category> optCategories;
 	private int lastVotesUp = -1;
+	private Settings settings;
 
 	/** Non-view / non-UI related initialization. (fires before onCreateView()) */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// Non-view initialization
+		settings    = Settings.load(getActivity());
 		parseClient = JokesApplication.getParseClient();
 		internetStatus = new InternetStatus(getActivity());
 		lastObjectId     = null; // Always start from null.
@@ -99,6 +102,13 @@ abstract public class JokesListFragment extends Fragment {
 		});
 	}
 	
+	/** Tell the fragment to refresh its contents because something changed and it may not be accurate. */
+	public void refresh(Settings settings){
+		this.settings = settings;
+        populateJokeStream(true); // true = start from beginning again
+        setupEndlessScroll(); // Resetup endless scroll in case it previously hit the bottom and stopped scrolling further again. 
+	}
+	
 	/** Setup swipe down to refresh. */
 	private void setupSwipeContainer(View v){
         swipeContainer = (SwipeRefreshLayout) v.findViewById(R.id.swipeContainer);
@@ -109,8 +119,7 @@ abstract public class JokesListFragment extends Fragment {
                 // Your code to refresh the list here.
                 // Make sure you call swipeContainer.setRefreshing(false)
                 // once the network request has completed successfully.
-                populateJokeStream(true); // true = start from beginning again
-                setupEndlessScroll(); // Resetup endless scroll in case it previously hit the bottom and stopped scrolling further again. 
+            	refresh(settings);
             } 
         });
         // Configure the refreshing colors
@@ -236,6 +245,10 @@ abstract public class JokesListFragment extends Fragment {
 
 	public int getLastVotesUp() {
 		return lastVotesUp;
+	}
+	
+	protected Settings getSettings(){
+		return settings;
 	}
 	
 }

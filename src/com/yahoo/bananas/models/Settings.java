@@ -18,6 +18,18 @@ public class Settings implements Serializable{
 	// Access Methods
 	public Set<Category> getCategoriesSelected(){ return categoriesSelected; }
 	
+	/** Compare if two settings instances reflect the same values. */
+	@Override
+	public boolean equals(Object rhs) {
+		boolean isSame = true; // Assume same until we find any differences that say otherwise.
+		Settings s1 = this;
+		Settings s2 = (rhs instanceof Settings)? (Settings) rhs : null;
+		if(s2==null) isSame = false;
+		else if(s1.categoriesSelected.size()!=s2.categoriesSelected.size()) isSame = false;
+		else if(s1.categoriesSelected.containsAll(s2.categoriesSelected)==false) isSame = false;
+		return isSame;
+	}
+	
 	// ----- PERSISTENCE -----
 	public static Settings load(Activity anyActivity){
 		Settings settings = new Settings();

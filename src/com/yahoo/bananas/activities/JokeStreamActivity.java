@@ -172,7 +172,16 @@ public class JokeStreamActivity extends FragmentActivity {
     		}
     	}else if(requestCode==ACTIVITY_SETTINGS){
     		if(resultCode == RESULT_OK){
-    			settings = (Settings) data.getSerializableExtra(INTENT_SETTINGS);
+    			Settings newSettings = (Settings) data.getSerializableExtra(INTENT_SETTINGS);
+    			// If the settings changed, we'll need to refresh whatever they are viewing.
+    			if(!settings.equals(newSettings)){
+    				settings = newSettings;
+	    			// Refresh because the categories they want may have changed.
+					JokesListFragment fragment1 = (JokesListFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENTTAG_NEWEST);
+					JokesListFragment fragment2 = (JokesListFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENTTAG_POPULAR);
+					if(fragment1!=null) fragment1.refresh(settings);
+					if(fragment2!=null) fragment2.refresh(settings);
+    			}
     		}
     	}
     }

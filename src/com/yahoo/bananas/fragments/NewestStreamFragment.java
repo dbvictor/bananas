@@ -22,7 +22,7 @@ public class NewestStreamFragment extends JokesListFragment {
 	 * @param handler */
 	@Override
 	protected void getJokes(FindJokes handler){
-		getParseClient().getJokesNewest(getLastDate(), getLastObjectId(), null, getOptCategories(), handler);
+		getParseClient().getJokesNewest(getLastDate(), getLastObjectId(), null, getSettings().getCategoriesSelected(), handler);
 	}
 	
 	/** Query for the correct offline tweets for the particular fragment type. */

@@ -29,7 +29,7 @@ import com.yahoo.bananas.models.User;
 import com.yahoo.bananas.util.Util;
 
 public class JokeArrayAdapter extends ArrayAdapter<Joke> {
-	private static final int JOKE_BODY_READABLE_LIMIT = 30;
+	private static final int JOKE_BODY_READABLE_LIMIT = 200;
 	private ImageLoader imageLoader = ImageLoader.getInstance();  // Universal loader we will use to get the image for us (asynchronously)
 
 	public JokeArrayAdapter(Context context, List<Joke> objects){

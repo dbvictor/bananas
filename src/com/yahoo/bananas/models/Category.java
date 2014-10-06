@@ -6,14 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 
 public enum Category {
-	Animal		(0,"Animal"		),
-	Bar   		(1,"Bar"   		),
-	Food   		(2,"Food"   	),
-	Blonde   	(3,"Blonde"   	),
-	Yo_Mama  	(4,"Yo Mama" ),
-	Lawyer   	(5,"Lawyer"   	),
-	Doctor   	(6,"Doctor"   	),
-	Other 		(7,"Other" 		);
+	Animal		(0,"Animal"		 ),
+	Bar   		(1,"Bar"   		 ),
+	Food   		(2,"Food"   	 ),
+	Blonde   	(3,"Blonde"   	 ),
+	Yo_Mama  	(4,"Yo Mama"     ),
+	Lawyer   	(5,"Lawyer"   	 ),
+	Doctor   	(6,"Doctor"   	 ),
+	Other 		(7,"Other" 		 ),
+	KnockKnock  (8, "Knock Knock");
 	
 	// Members
 	private Integer dbValue     = -1;

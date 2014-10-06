@@ -26,44 +26,43 @@
         android:id="@+id/tvUpVotes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_marginRight="26dp"
-        android:paddingLeft="0dp"
-        android:paddingRight="7dp"
-        android:textSize="10dp"
-        android:text="Up"
-        android:textColor="@color/text_grey" />
+        android:layout_toLeftOf="@+id/ivStaticUp"
+        android:paddingLeft="7dp"
+        android:paddingRight="2dp"
+        android:text="U"
+        android:textColor="@color/text_grey"
+        android:textSize="10dp" />
 
     <TextView
         android:id="@+id/tvDownVotes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/tvUpVotes"
+        android:layout_toLeftOf="@+id/ivStaticDown"
         android:layout_below="@+id/tvUpVotes"
         android:paddingLeft="7dp"
-        android:paddingRight="7dp"
+        android:paddingRight="2dp"
         android:textSize="10dp"
-        android:text="Down"
+        android:text="D"
         android:textColor="@color/text_grey" />
 
     <TextView
         android:id="@+id/tvShares"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/tvDownVotes"
+        android:layout_toLeftOf="@+id/ivStaticShares"
         android:layout_below="@+id/tvDownVotes"
         android:paddingLeft="7dp"
-        android:paddingRight="7dp"
+        android:paddingRight="2dp"
         android:textSize="10dp"
-        android:text="Shares"
+        android:text="S"
         android:textColor="@color/text_grey" />
 
     <TextView
         android:id="@+id/tvTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/tvBody"
+        android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/tvUpVotes"
         android:maxLines="1"
         android:paddingLeft="7dp"
@@ -77,8 +76,9 @@
         android:id="@+id/ivStaticUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/tvUserName"
         android:layout_alignBottom="@+id/tvUpVotes"
-        android:layout_alignLeft="@+id/ivStaticDown"
+        android:layout_alignTop="@+id/tvUpVotes"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:src="@drawable/ic_up" />
@@ -87,19 +87,22 @@
         android:id="@+id/ivStaticDown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvDownVotes"
+        android:layout_alignTop="@+id/tvDownVotes"
         android:layout_alignParentRight="true"
-		android:layout_alignTop="@+id/tvDownVotes"
-		android:layout_alignBottom="@+id/tvDownVotes"
+        android:layout_below="@+id/ivStaticUp"
         android:src="@drawable/ic_down" />
 
     <ImageView
         android:id="@+id/ivStaticShares"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-    	android:layout_alignLeft="@+id/ivStaticDown"
         android:layout_alignBottom="@+id/tvShares"
+        android:layout_alignLeft="@+id/ivStaticDown"
+        android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/tvShares"
-        android:layout_toRightOf="@+id/tvShares"
+        android:layout_below="@+id/ivStaticDown"
+        android:baselineAlignBottom="false"
         android:src="@drawable/ic_shares" />
 
     <!-- <TextView
@@ -117,21 +120,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/tvTime"
         android:layout_toRightOf="@+id/ivCategoryImage"
         android:text="Title"
+        android:textStyle="bold"
         android:textSize="12dp" />
 
     <TextView
         android:id="@+id/tvBody"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tvTitle"
         android:layout_below="@+id/tvTitle"
-        android:layout_toLeftOf="@+id/tvTime"
+        android:layout_toLeftOf="@+id/tvShares"
+        android:layout_toRightOf="@+id/ivCategoryImage"
         android:onClick="onJokeClick"
-        android:paddingLeft="5dp"
-        android:paddingRight="0dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
         android:text="Joke body..."
         android:textSize="10dp" />
 
@@ -139,12 +142,11 @@
         android:id="@+id/tvUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/tvShares"
-        android:layout_alignBottom="@+id/tvShares"
-        android:layout_alignLeft="@+id/tvBody"
+        android:layout_below="@+id/tvBody"
+        android:layout_alignParentRight="true"
+        android:paddingRight="5dp"
         android:maxLines="1"
-        android:paddingLeft="7dp"
-        android:paddingRight="0dp"
+        android:textStyle="italic"
         android:text="\@Username"
         android:textColor="@color/text_grey"
         android:textSize="10dp" />

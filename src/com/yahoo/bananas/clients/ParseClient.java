@@ -84,6 +84,20 @@ public class ParseClient {
 		});
     }*/
     
+    /** Get the latest joke info with the specified joke object id from the remote store. */
+	public void getJoke(String objectId, final ParseClient.FindJoke handler){
+		getJoke(objectId,FindJoke.fromParseObject(handler));
+	}
+	/** Same as getJoke(...,ParseClient.FindUser), except returns unconverted ParseObjects. */
+    private void getJoke(String objectId, FindCallback<ParseObject> handler){
+    	try{
+			ParseQuery<ParseObject> query = ParseQuery.getQuery(Joke.TABLE);
+			query.setLimit(1);
+			query.get(objectId); // Use built-in for objectId, not custom column: query.whereEqualTo(User.COL.OBJECTID, userObjectId);
+			query.findInBackground(handler);
+		}catch(ParseException e){ handler.done(null, e); }
+    }
+    
 	/**
 	 * Get jokes sorted by latest first.
 	 * @param lastItemDate
@@ -323,6 +337,29 @@ public class ParseClient {
 		query.setLimit(userObjectIds.size());
 		query.whereContainedIn(User.COL.OBJECTID, userObjectIds);
 		query.findInBackground(handler);
+    }
+    
+    /** Record a share event for a joke, incrementing the share number by one. */
+    public void jokeShare(final Joke jokeOld, final SaveCallback handler){
+		Log.d("trace", "ParseClient.jokeShare(Joke="+jokeOld.getObjectId()+")");
+    	// Get the latest copy of the existing joke (so we increment a current number).
+    	// NOTE: This is flawed, we need to lock the row or rely on the DB to increment by 1, not retrieve-update-set.
+    	getJoke(jokeOld.getObjectId(), new FindJoke() {
+			@Override
+			public void done(Joke jokeNew, ParseException e) {
+				Log.d("trace", "ParseClient.jokeShare(Joke="+jokeOld.getObjectId()+") retrieved");
+				if(e!=null)	Log.e("PARSE ERROR","Get Joke Failed: "+e.getMessage(),e);
+				if(e!=null){ // If failed, just stop now.
+					handler.done(e);
+				}else if(jokeNew==null){ // If not found, error now.
+					Log.e("ERROR","Cannot record share event.  Get Joke '"+jokeOld.getObjectId()+"' Not Found.");
+					handler.done(null);
+				}else{ // Else proceed to update.
+					jokeNew.setShares(jokeNew.getShares()+1);
+					update(jokeNew,handler);
+				}
+			}
+		});
     }
 	
     /** Update existing User. */

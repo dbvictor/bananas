@@ -32,7 +32,7 @@ public class TwitterClient extends OAuthBaseClient {
 		super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
 	}
 	
-	public void getNewestJokeStream(long lastItemId, AsyncHttpResponseHandler handler){
+	public void getHomeTimeline(long lastItemId, AsyncHttpResponseHandler handler){
 		String url = getApiUrl("statuses/home_timeline.json");
 		RequestParams params = new RequestParams();
 		if(lastItemId>0) params.put("max_id",""+(lastItemId-1)); // Subtract 1 because max id will return results inclusive of that ID, and we only want the next older ones.  Use max & subtract because we are going for older IDs.
@@ -40,7 +40,7 @@ public class TwitterClient extends OAuthBaseClient {
 		client.get(url, params, handler);
 	}
 
-	public void getPopularJokeStream(long lastItemId, AsyncHttpResponseHandler handler){
+	public void getMentionsTimeline(long lastItemId, AsyncHttpResponseHandler handler){
 		String url = getApiUrl("statuses/mentions_timeline.json");
 		RequestParams params = new RequestParams();
 		if(lastItemId>0) params.put("max_id",""+(lastItemId-1)); // Subtract 1 because max id will return results inclusive of that ID, and we only want the next older ones.  Use max & subtract because we are going for older IDs.
@@ -58,7 +58,7 @@ public class TwitterClient extends OAuthBaseClient {
 	 *          0: refresh from the beginning.
 	 * @param handler - callback handler to return results when they are ready.
 	 */
-	public void getUserJokeStream(long optUid, long lastItemId, AsyncHttpResponseHandler handler){
+	public void getUserTimeline(long optUid, long lastItemId, AsyncHttpResponseHandler handler){
 		String url = getApiUrl("statuses/user_timeline.json");
 		RequestParams params = new RequestParams();
 		if(optUid>-1) params.put("user_id", ""+optUid);
@@ -72,7 +72,7 @@ public class TwitterClient extends OAuthBaseClient {
 		client.get(url, null, handler);
 	}
 	
-	public void createJoke(String tweet, AsyncHttpResponseHandler handler){
+	public void createTweet(String tweet, AsyncHttpResponseHandler handler){
 		String url = getApiUrl("statuses/update.json");
 		RequestParams params = new RequestParams();
 		params.put("status",tweet);

@@ -1,10 +1,11 @@
 package com.yahoo.bananas.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,10 +13,13 @@ import android.widget.Toast;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yahoo.bananas.R;
 import com.yahoo.bananas.models.Joke;
+import com.yahoo.bananas.models.User;
 
 public class DetailActivity extends Activity {
 
 	private Joke joke;
+	
+	private static final int    ACTIVITY_PROFILE     = 2;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +53,17 @@ public class DetailActivity extends Activity {
 		//http://html-color-codes.info
 		colorDrawable.setColor(Color.parseColor("#4099FF"));
 		getActionBar().setBackgroundDrawable(colorDrawable);
+	}
+	
+	public void moreFromThisUser(View v){
+		User u = joke.getCreatedByUser();
+		if(u!=null){ // Error if not there.
+			Intent i = new Intent(this,ProfileActivity.class);
+			i.putExtra("user", u);
+			startActivityForResult(i, ACTIVITY_PROFILE);
+		} else {
+			Toast.makeText(this, "Image Missing User Info!", Toast.LENGTH_SHORT).show();
+		}
 	}
 	
 }

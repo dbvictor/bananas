@@ -6,20 +6,10 @@
     tools:context="${relativePackage}.${activityClass}" >
 
     <TextView
-        android:id="@+id/tvJokeTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="18dp"
-        android:text="Title"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-    
-    <TextView
         android:id="@+id/tvJoke"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/ivCreationUser"
+        android:layout_above="@+id/ivLike"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/tvJokeTitle"
@@ -33,36 +23,54 @@
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <Button
-        android:id="@+id/btMoreFromThisUser"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="14dp"
-        android:onClick="moreFromThisUser"
-        android:background="@color/twitterBlue"
-        android:text="More from this user" />
-
     <ImageView
         android:id="@+id/ivCreationUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btMoreFromThisUser"
-        android:layout_alignLeft="@+id/btMoreFromThisUser"
-        android:layout_marginTop="14dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:onClick="moreFromThisUser"
         android:src="@drawable/ic_launcher" />
 
-    <TextView
-        android:id="@+id/tvCreationUser"
+    <Button
+        android:id="@+id/btClickHereToReadMoreFrom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btMoreFromThisUser"
-        android:layout_alignRight="@+id/btMoreFromThisUser"
-        android:layout_alignTop="@+id/ivCreationUser"
-        android:layout_toRightOf="@+id/ivCreationUser"
-        android:gravity="center"
-        android:text="Medium Text"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:layout_above="@+id/ivCreationUser"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/custom_button"
+        android:minHeight="30dp"
+        android:layout_marginTop="5dp"
+        android:onClick="moreFromThisUser"
+        android:text=" See all jokes from xyz "
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tvJokeTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp"
+        android:text="Title"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <ImageView
+        android:id="@+id/ivLike"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btClickHereToReadMoreFrom"
+        android:layout_toLeftOf="@+id/btClickHereToReadMoreFrom"
+        android:src="@drawable/ic_up" />
+
+    <ImageView
+        android:id="@+id/ivDislike"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btClickHereToReadMoreFrom"
+        android:layout_toRightOf="@+id/btClickHereToReadMoreFrom"
+        android:src="@drawable/ic_down" />
 
 </RelativeLayout>

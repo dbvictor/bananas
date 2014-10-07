@@ -34,8 +34,10 @@ Jokes app for users to get their daily fix of laughter, engage in a community of
  - **(Optional)** Login
 
 ## Basic Principles
- - Extremely easy to navigate.
- - User wants to spend a lot of time in the app.
+ - Easy to navigate by having no circular dependencies or repeated entry points to the same experience but rather having one thing just have one expected behavior.
+ - App designed in a way that the real content i.e. the jokes are the most easily readable content on it and come out above anything else throughout without fail.
+ - Color combinations kept to the minimum and consistent throughout the app to provide a seamless experience that doesnt break thoughts.
+ - App designed in a way that the stream itself is able to support a lot of the content to take the most advantage of infinite scroll and provide a engaging daily joke digest.
 
 ## Wire Frames
 ![Wire Frames](bananas_wireframe.JPG "Wire Frames") 

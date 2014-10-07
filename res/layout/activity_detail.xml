@@ -48,6 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/btMoreFromThisUser"
         android:layout_alignLeft="@+id/btMoreFromThisUser"
+        android:layout_marginTop="14dp"
         android:src="@drawable/ic_launcher" />
 
     <TextView
@@ -58,8 +59,8 @@
         android:layout_alignRight="@+id/btMoreFromThisUser"
         android:layout_alignTop="@+id/ivCreationUser"
         android:layout_toRightOf="@+id/ivCreationUser"
-        android:text="Medium Text"
         android:gravity="center"
+        android:text="Medium Text"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

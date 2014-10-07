@@ -31,18 +31,20 @@ import com.yahoo.bananas.models.Settings;
 import com.yahoo.bananas.util.InternetStatus;
 
 abstract public class JokesListFragment extends Fragment {
-	private ParseClient			parseClient;
-	private ArrayList<Joke>   jokes;
-	private JokeArrayAdapter  aJokes;
+	// Primary Data & UI Elements
+	private ArrayList<Joke>    jokes;
+	private JokeArrayAdapter   aJokes;
 	private ListView		   lvJokes;
-	private InternetStatus     internetStatus;
 	private SwipeRefreshLayout swipeContainer;
-	private String			lastObjectId;
-	private Date lastDate = null;
-	private String optUserId;
-	private List<Category> optCategories;
-	private int lastVotesUp = -1;
-	private Settings settings;
+	// Member Variables for Behaviors
+	private InternetStatus     internetStatus;
+	private String		       lastObjectId  = null;
+	private Date               lastDate      = null;
+	private int                lastVotesUp   = -1;
+	private String             optUserId;
+	private List<Category>     optCategories;
+	private ParseClient		   parseClient;
+	private Settings           settings;
 
 	/** Non-view / non-UI related initialization. (fires before onCreateView()) */
 	@Override
@@ -197,15 +199,6 @@ abstract public class JokesListFragment extends Fragment {
 								lastDate = null;
 							}
 							swipeContainer.setRefreshing(false);
-							try {
-								for (Joke j : results) {
-									j.save();
-								}
-								Log.d("persist", "Persisted Timeline Results");
-							} catch(Exception ex){
-								Log.e("error", ex.toString());
-								Toast.makeText(parentThis.getActivity(), "PERSIST FAILED!", Toast.LENGTH_SHORT).show();
-			                }
 						}
 					}					
 				}

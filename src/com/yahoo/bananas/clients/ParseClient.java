@@ -23,6 +23,7 @@ import com.yahoo.bananas.JokesApplication;
 import com.yahoo.bananas.models.Category;
 import com.yahoo.bananas.models.Joke;
 import com.yahoo.bananas.models.User;
+import com.yahoo.bananas.util.Util;
 
 public class ParseClient {
 	// Constants
@@ -401,6 +402,7 @@ public class ParseClient {
 				if(e!=null)	Log.e("PARSE ERROR","Update Joke Failed: "+e.getMessage(),e);
 				// Cache the updated user if it succeeds, or the user will keep seeing the old cached user.
 				if(e==null) CACHE_USERS.put(user.getObjectId(), user);
+				if(e==null) Util.saveToOfflineAsync(user); // Save latest to offline persistence to be used later if user goes offline.
 				// Report to the caller that it was done.
 				handler.done(e);
 			}
@@ -430,6 +432,7 @@ public class ParseClient {
 					if(e!=null)	Log.e("PARSE ERROR","Get Jokes Failed: "+e.getMessage(),e);
 					if(resultsPO==null) resultsPO = new ArrayList<ParseObject>(0); // Avoid NPE or more conditional logic.
 					List<Joke> resultsJokes = Joke.fromParseObjects(resultsPO);
+					Util.saveToOfflineAsync(resultsJokes); // Save latest to offline persistence to be used later if user goes offline.
 					if(e==null) JokesApplication.getParseClient().getJokesUsers(resultsJokes,handler);
 					else        handler.done(resultsJokes, e);
 				}
@@ -451,6 +454,7 @@ public class ParseClient {
 					}
 					Joke joke = null;
 					if((resultsPO!=null)&&(resultsPO.size()>0)) joke = Joke.fromParseObject(resultsPO.get(0));
+					if(joke!=null) Util.saveToOfflineAsync(joke); // Save latest to offline persistence to be used later if user goes offline.
 					if(e!=null) JokesApplication.getParseClient().getJokesUsers(joke,handler);
 					else        handler.done(joke,e);
 				}
@@ -471,6 +475,7 @@ public class ParseClient {
 					List<User> resultsUsers = User.fromParseObjects(resultsPO);
 					// Cache Users (or update in case any changed)
 					for(User u : resultsUsers) CACHE_USERS.put(u.getObjectId(), u); // Update cache with the user.
+					Util.saveToOfflineAsync(resultsUsers); // Save latest to offline persistence to be used later if user goes offline.
 					// Report to caller's handler with the converted users.
 					handler.done(resultsUsers,e);
 				}
@@ -495,6 +500,7 @@ public class ParseClient {
 					if((resultsPO!=null)&&(resultsPO.size()>0)) user = User.fromParseObject(resultsPO.get(0));
 					// Cache Users (or update in case any changed)
 					if(user!=null) CACHE_USERS.put(user.getObjectId(), user); // Update cache with the user.
+					if(user!=null) Util.saveToOfflineAsync(user); // Save latest to offline persistence to be used later if user goes offline.
 					// Report to caller's handler with the converted users.
 					handler.done(user,e);
 				}

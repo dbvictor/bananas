@@ -3,18 +3,17 @@ package com.yahoo.bananas.util;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
 
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.text.format.DateUtils;
 import android.widget.ProgressBar;
+import android.util.Log;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Model;
-import com.activeandroid.util.Log;
-
 
 public class Util {
 	
@@ -72,8 +71,8 @@ public class Util {
 		return "http://www.gravatar.com/avatar/" + hex + "?d=identicon";
 	}
 	
-	/** Save multiple Model subclass instances to SQLite (local persistence). */
-	private static void save(Collection<? extends Model> list){
+	/** Save multiple Model subclass instances to offline persistence (SQLite). */
+	private static void saveToOffline(Collection<? extends Model> list){
 		try{
 			ActiveAndroid.beginTransaction();
 			try{
@@ -89,16 +88,21 @@ public class Util {
 		}
 	}
 
-	/** Save multiple Model subclass instances asynchronously to SQLite (local persistence). */
-	public static void saveAsync(final Collection<? extends Model> list){
+	/** Save multiple Model subclass instances asynchronously to offline persistence (SQLite). */
+	public static void saveToOfflineAsync(final Collection<? extends Model> list){
+		if(list.size()<=0) return; // Do nothing if empty.
 		new AsyncTask<Void,Void,Void>(){
 			@Override
 		    protected Void doInBackground(Void... ignore) { // Type is first one in template.
 		         // Some long-running task like downloading an image.
-		         save(list);
+		         saveToOffline(list);
 		         return null;
 		     }
 		}.execute();
+	}
+	/** Save Model subclass instance asynchronously to offline persistence (SQLite). */
+	public static void saveToOfflineAsync(Model model){
+		saveToOfflineAsync(Arrays.asList(model));
 	}
 	
 	/* ASYNC TEMPLATE START

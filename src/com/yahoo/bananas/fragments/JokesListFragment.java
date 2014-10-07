@@ -63,6 +63,7 @@ abstract public class JokesListFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// Inflate Layout
+		
 		View v = inflater.inflate(R.layout.fragment_jokes_list, container, false); // false = don't attach to container yet.
 		// Assign view preferences
 		setupSwipeContainer(v);
@@ -74,6 +75,16 @@ abstract public class JokesListFragment extends Fragment {
 		// Return layout view
 		return v;
 	}
+	
+	// Should be called manually when an async task has started
+    public void showProgressBar() {
+        getActivity().setProgressBarIndeterminateVisibility(true); 
+    }
+
+    // Should be called when an async task has finished
+    public void hideProgressBar() {
+    	getActivity().setProgressBarIndeterminateVisibility(false); 
+    }
 	
 	private void setupListViewListener() {
 		lvJokes.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -168,6 +179,7 @@ abstract public class JokesListFragment extends Fragment {
 	
     /** Populate the list with tweets. */
 	public void populateJokeStream(final boolean refresh){
+		showProgressBar();
 		Log.d("DVDEBUG", "+ TimelineActivity.populateTimeline()");
 		if(!internetStatus.isAvailable()){ // If no network, don't allow create tweet.
 			Toast.makeText(getActivity(), "Network Not Available!", Toast.LENGTH_SHORT).show();
@@ -200,7 +212,8 @@ abstract public class JokesListFragment extends Fragment {
 							}
 							swipeContainer.setRefreshing(false);
 						}
-					}					
+					}	
+					hideProgressBar();
 				}
 			});
 		}
@@ -208,11 +221,13 @@ abstract public class JokesListFragment extends Fragment {
 	
 	/** Populate the timeline based on offline content. */
 	private void populateJokeStreamOffline(final boolean refresh){
+		showProgressBar();
 		List<Joke> retrievedJokes = getOfflineJokes();
 		aJokes.addAll(retrievedJokes);
 		lastObjectId = jokes.get(jokes.size()-1).getObjectId(); // record the last item ID we've seen now, so we know where to continue off from next time.
 		Toast.makeText(getActivity(), "Offline Content: "+retrievedJokes.size(), Toast.LENGTH_SHORT).show();
         swipeContainer.setRefreshing(false);
+        hideProgressBar();
 	}
 	
 	/** Query for the correct offline tweets for the particular fragment type. */

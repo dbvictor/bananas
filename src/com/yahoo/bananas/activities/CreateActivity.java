@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
@@ -82,6 +83,8 @@ public class CreateActivity extends Activity {
 	}
 	
 	public void create(View v){
+		final ProgressBar pbCreate = (ProgressBar) findViewById(R.id.pb_create);
+		pbCreate.setVisibility(ProgressBar.VISIBLE);
 		String etBodyText = etBody.getText().toString();
 		String spinnerSelection = spCategory.getSelectedItem().toString();
 		String etTitleText = etTitle.getText().toString();
@@ -102,6 +105,7 @@ public class CreateActivity extends Activity {
 				
 				@Override
 				public void done(ParseException e) {
+					pbCreate.setVisibility(ProgressBar.INVISIBLE);
 					if (e != null) {
 						Log.d("debug", e.toString());
 						Toast.makeText(parentThis, "FAILED!", Toast.LENGTH_SHORT).show();

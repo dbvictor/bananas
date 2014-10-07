@@ -1,7 +1,5 @@
 package com.yahoo.bananas.activities;
 
-import java.util.List;
-
 import org.json.JSONObject;
 
 import android.app.Application;
@@ -12,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.codepath.oauth.OAuthLoginActivity;
@@ -52,6 +51,9 @@ public class LoginActivity extends OAuthLoginActivity<TwitterClient> {
 	// i.e Display application "homepage"
 	@Override
 	public void onLoginSuccess() {
+		ProgressBar pbLogin = (ProgressBar) findViewById(R.id.pbLogin);
+		pbLogin.setVisibility(ProgressBar.INVISIBLE);
+
 		Toast.makeText(this, "Logged into Twitter", Toast.LENGTH_SHORT).show();
 		// Update User Info from Twitter Info
 		updateUserFromTwitterAsync();
@@ -63,6 +65,8 @@ public class LoginActivity extends OAuthLoginActivity<TwitterClient> {
 	// i.e Display an error dialog or toast
 	@Override
 	public void onLoginFailure(Exception e) {
+		ProgressBar pbLogin = (ProgressBar) findViewById(R.id.pbLogin);
+		pbLogin.setVisibility(ProgressBar.INVISIBLE);
 		e.printStackTrace();
 	}
 
@@ -70,6 +74,8 @@ public class LoginActivity extends OAuthLoginActivity<TwitterClient> {
 	// Uses the client to initiate OAuth authorization
 	// This should be tied to a button used to login
 	public void loginToRest(View view) {
+		ProgressBar pbLogin = (ProgressBar) findViewById(R.id.pbLogin);
+		pbLogin.setVisibility(ProgressBar.VISIBLE);
 		getClient().connect();
 	}
 	

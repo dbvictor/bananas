@@ -8,7 +8,8 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -33,6 +34,7 @@ public class CreateActivity extends Activity {
 	private EditText etTitle;
 	private Spinner spCategory;
 	private TextView tvCharsRemaining;
+	private MenuItem menuItemActionDone;
 	// Constants
 	private static final int MAX_LENGTH = 500;
 
@@ -52,6 +54,15 @@ public class CreateActivity extends Activity {
 		setupSpinner();
 		setActionBarColor();
 	}
+	
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_settings, menu);
+        this.menuItemActionDone = menu.findItem(R.id.actionDone);
+        menuItemActionDone.setEnabled(false);
+        return true;
+    }
 	
 	private void setActionBarColor() {
 		ColorDrawable colorDrawable = new ColorDrawable();
@@ -78,13 +89,12 @@ public class CreateActivity extends Activity {
 			@Override public void afterTextChanged(Editable s) {
 				int count = etBody.getText().toString().length();
 				tvCharsRemaining.setText(""+(MAX_LENGTH-count)+" remaining" );
+		        menuItemActionDone.setEnabled(true);
 			}
 		});
 	}
 	
-	public void create(View v){
-		final ProgressBar pbCreate = (ProgressBar) findViewById(R.id.pb_create);
-		pbCreate.setVisibility(ProgressBar.VISIBLE);
+	public void save(MenuItem menuItem){
 		String etBodyText = etBody.getText().toString();
 		String spinnerSelection = spCategory.getSelectedItem().toString();
 		String etTitleText = etTitle.getText().toString();
@@ -94,6 +104,9 @@ public class CreateActivity extends Activity {
 			Toast.makeText(this, "Nothing to Post!", Toast.LENGTH_SHORT).show();
 		// Else send joke!
 		}else{
+			final ProgressBar pbCreate = (ProgressBar) findViewById(R.id.pb_create);
+			pbCreate.setVisibility(ProgressBar.VISIBLE);
+
 			joke = new Joke();
 			joke.setCreatedBy(JokesApplication.getParseClient().getUser());
 			joke.setText(etBodyText);

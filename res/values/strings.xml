@@ -21,5 +21,6 @@
     <string name="joke_title">Title:</string>
     <string name="joke_label">Joke:</string>
     <string name="category_label">Category:</string>
+    <string name="hint_category">Category</string>
 
 </resources>

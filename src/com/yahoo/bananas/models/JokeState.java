@@ -37,6 +37,7 @@ public class JokeState extends Model implements Serializable {
 	public static final class COL{
 		public static final String OBJECTID  = "objectId";     // (automatic) generated row ID.
 		public static final String JOKEID    = "jokeObjectId"; // Joke table's objectId
+		public static final String READ      = "read";         // User read joke
 		public static final String VOTEDUP   = "votedUp";      // User voted up / liked
 		public static final String VOTEDDOWN = "votedDown";    // User voted down / disliked
 		public static final String SHARED    = "shared";       // # times shared
@@ -48,6 +49,9 @@ public class JokeState extends Model implements Serializable {
 
 	@Column(name = COL.JOKEID, unique = true, onUniqueConflict = Column.ConflictAction.REPLACE) // avoid duplicates
 	private String jokeObjectId;
+
+	@Column(name = COL.READ)
+	private boolean read = false;
 	
 	@Column(name = COL.VOTEDUP)
 	private boolean votedUp = false;

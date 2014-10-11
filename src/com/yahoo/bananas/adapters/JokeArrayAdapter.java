@@ -80,25 +80,7 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 		if (category == null) {
 			category = Category.Other;
 		}
-//		tvCategory.setText(category.getDisplayName());
-		if(category==Category.Animal){
-			ivCategoryImage.setImageResource(R.drawable.ic_animal);
-		}else if(category==Category.Bar){
-			ivCategoryImage.setImageResource(R.drawable.ic_bar);
-		}else if(category==Category.Blonde){
-			ivCategoryImage.setImageResource(R.drawable.ic_blonde);
-		}else if(category==Category.Doctor){
-			ivCategoryImage.setImageResource(R.drawable.ic_doctor);
-		}else if(category==Category.Food){
-			ivCategoryImage.setImageResource(R.drawable.ic_food);
-		}else if(category==Category.Lawyer){
-			ivCategoryImage.setImageResource(R.drawable.ic_lawyer);
-		}else if(category==Category.Other){
-			ivCategoryImage.setImageResource(R.drawable.ic_others);
-		}else if(category==Category.Yo_Mama){
-			ivCategoryImage.setImageResource(R.drawable.ic_yomama);
-		}
-		
+		ivCategoryImage.setImageResource(category.getImageResourceId());
 		tvBody.setText(jokeText);
 		tvTitle.setText(joke.getTitle());
 		tvUpVotes.setText(String.valueOf(joke.getVotesUp()));

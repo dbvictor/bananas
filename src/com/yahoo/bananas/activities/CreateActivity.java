@@ -10,8 +10,12 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
@@ -33,6 +37,7 @@ public class CreateActivity extends Activity {
 	private EditText etBody;
 	private EditText etTitle;
 	private Spinner spCategory;
+	private ImageView ivCategory;
 	private TextView tvCharsRemaining;
 	private MenuItem menuItemActionDone;
 	// Constants
@@ -47,6 +52,7 @@ public class CreateActivity extends Activity {
 		etBody           = (EditText) findViewById(R.id.etNewJoke      );
 		etTitle			 = (EditText) findViewById(R.id.etTitle);
 		spCategory		 = (Spinner)  findViewById(R.id.spCategories   );
+		ivCategory		 = (ImageView)findViewById(R.id.ivCategory     );
 		tvCharsRemaining = (TextView) findViewById(R.id.tvCharsRemaining);
 		tvCharsRemaining.setText(""+MAX_LENGTH+" remaining" );
 		// Setup events
@@ -72,10 +78,22 @@ public class CreateActivity extends Activity {
 	}
 	
 	private void setupSpinner() {
-		Spinner spinner = (Spinner)findViewById(R.id.spCategories);
-
 		SpinnerAdapter spAdapter = new ArrayAdapter<Category>(this, android.R.layout.simple_list_item_1, Category.getCategories());
-		spinner.setAdapter(spAdapter);
+		spCategory.setAdapter(spAdapter);
+		spCategory.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				String spinnerSelection = spCategory.getSelectedItem().toString();
+				Category category = Category.valueOf(spinnerSelection);
+				ivCategory.setImageResource(category.getImageResourceId());
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+			}
+		});
 	}
 
 	private void setupTextChangeListener(){

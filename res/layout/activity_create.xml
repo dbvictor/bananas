@@ -2,110 +2,85 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/background_grey"
     tools:context="${relativePackage}.${activityClass}" >
 
-    <TextView
-        android:id="@+id/tvCharsRemaining"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/etNewJoke"
-        android:paddingLeft="0dp"
-        android:paddingRight="5dp"
-        android:textStyle="italic"
-        android:text="N remaining" />
-
-    <!-- <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/etTitle"
-        android:layout_alignBottom="@+id/etTitle"
-        android:layout_marginLeft="10dp"
-        android:textSize="16dp"
-        android:textStyle="bold"
-        android:layout_alignParentLeft="true"
-        android:text="@string/joke_title" /> -->
-
-    <!-- <TextView
-        android:id="@+id/tvJokeLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/etTitle"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="15dp"
-        android:text="@string/joke_label"
-        android:textSize="16dp"
-        android:textStyle="bold" /> -->
-
-    <!-- <TextView
-        android:id="@+id/tvCategoryLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/tvCharsRemaining"
-        android:layout_marginLeft="10dp"
-        android:textStyle="bold"
-        android:textSize="16dp"
-        android:text="@string/category_label" /> -->
-
-    <!-- <Button
-        android:id="@+id/bSubmit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvCharsRemaining"
-        android:layout_centerHorizontal="true"
-        android:onClick="create"
-        android:text="@string/new_joke_button" /> -->
-
-    <Spinner
-        android:id="@+id/spCategories"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="5dp" />
+        android:layout_marginBottom="7dp"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="7dp"
+        android:background="@color/white" >
 
-    <EditText
-        android:id="@+id/etTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/spCategories"
-        android:layout_marginLeft="5dp"
-        android:ems="10"
-        android:maxLines="1"
-        android:hint="Enter Title Here..."
-        android:textSize="16dp" >
+        <ImageView
+            android:id="@+id/ivCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/ic_animal" />
 
-        <requestFocus />
-    </EditText>
+        <Spinner
+            android:id="@+id/spCategories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/ivCategory" />
 
-    <EditText
-        android:id="@+id/etNewJoke"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/etTitle"
-        android:layout_marginLeft="5dp"
-        android:scrollbars="vertical"
-        android:ems="10"
-        android:gravity="start"
-        android:hint="@string/new_joke_hint"
-        android:maxLength="500"
-        android:minLines="8"
-        android:textAlignment="textStart"
-        android:textSize="14dp" />
+        <EditText
+            android:id="@+id/etTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/spCategories"
+            android:ems="10"
+            android:hint="Enter Title Here..."
+            android:maxLines="1"
+            android:textSize="16dp" >
 
-    <ProgressBar
-        android:id="@+id/pb_create"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvCharsRemaining"
-        android:layout_centerHorizontal="true"
-        android:visibility="invisible" />
+            <requestFocus />
+        </EditText>
+
+        <EditText
+            android:id="@+id/etNewJoke"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/etTitle"
+            android:ems="10"
+            android:gravity="start"
+            android:hint="@string/new_joke_hint"
+            android:maxLength="500"
+            android:minLines="8"
+            android:scrollbars="vertical"
+            android:textAlignment="textStart"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/tvCharsRemaining"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/etNewJoke"
+            android:paddingLeft="0dp"
+            android:paddingRight="5dp"
+            android:text="N remaining"
+            android:textStyle="italic" />
+
+        <ProgressBar
+            android:id="@+id/pb_create"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/etNewJoke"
+            android:layout_centerHorizontal="true"
+            android:visibility="invisible" />
+    </RelativeLayout>
 
 </RelativeLayout>

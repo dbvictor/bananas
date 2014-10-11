@@ -63,6 +63,8 @@ public class Joke extends Model implements Serializable {
 
 	@Column(name = COL.SHARES)
 	private int shares = 0;
+	
+	private JokeState userState = null;
 
 	// ----- ACCESS -----
 	/** (Automatically generated) row ID. */
@@ -146,6 +148,14 @@ public class Joke extends Model implements Serializable {
 	}
 	public void setShares(int shares) {
 		this.shares = shares;
+	}
+
+	/** Current user state (action hisotry) for the current joke. */
+	public JokeState getUserState() {
+		return userState;
+	}
+	public void setUserState(JokeState jokeState) {
+		this.userState = jokeState;
 	}
 	
 	// ------ OTHER ------

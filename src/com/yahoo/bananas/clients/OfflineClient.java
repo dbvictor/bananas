@@ -3,7 +3,9 @@ package com.yahoo.bananas.clients;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import android.os.AsyncTask;
@@ -12,6 +14,8 @@ import android.util.Log;
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Model;
 import com.activeandroid.query.Select;
+import com.parse.ParseException;
+import com.yahoo.bananas.models.Joke;
 import com.yahoo.bananas.models.JokeState;
 
 /**
@@ -76,11 +80,11 @@ public class OfflineClient {
 		static GetJokeStates fromJokeStates(final GetJokeState handler){
 			return new GetJokeStates() {
 				@Override
-				public void done(List<JokeState> results, Exception e) {
+				public void done(Map<String,JokeState> results, Exception e) {
 					JokeState js = null;
 					if(results!=null){
 						if(results.size()==0) js = null;
-						else if(results.size()==1) js = results.get(0);
+						else if(results.size()==1) js = results.values().iterator().next();
 						else if(e==null) e = new RuntimeException("Found '"+results.size()+"' results when only single result expected.");
 					}
 					handler.done(js, e);
@@ -102,9 +106,11 @@ public class OfflineClient {
 	 * @param handler
 	 *          Return results will be passed back through the handler.
 	 *          If cache is not loaded, this task will run asynchronously and call back when ready.  
-	 * @return Non-null of 0 or more (createIfNotExist==false) joke state instances if exists for each
-	 *         joke by this user.  Else non-null list of exactly the number of joke state instances
-	 *         for each joke specified (created if not exist).
+	 * @return Non-null map of 0 or more joke state instances found by Joke objectId if exists for
+	 *         each joke for this user.  If createIfNotExist==true, then the list will be exactly
+	 *         the number of joke state instances requested.
+	 *         KEY: Joke ObjectId.
+	 *         VALUE: JokeState for that joke.
 	 */
 	public void getJokeStates(final Collection<String> jokeObjectIds, final boolean createIfNotExist, final GetJokeStates handler){
 		// If joke states are cached, just return from cache immediately.
@@ -121,15 +127,41 @@ public class OfflineClient {
 			}
 		}.execute();
 	}
-	private List<JokeState> getJokeStates(Collection<String> jokeObjectIds, boolean createIfNotExist){
-		List<JokeState> jokeStates = new ArrayList<JokeState>(jokeObjectIds.size());
-		for(String jokeObjectId : jokeObjectIds) jokeStates.add(getJokeState(jokeObjectId,createIfNotExist));
+	private Map<String, JokeState> getJokeStates(Collection<String> jokeObjectIds, boolean createIfNotExist){
+		Map<String,JokeState> jokeStates = new HashMap<String,JokeState>(jokeObjectIds.size());
+		for(String jokeObjectId : jokeObjectIds) jokeStates.put(jokeObjectId,getJokeState(jokeObjectId,createIfNotExist));
 		Log.d("trace", "Found joke states x"+jokeStates.size());
 		return jokeStates;
 	}
 	/** Asynchronous callback for getJokeStates() result. */
 	public abstract static class GetJokeStates{
-		public abstract void done(List<JokeState> results, Exception e);
+		public abstract void done(Map<String,JokeState> results, Exception e);
+	}
+	/** Same as getJokeStates(...) except populates results directly into Joke objects. */
+	public void getJokeStates(final List<Joke> jokes, final boolean createIfNotExist, final ParseClient.FindJokes handler){
+		// Get list of joke IDs
+		List<String> jokeObjectIds = new ArrayList<String>(jokes.size());
+		for(Joke j : jokes) jokeObjectIds.add(j.getObjectId());
+		// Call joke object ID based version
+		getJokeStates(jokeObjectIds, createIfNotExist, new GetJokeStates() {
+			@Override
+			public void done(Map<String,JokeState> results, Exception e) {
+				Log.d("trace","OfflineClient.getJokeStates.done() results="+((results!=null)? results.size() : "null"));
+				if(e!=null) Log.e("ERROR","Failed to load Joke States: "+e.getClass().getSimpleName()+" = "+e.getMessage());
+				if(results!=null){
+					for(Joke j : jokes){
+						j.setUserState(results.get(j.getObjectId()));
+						if(j.getUserState()==null){
+							Log.e("UNEXPECTED","Failed to find joke state for joke '"+j.getObjectId()+"' when the option was set to create if not exist!");
+							if(e!=null) e = new RuntimeException("INTERNAL ERROR: Failed to find joke state for joke '"+j.getObjectId()+"' when the option was set to create if not exist!"); 
+						}
+					}
+				}
+				ParseException parseException = null;
+				if(e!=null) parseException = new ParseException(e.getMessage(), e);
+				handler.done(jokes, parseException);
+			}
+		});
 	}
 	
 	// ========================================================================

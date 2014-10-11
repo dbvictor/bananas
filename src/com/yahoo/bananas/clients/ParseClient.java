@@ -433,9 +433,19 @@ public class ParseClient {
 					if(e!=null)	Log.e("PARSE ERROR","Get Jokes Failed: "+e.getMessage(),e);
 					if(resultsPO==null) resultsPO = new ArrayList<ParseObject>(0); // Avoid NPE or more conditional logic.
 					List<Joke> resultsJokes = Joke.fromParseObjects(resultsPO);
-					OfflineClient.saveToOfflineAsync(resultsJokes); // Save latest to offline persistence to be used later if user goes offline.
-					if(e==null) JokesApplication.getParseClient().getJokesUsers(resultsJokes,handler);
-					else        handler.done(resultsJokes, e);
+					// Save latest to offline persistence to be used later if user goes offline.
+					OfflineClient.saveToOfflineAsync(resultsJokes);
+					if(e==null){
+						// Get User objects for joke users (currently with only User objectId).
+						JokesApplication.getParseClient().getJokesUsers(resultsJokes, new FindJokes() {
+							// Get JokeStat objects for jokes -- chained asynchronously as an async call once the other returns.
+							@Override public void done(List<Joke> resultsJokes, ParseException e) {
+								Log.d("trace", "ParseClient.FindJokes.getJokesUsers.done()");
+								if(e!=null)	Log.e("OFFLINE ERROR","Get JokeStates Failed: "+e.getMessage(),e);
+								JokesApplication.getOfflineClient().getJokeStates(resultsJokes, true, handler);
+							}
+						});
+					}else handler.done(resultsJokes, e);
 				}
 			};
 		}

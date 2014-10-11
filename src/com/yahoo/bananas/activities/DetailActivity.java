@@ -26,6 +26,7 @@ public class DetailActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_detail);
+		setActionBarColor();
 
 		joke = (Joke) getIntent().getSerializableExtra("joke");
 		
@@ -48,7 +49,6 @@ public class DetailActivity extends Activity {
 //		}
 //		TextView tvCategory = (TextView) findViewById(R.id.tvCategory);
 //		tvCategory.setText(joke.getCategory().getDisplayName());
-		setActionBarColor();
 	}
 	
 	private void setActionBarColor() {

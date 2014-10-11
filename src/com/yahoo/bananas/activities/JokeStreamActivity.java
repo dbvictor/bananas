@@ -10,9 +10,12 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yahoo.bananas.JokesApplication;
 import com.yahoo.bananas.R;
 import com.yahoo.bananas.fragments.JokesListFragment;
@@ -87,7 +90,26 @@ public class JokeStreamActivity extends FragmentActivity {
 		getMenuInflater().inflate(R.menu.menu_timeline, menu);
 		MenuItem internetToggle = menu.findItem(R.id.actionInternetToggle);
 		setupInternetToggle(internetToggle);
+
 		return true;
+	}
+	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		User user = JokesApplication.getParseClient().getUser();
+		final MenuItem profile = menu.findItem(R.id.actionProfile);
+		View actionView = profile.getActionView();
+		ImageView ivProfileImage = (ImageView) actionView.findViewById(R.id.ivProfileImage);
+		ImageLoader.getInstance().displayImage(user.getImageUrl(), ivProfileImage);
+
+		ivProfileImage.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				viewProfile(profile);				
+			}
+		});
+		return super.onPrepareOptionsMenu(menu);
 	}
 
 	/** Menu selection to turn on/off Internet to simulate offline. */

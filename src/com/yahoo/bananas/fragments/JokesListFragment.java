@@ -55,6 +55,8 @@ abstract public class JokesListFragment extends Fragment {
 		parseClient = JokesApplication.getParseClient();
 		internetStatus = new InternetStatus(getActivity());
 		lastObjectId     = null; // Always start from null.
+		lastDate = null;
+		lastVotesUp = -1;
 		jokes         = new ArrayList<Joke>();
 		aJokes        = new JokeArrayAdapter(getActivity(), jokes); // WARNING: RARELY USE getActivity().  Other usage is likely improper.
 	}
@@ -183,9 +185,9 @@ abstract public class JokesListFragment extends Fragment {
 		Log.d("DVDEBUG", "+ TimelineActivity.populateTimeline()");
 		if(!internetStatus.isAvailable()){ // If no network, don't allow create tweet.
 			Toast.makeText(getActivity(), "Network Not Available!", Toast.LENGTH_SHORT).show();
-			if(refresh) populateJokeStreamOffline(refresh);
+			if(refresh) 
+				populateJokeStreamOffline(refresh);
 		}else{
-			final JokesListFragment parentThis = this;
 			if(refresh) {
 				lastObjectId = null; // If told to refresh from beginning, start again from 0.
 				lastVotesUp = -1;
@@ -199,19 +201,19 @@ abstract public class JokesListFragment extends Fragment {
 					} else if (results != null){
 						if (refresh) {
 							aJokes.clear();
-							aJokes.addAll(results);
-							if (jokes != null && ! jokes.isEmpty()) {
-								Joke lastJoke = jokes.get(jokes.size()-1);
-								lastObjectId = lastJoke.getObjectId();
-								lastVotesUp = lastJoke.getVotesUp();
-								lastDate = lastJoke.getCreatedAt();
-							} else {
-								lastObjectId = null;
-								lastVotesUp = -1;
-								lastDate = null;
-							}
-							swipeContainer.setRefreshing(false);
 						}
+						aJokes.addAll(results);
+						if (jokes != null && ! jokes.isEmpty()) {
+							Joke lastJoke = jokes.get(jokes.size()-1);
+							lastObjectId = lastJoke.getObjectId();
+							lastVotesUp = lastJoke.getVotesUp();
+							lastDate = lastJoke.getCreatedAt();
+						} else {
+							lastObjectId = null;
+							lastVotesUp = -1;
+							lastDate = null;
+						}
+						swipeContainer.setRefreshing(false);
 					}	
 					hideProgressBar();
 				}

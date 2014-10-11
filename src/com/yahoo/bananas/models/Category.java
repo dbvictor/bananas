@@ -4,26 +4,29 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import com.yahoo.bananas.R;
 
 /** Categories of jokes. */
 public enum Category {
-	Animal		(0,"Animal"		 ),
-	Bar   		(1,"Bar"   		 ),
-	Food   		(2,"Food"   	 ),
-	Blonde   	(3,"Blonde"   	 ),
-	Yo_Mama  	(4,"Yo Mama"     ),
-	Lawyer   	(5,"Lawyer"   	 ),
-	Doctor   	(6,"Doctor"   	 ),
-	Other 		(7,"Other" 		 ),
-	KnockKnock  (8, "Knock Knock");
+	Animal		(0,"Animal", R.drawable.ic_animal),
+	Bar   		(1,"Bar", R.drawable.ic_bar),
+	Food   		(2,"Food", R.drawable.ic_food),
+	Blonde   	(3,"Blonde", R.drawable.ic_blonde),
+	Yo_Mama  	(4,"Yo Mama", R.drawable.ic_yomama),
+	Lawyer   	(5,"Lawyer", R.drawable.ic_lawyer),
+	Doctor   	(6,"Doctor", R.drawable.ic_doctor),
+	KnockKnock  (8, "Knock Knock", R.drawable.ic_knockknock),
+	Other 		(7,"Other", R.drawable.ic_others);
 	
 	// Members
 	private Integer dbValue     = -1;
 	private String  displayName = null;
+	private int imageId;
 	// Custom CTOR
-	private Category(Integer dbValue, String displayName){
+	private Category(Integer dbValue, String displayName, Integer imageId){
 		this.dbValue     = dbValue;
 		this.displayName = displayName;
+		this.imageId = imageId;
 	}
 	// Methods
 	public String  getDisplayName(){ return displayName; }
@@ -51,11 +54,15 @@ public enum Category {
 	private static HashMap<Integer,Category> MAP_DB_TO_ENUM = null;
 	
 	public static List<Category> getCategories() {
+		
 		List<Category> categories = new ArrayList<Category>();
 		for (Category cat : Category.values()) {
 			categories.add(cat);
 		}
 		return categories;
+	}
+	public int getImageResourceId() {
+		return this.imageId;
 	}
 
 }

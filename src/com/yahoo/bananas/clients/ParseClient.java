@@ -162,7 +162,7 @@ public class ParseClient {
 	private void getJokesPopular(int lastVotesUp, String lastObjectId, Collection<Category> optCategories, FindCallback<ParseObject> handler){
 		ParseQuery<ParseObject> query = ParseQuery.getQuery(Joke.TABLE);
 		query.setLimit(PAGESIZE);
-		if(lastVotesUp>=0) query.whereLessThan(Joke.COL.VOTESUP, lastVotesUp);
+		if(lastVotesUp>=0) query.whereLessThanOrEqualTo(Joke.COL.VOTESUP, lastVotesUp);
 		// We will have to consider that multiple can have the same date, but objectId isn't sequential
 		// - so we also sort secondarily by objectid.
 		if(lastObjectId!=null) query.whereLessThan(Joke.COL.OBJECTID , lastObjectId);

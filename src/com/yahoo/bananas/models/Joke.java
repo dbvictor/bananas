@@ -12,6 +12,12 @@ import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 import com.parse.ParseObject;
 
+/**
+ * Primary joke object containing the stand-alone core pieces of a joke.  The joke itself has no
+ * dependencies.  But for better context in the UI, additional related objects may be retrieved 
+ * in conjunction, such as more details user objects given the userid stored here, and the joke
+ * status for the current user's action history like their votes & sharing.    
+ */
 @Table(name = "Jokes")
 public class Joke extends Model implements Serializable {
 	// Constants
@@ -192,7 +198,7 @@ public class Joke extends Model implements Serializable {
           //.where("Category = ?", category.getId())
           .orderBy("createdAt DESC")
           .execute();
-        if(result==null) result = new ArrayList<Joke>();
+        if(result==null) result = new ArrayList<Joke>(0);
         return result;
     }
 	

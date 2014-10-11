@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
+/** All settings & filters for the Bananas application. */
 public class Settings implements Serializable{
 	// Static Constants
 	private static final long   serialVersionUID    = -7811227143349252788L;

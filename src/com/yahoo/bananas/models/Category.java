@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+/** Categories of jokes. */
 public enum Category {
 	Animal		(0,"Animal"		 ),
 	Bar   		(1,"Bar"   		 ),

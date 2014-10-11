@@ -11,7 +11,7 @@
 
     <item
         android:id="@+id/actionProfile"
-        android:icon="@drawable/ic_action_user"
+        android:actionLayout="@layout/action_view_profile"
         android:orderInCategory="100"
         android:showAsAction="always"
         android:onClick="viewProfile"

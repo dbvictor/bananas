@@ -65,32 +65,31 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvEmail"
                 android:layout_toRightOf="@+id/ivProfileImage"
-                android:text="40000"
                 android:gravity="end|right"
+                android:text="40000"
                 android:textAlignment="textEnd"
                 android:textSize="14sp" />
-            
-                        <ImageView
-                            android:id="@+id/ivCreated"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignBottom="@+id/tvCreated"
-                            android:layout_toRightOf="@+id/tvCreated"
-                            android:layout_alignTop="@+id/tvCreated"
-                            android:layout_below="@+id/tvEmail"
-                            android:src="@drawable/ic_pencil_cartoon_not_a_box" />
-                        
-                                   <TextView
+
+            <ImageView
+                android:id="@+id/ivCreated"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/tvCreated"
+                android:layout_alignTop="@+id/tvCreated"
+                android:layout_below="@+id/tvEmail"
+                android:layout_toRightOf="@+id/tvCreated"
+                android:src="@drawable/ic_pencil_cartoon_not_a_box" />
+
+            <TextView
                 android:id="@+id/tvVotesUp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvEmail"
                 android:layout_toLeftOf="@+id/ivVotesUp"
                 android:layout_toRightOf="@+id/ivCreated"
-                                android:gravity="end|right"
-                android:textAlignment="textEnd"
-                
+                android:gravity="end|right"
                 android:text="72000"
+                android:textAlignment="textEnd"
                 android:textSize="14sp" />
 
             <ImageView
@@ -130,50 +129,42 @@
                 android:layout_below="@+id/tvVotesUp"
                 android:layout_toLeftOf="@+id/ivVotesDown"
                 android:layout_toRightOf="@+id/ivJokesRead"
-                                android:gravity="end|right"
-                android:textAlignment="textEnd"
-                
+                android:gravity="end|right"
                 android:text="7"
+                android:textAlignment="textEnd"
                 android:textSize="14sp" />
-            
-                        <ImageView
+
+            <ImageView
                 android:id="@+id/ivVotesDown"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/tvVotesDown"
                 android:layout_alignParentRight="true"
                 android:layout_alignTop="@+id/tvVotesDown"
-                android:layout_alignBottom="@+id/tvVotesDown"
                 android:layout_below="@+id/ivVotesUp"
                 android:src="@drawable/ic_down" />
 
- 
-
-
-            
             <TextView
                 android:id="@+id/tvShared"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toLeftOf="@+id/ivShared"
-android:layout_alignLeft="@+id/tvVotesDown"
+                android:layout_alignLeft="@+id/tvVotesDown"
                 android:layout_below="@+id/tvVotesDown"
-                                android:gravity="end|right"
-                android:textAlignment="textEnd"
-                
+                android:layout_toLeftOf="@+id/ivShared"
+                android:gravity="end|right"
                 android:text="3"
+                android:textAlignment="textEnd"
                 android:textSize="14sp" />
 
             <ImageView
                 android:id="@+id/ivShared"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/ivVotesDown"
                 android:layout_alignBottom="@+id/tvShared"
-                android:layout_alignTop="@+id/tvShared"
                 android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/tvShared"
+                android:layout_below="@+id/ivVotesDown"
                 android:src="@drawable/ic_shares" />
-            
-
         </RelativeLayout>
     </RelativeLayout>
 

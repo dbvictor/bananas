@@ -12,14 +12,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.yahoo.bananas.JokesApplication;
 import com.yahoo.bananas.R;
+import com.yahoo.bananas.clients.OfflineClient;
 import com.yahoo.bananas.fragments.UserJokeStreamFragment;
 import com.yahoo.bananas.models.User;
+import com.yahoo.bananas.models.UserStats;
 import com.yahoo.bananas.util.InternetStatus;
 
 public class ProfileActivity extends FragmentActivity {
 	private InternetStatus internetStatus;
 	private User user;
+	private OfflineClient offlineClient = JokesApplication.getOfflineClient();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +86,42 @@ public class ProfileActivity extends FragmentActivity {
 		
 		TextView tvUserName = (TextView) findViewById(R.id.tvRealName);
 		tvUserName.setText(user.getRealName());
+		
+		TextView tvEmail = (TextView) findViewById(R.id.tvEmail);
+		tvEmail.setText(user.getEmail());
+		
+		//update stats
+		offlineClient.getUserStats(new OfflineClient.GetUserStats() {
+			
+			@Override
+			public void done(UserStats result, Exception e) {
+				if (e != null || result == null) {
+					return;
+				}
+				TextView tvCreated = (TextView) findViewById(R.id.tvCreated);
+				int created = result.created();
+				tvCreated.setText(created < 0 ? "?" : String.valueOf(created));
+				
+				TextView tvRead = (TextView) findViewById(R.id.tvJokesRead);
+				int touched = result.touched();
+				tvRead.setText(touched < 0 ? "?" : String.valueOf(touched));
+				
+				TextView tvVotesUp = (TextView) findViewById(R.id.tvVotesUp);
+				int votesUp = result.votesUp();
+				tvVotesUp.setText(votesUp < 0 ? "?" : String.valueOf(votesUp));
+				
+				TextView tvVotesDown = (TextView) findViewById(R.id.tvVotesDown);
+				int votesDn = result.votesDn();
+				tvVotesDown.setText(votesDn < 0 ? "?" : String.valueOf(votesDn));
+				
+				TextView tvShares = (TextView) findViewById(R.id.tvShared);
+				int shared = result.shared();
+				tvShares.setText(shared < 0 ? "?" : String.valueOf(shared));
+
+			}
+		} );
+		
+		
 	}
 	
 	@Override

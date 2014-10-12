@@ -10,12 +10,9 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.Window;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yahoo.bananas.JokesApplication;
 import com.yahoo.bananas.R;
 import com.yahoo.bananas.fragments.JokesListFragment;
@@ -94,23 +91,27 @@ public class JokeStreamActivity extends FragmentActivity {
 		return true;
 	}
 	
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		User user = JokesApplication.getParseClient().getUser();
-		final MenuItem profile = menu.findItem(R.id.actionProfile);
-		View actionView = profile.getActionView();
-		ImageView ivProfileImage = (ImageView) actionView.findViewById(R.id.ivProfileImage);
-		ImageLoader.getInstance().displayImage(user.getImageUrl(), ivProfileImage);
-
-		ivProfileImage.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				viewProfile(profile);				
-			}
-		});
-		return super.onPrepareOptionsMenu(menu);
-	}
+//	Since we don't have good profile pictures, we'll use the profile icon instead of the 
+//	image for the user's profile.  To re-enable using the user's profile image for the
+//	icon in the action bar, uncomment the onPrepareOptionsMenu command end re-enable the
+//	actionbar item with layout specified in the menu_timeline.xml.
+//	@Override
+//	public boolean onPrepareOptionsMenu(Menu menu) {
+//		User user = JokesApplication.getParseClient().getUser();
+//		final MenuItem profile = menu.findItem(R.id.actionProfile);
+//		View actionView = profile.getActionView();
+//		ImageView ivProfileImage = (ImageView) actionView.findViewById(R.id.ivProfileImage);
+//		ImageLoader.getInstance().displayImage(user.getImageUrl(), ivProfileImage);
+//
+//		ivProfileImage.setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				viewProfile(profile);				
+//			}
+//		});
+//		return super.onPrepareOptionsMenu(menu);
+//	}
 
 	/** Menu selection to turn on/off Internet to simulate offline. */
 	public void internetToggle(MenuItem menuItem){

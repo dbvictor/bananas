@@ -28,6 +28,7 @@
             android:id="@+id/spCategories"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/ivCategory"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/ivCategory" />
 
@@ -41,6 +42,7 @@
             android:ems="10"
             android:hint="Enter Title Here..."
             android:maxLines="1"
+            android:maxLength="50"
             android:textSize="16dp" >
 
             <requestFocus />

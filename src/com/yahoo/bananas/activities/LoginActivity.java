@@ -67,6 +67,7 @@ public class LoginActivity extends OAuthLoginActivity<TwitterClient> {
 	public void onLoginFailure(Exception e) {
 		ProgressBar pbLogin = (ProgressBar) findViewById(R.id.pbLogin);
 		pbLogin.setVisibility(ProgressBar.INVISIBLE);
+		Toast.makeText(this, "FAILED login to Twitter", Toast.LENGTH_SHORT).show();
 		e.printStackTrace();
 	}
 

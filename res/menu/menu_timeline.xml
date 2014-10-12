@@ -9,9 +9,17 @@
         android:onClick="create"
         android:title="@string/action_create"/>
 
-    <item
+    <!-- <item
         android:id="@+id/actionProfile"
         android:actionLayout="@layout/action_view_profile"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:onClick="viewProfile"
+        android:title="@string/action_profile"/> -->
+        
+        <item
+        android:id="@+id/actionProfile"
+        android:icon="@drawable/ic_action_user"
         android:orderInCategory="100"
         android:showAsAction="always"
         android:onClick="viewProfile"

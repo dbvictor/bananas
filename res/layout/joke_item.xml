@@ -120,10 +120,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/tvTime"
         android:layout_toRightOf="@+id/ivCategoryImage"
         android:text="Title"
-        android:textStyle="bold"
-        android:textSize="12dp" />
+        android:textSize="12dp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvBody"

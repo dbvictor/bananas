@@ -22,6 +22,7 @@ import com.parse.SaveCallback;
 import com.yahoo.bananas.JokesApplication;
 import com.yahoo.bananas.models.Category;
 import com.yahoo.bananas.models.Joke;
+import com.yahoo.bananas.models.JokeState;
 import com.yahoo.bananas.models.User;
 
 /** Client for interacting with the remote store (Parse) for online behavior. */
@@ -352,14 +353,39 @@ public class ParseClient {
 
     /**
      * Record voting up/down for a joke, incrementing the up/down vote number by one.
-     * @param jokeObjectId   - the ID of the joke for which you want to change the voting counts.
-     * @param voteDifference - Number of votes to add or subtract.  Positive = Votes Up, Negative = Votes Down.
+     * @param jokeObjectId - the ID of the joke for which you want to change the voting counts.
+     * @param voteUp       - Vote Up
+     * @param voteDn       - Vote Down 
      **/
-    public void jokeVote(final String jokeObjectId, final int voteDifference, final SaveCallback handler){
-    	updateLatest(jokeObjectId, handler, new UpdateJoke() {
-			@Override public void applyChanges(Joke joke) {
-				if(voteDifference>0) joke.setVotesUp  (joke.getVotesUp  ()+voteDifference);
-				else                 joke.setVotesDown(joke.getVotesDown()-voteDifference);
+    public void jokeVote(final String jokeObjectId, final boolean voteUp, final boolean voteDn, final SaveCallback handler){
+		// Get existing votes for this user
+		JokesApplication.getOfflineClient().getJokeState(jokeObjectId,true,new OfflineClient.GetJokeState() {
+			@Override
+			public void done(JokeState js, Exception e) {
+				if(e!=null) handler.done(new ParseException(e.getMessage(),e));
+				// 0. Determine the change to vote count
+				int changeVotesUp = 0;
+				int changeVotesDn = 0;
+				// Undo existing votes
+				if(js.getVotedUp  ()) changeVotesUp--;
+				if(js.getVotedDown()) changeVotesDn--;
+				// Apply new votes
+				if(voteUp) changeVotesUp++;
+				if(voteDn) changeVotesDn++;
+				// If no change needed, just return
+				if((changeVotesUp==0)&&(changeVotesDn==0)){
+					handler.done(null);
+				// Otherwise save changes to voting
+				}else{
+					final int changeVotesUpFinal = changeVotesUp;
+					final int changeVotesDnFinal = changeVotesDn;
+			    	updateLatest(jokeObjectId, handler, new UpdateJoke() {
+						@Override public void applyChanges(Joke joke) {
+							joke.setVotesUp  (joke.getVotesUp  ()+changeVotesUpFinal);
+							joke.setVotesDown(joke.getVotesDown()-changeVotesDnFinal);
+						}
+					});
+				}
 			}
 		});
     }

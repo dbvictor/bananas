@@ -23,7 +23,6 @@ import com.yahoo.bananas.JokesApplication;
 import com.yahoo.bananas.models.Category;
 import com.yahoo.bananas.models.Joke;
 import com.yahoo.bananas.models.User;
-import com.yahoo.bananas.util.Util;
 
 /** Client for interacting with the remote store (Parse) for online behavior. */
 public class ParseClient {
@@ -341,26 +340,12 @@ public class ParseClient {
 		query.whereContainedIn(User.COL.OBJECTID, userObjectIds);
 		query.findInBackground(handler);
     }
-    
+
     /** Record a share event for a joke, incrementing the share number by one. */
     public void jokeShare(final String jokeObjectId, final SaveCallback handler){
-		Log.d("trace", "ParseClient.jokeShare(Joke="+jokeObjectId+")");
-    	// Get the latest copy of the existing joke (so we increment a current number).
-    	// NOTE: This is flawed, we need to lock the row or rely on the DB to increment by 1, not retrieve-update-set.
-    	getJoke(jokeObjectId, new FindJoke() {
-			@Override
-			public void done(Joke joke, ParseException e) {
-				Log.d("trace", "ParseClient.jokeShare(Joke="+jokeObjectId+") retrieved = "+joke);
-				if(e!=null)	Log.e("PARSE ERROR","Get Joke Failed: "+e.getMessage(),e);
-				if(e!=null){ // If failed, just stop now.
-					handler.done(e);
-				}else if(joke==null){ // If not found, error now.
-					Log.e("ERROR","Cannot record share event.  Get Joke '"+jokeObjectId+"' Not Found.");
-					handler.done(null);
-				}else{ // Else proceed to update.
-					joke.setShares(joke.getShares()+1);
-					update(joke,handler);
-				}
+    	updateLatest(jokeObjectId, handler, new UpdateJoke() {
+			@Override public void applyChanges(Joke joke) {
+				joke.setShares(joke.getShares()+1);
 			}
 		});
     }
@@ -371,24 +356,10 @@ public class ParseClient {
      * @param voteDifference - Number of votes to add or subtract.  Positive = Votes Up, Negative = Votes Down.
      **/
     public void jokeVote(final String jokeObjectId, final int voteDifference, final SaveCallback handler){
-		Log.d("trace", "ParseClient.jokeVote(Joke="+jokeObjectId+","+voteDifference+")");
-    	// Get the latest copy of the existing joke (so we increment a current number).
-    	// NOTE: This is flawed, we need to lock the row or rely on the DB to increment by 1, not retrieve-update-set.
-    	getJoke(jokeObjectId, new FindJoke() {
-			@Override
-			public void done(Joke joke, ParseException e) {
-				Log.d("trace", "ParseClient.jokeVote("+jokeObjectId+") retrieved = "+joke);
-				if(e!=null)	Log.e("PARSE ERROR","Get Joke Failed: "+e.getMessage(),e);
-				if(e!=null){ // If failed, just stop now.
-					handler.done(e);
-				}else if(joke==null){ // If not found, error now.
-					Log.e("ERROR","Cannot record vote.  Get Joke '"+jokeObjectId+"' Not Found.");
-					handler.done(null);
-				}else{ // Else proceed to update.
-					if(voteDifference>0) joke.setVotesUp  (joke.getVotesUp  ()+voteDifference);
-					else                 joke.setVotesDown(joke.getVotesDown()-voteDifference);
-					update(joke,handler);
-				}
+    	updateLatest(jokeObjectId, handler, new UpdateJoke() {
+			@Override public void applyChanges(Joke joke) {
+				if(voteDifference>0) joke.setVotesUp  (joke.getVotesUp  ()+voteDifference);
+				else                 joke.setVotesDown(joke.getVotesDown()-voteDifference);
 			}
 		});
     }
@@ -420,6 +391,44 @@ public class ParseClient {
     private void update(final ParseObject po, SaveCallback handler){
     	po.saveInBackground(handler);
     }
+    
+    /**
+     * Make changes to the latest copy of a joke.  The latest will be retrieved, you can apply
+     * some changes quickly on top of it, and it will be saved for you.  Do this when your joke
+     * instance is stale and you don't want to risk overwriting values updated more recently by another.  
+     * @param jokeObjectId - the ID of the joke for which you want to update.
+     * @param handler      - asynchronous call back to tell you when it is done.
+     * @param updater      - implementation you provide to make updates to the latest joke instance.
+     **/
+    public void updateLatest(final String jokeObjectId, final SaveCallback handler, final ParseClient.UpdateJoke updater){
+		Log.d("trace", "ParseClient.updateLatest(Joke="+jokeObjectId+")");
+    	// Get the latest copy of the existing joke (so we increment a current number).
+    	// NOTE: This is flawed, we need to lock the row or rely on the DB to increment by 1, not retrieve-update-set.
+    	getJoke(jokeObjectId, new FindJoke() {
+			@Override
+			public void done(Joke joke, ParseException e) {
+				Log.d("trace", "ParseClient.updateLatest(Joke="+jokeObjectId+") retrieved = "+joke);
+				if(e!=null)	Log.e("PARSE ERROR","Get Joke Failed: "+e.getMessage(),e);
+				if(e!=null){ // If failed, just stop now.
+					handler.done(e);
+				}else if(joke==null){ // If not found, error now.
+					Log.e("ERROR","Cannot update joke.  Get Joke '"+jokeObjectId+"' Not Found.");
+					handler.done(null);
+				}else{ // Else proceed to update.
+					try{ updater.applyChanges(joke);
+					}catch(Exception applyChangesExc){ handler.done(new ParseException(applyChangesExc.getMessage(),applyChangesExc)); }
+					update(joke,handler);
+				}
+			}
+		});
+    }
+    /** Implementation you provide to make updates to the latest joke instance. */
+    public abstract static class UpdateJoke{
+    	/** Apply changes to the latest joke instance.
+    	 *  @parasm joke - Non-null latest copy of joke to make modifications to. */
+    	public abstract void applyChanges(Joke joke);
+    }
+    
     
 	// ========================================================================
     // CONVERSION UTILITIES

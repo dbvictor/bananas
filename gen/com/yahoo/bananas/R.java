@@ -43,6 +43,7 @@ public final class R {
         public static final int ic_create=0x7f02000e;
         public static final int ic_doctor=0x7f02000f;
         public static final int ic_down=0x7f020010;
+<<<<<<< HEAD
         public static final int ic_down_voted=0x7f020011;
         public static final int ic_food=0x7f020012;
         public static final int ic_home=0x7f020013;
@@ -58,6 +59,20 @@ public final class R {
         public static final int ic_up=0x7f02001d;
         public static final int ic_up_voted=0x7f02001e;
         public static final int ic_yomama=0x7f02001f;
+=======
+        public static final int ic_food=0x7f020011;
+        public static final int ic_home=0x7f020012;
+        public static final int ic_knockknock=0x7f020013;
+        public static final int ic_launcher=0x7f020014;
+        public static final int ic_lawyer=0x7f020015;
+        public static final int ic_mentions=0x7f020016;
+        public static final int ic_others=0x7f020017;
+        public static final int ic_pencil_cartoon_not_a_box=0x7f020018;
+        public static final int ic_popular=0x7f020019;
+        public static final int ic_shares=0x7f02001a;
+        public static final int ic_up=0x7f02001b;
+        public static final int ic_yomama=0x7f02001c;
+>>>>>>> 980a30f982a9902615b094009093431cde4966d1
     }
     public static final class id {
         public static final int actionCreate=0x7f090031;

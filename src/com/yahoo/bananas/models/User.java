@@ -13,11 +13,25 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.yahoo.bananas.util.Util;
 
+/**
+ * Primary user object that represents the user of the Bananas application.  This is actually a
+ * Parse user from the parse authentication system that is required to connect with Parse, our 
+ * remote store for jokes.  We may log in anonymously (or utilize actual login in the future).
+ * Regardless, every connection is logged in with a user, that is represented by an instance
+ * of this object (whether you access a whole instance, use just the userid, or ignore it).
+ * 
+ * We extended the existing Parse User system table with a few extra columns that we update to
+ * store additional information about the user instead of having a completely separate user table,
+ * such as imageUrl.
+ * 
+ * We may utilize access to other services to populate meaningful detail into this user,
+ * such as if they allow us to login to Twitter, Facebook, Yahoo, etc.  
+ */
 @Table(name = "Users")
 public class User extends Model implements Serializable{
 	// Constants
 	private static final long serialVersionUID = 8667788773549950232L;
-	public static final String TABLE         = "User";
+	public static final String TABLE         = "Users";
 	public static final class COL{
 		public static final String OBJECTID  = "objectId";  // (automatic) generated row ID.
 		public static final String CREATEDAT = "createdAt"; // (automatic) timestamp row created
@@ -139,7 +153,7 @@ public class User extends Model implements Serializable{
           //.where("Category = ?", category.getId())
           .orderBy("createdAt DESC")
           .execute();
-        if(result==null) result = new ArrayList<Joke>();
+        if(result==null) result = new ArrayList<Joke>(0);
         return result;
     }
 

@@ -71,40 +71,6 @@ public class Util {
 		return "http://www.gravatar.com/avatar/" + hex + "?d=identicon";
 	}
 	
-	/** Save multiple Model subclass instances to offline persistence (SQLite). */
-	private static void saveToOffline(Collection<? extends Model> list){
-		try{
-			ActiveAndroid.beginTransaction();
-			try{
-			        for (Model m : list) m.save();
-			        ActiveAndroid.setTransactionSuccessful();
-			}finally{
-			        ActiveAndroid.endTransaction();
-			}
-			Log.d("sqlite","persisted "+((list.size()>0)? (""+list.iterator().next().getClass().getSimpleName()) : "Model")+" x "+list.size());
-		}catch(RuntimeException e){ // Log & rethrow
-			Log.e("sqlite","Error persisting "+((list.size()>0)? (""+list.iterator().next().getClass().getSimpleName()) : "Model")+" x "+list.size()+": "+e.getMessage(),e);
-			throw e;
-		}
-	}
-
-	/** Save multiple Model subclass instances asynchronously to offline persistence (SQLite). */
-	public static void saveToOfflineAsync(final Collection<? extends Model> list){
-		if(list.size()<=0) return; // Do nothing if empty.
-		new AsyncTask<Void,Void,Void>(){
-			@Override
-		    protected Void doInBackground(Void... ignore) { // Type is first one in template.
-		         // Some long-running task like downloading an image.
-		         saveToOffline(list);
-		         return null;
-		     }
-		}.execute();
-	}
-	/** Save Model subclass instance asynchronously to offline persistence (SQLite). */
-	public static void saveToOfflineAsync(Model model){
-		saveToOfflineAsync(Arrays.asList(model));
-	}
-	
 	/* ASYNC TEMPLATE START
 	// The types specified here are the input data type, the progress type, and the result type
 	private class MyAsyncTask extends AsyncTask<String, Void, Bitmap> {

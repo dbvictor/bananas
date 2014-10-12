@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-
 import com.yahoo.bananas.R;
 
+/** Categories of jokes. */
 public enum Category {
 	Animal		(0,"Animal", R.drawable.ic_animal),
 	Bar   		(1,"Bar", R.drawable.ic_bar),

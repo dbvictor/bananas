@@ -8,15 +8,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.ClipData.Item;
-import android.widget.Toast;
-
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Column.ForeignKeyAction;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 
+/** Twitter tweet.  If we interact with Twitter, this represents a tweet we can create or retrieve. */
 @Table(name = "Tweets")
 public class Tweet extends Model implements Serializable {
 	private static final long serialVersionUID = 7144327103228498679L;
@@ -94,7 +92,7 @@ public class Tweet extends Model implements Serializable {
           //.where("Category = ?", category.getId())
           .orderBy("uid DESC")
           .execute();
-        if(result==null) result = new ArrayList<Tweet>();
+        if(result==null) result = new ArrayList<Tweet>(0);
         return result;
     }	
 	

@@ -9,6 +9,7 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
+/** Twitter User info.  If they allow us to login with Twitter, we can retrieve user info. */
 @Table(name = "TwitterUsers")
 public class TwitterUser extends Model implements Serializable{
 	private static final long serialVersionUID = -7608183936172537118L;

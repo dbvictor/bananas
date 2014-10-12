@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:background="@color/background_grey"
     android:layout_height="match_parent" >
 
    <!--  <ImageView
@@ -133,12 +134,13 @@
         android:layout_below="@+id/tvTitle"
         android:layout_toLeftOf="@+id/tvShares"
         android:layout_toRightOf="@+id/ivCategoryImage"
+        android:background="@color/white"
+        android:minLines="2"
         android:onClick="onJokeClick"
         android:paddingBottom="5dp"
         android:paddingTop="5dp"
-        android:minLines="2"
         android:text="Joke body..."
-        android:textSize="14dp" />
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/tvUserName"

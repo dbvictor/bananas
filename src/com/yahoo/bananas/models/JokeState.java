@@ -86,6 +86,14 @@ public class JokeState extends Model implements Serializable {
 	public void setJokeObjectId(String jokeObjectId) {
 		this.jokeObjectId = jokeObjectId;
 	}
+
+	/** User read joke / viewed in detail view. */
+	public boolean getRead() {
+		return read;
+	}
+	public void setRead(boolean read) {
+		this.read = read;
+	}
 	
 	/** User voted up / likes. */
 	public boolean getVotedUp() {

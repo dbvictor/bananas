@@ -122,7 +122,7 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 						Tweet tweet = Tweet.fromJSON(json);
 						Toast.makeText(v.getContext(), "Tweeted", Toast.LENGTH_SHORT).show();
 						// Record Share Event
-						recordShareEvent(v.getContext(),joke,adapter);
+						recordJokeShare(v.getContext(),joke,adapter);
 					}
 					@Override
 					public void onFailure(Throwable e, String s) {
@@ -141,47 +141,52 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 		ivUp.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(final View v) {
-				recordVote(v.getContext(),joke,+1,adapter);
+				recordJokeVote(v.getContext(),joke,+1,adapter);
 			}
 		});
 		ivDn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(final View v) {
-				recordVote(v.getContext(),joke,-1,adapter);
+				recordJokeVote(v.getContext(),joke,-1,adapter);
 			}
 		});
 	}
 	
 	/** Record that a share has happened so people can see how many shares. */
-	private static void recordShareEvent(final Context context, final Joke joke, final JokeArrayAdapter adapter){
+	private static void recordJokeShare(final Context context, final Joke joke, final JokeArrayAdapter adapter){
+		// Make it show a +1 to the user for instant feedback.  This isn't the actual latest if others shared in the meanwhile, but will look appropriate to the user until they do a refresh.  It may be too confusing if it jumps by several when they click once if we did update it.
+		joke.setShares(joke.getShares()+1);
+		adapter.notifyDataSetChanged();
+		// Change icon to show as shared.
+		// TODO
+		// Save to Joke
 		JokesApplication.getParseClient().jokeShare(joke.getObjectId(), new SaveCallback() {
-			@Override
-			public void done(ParseException e) {
+			@Override public void done(ParseException e) {
 				if(e!=null){
-					Log.e("ERROR", "Failed to update share count: "+e.getMessage(),e);
+					Log.e("ERROR", "Update Share Count FAILED!: "+e.getMessage(),e);
 					Toast.makeText(context, "Update Share Count FAILED!", Toast.LENGTH_SHORT).show();
-				}else{
-					// Make it show a +1 to the user, which isn't the actual latest if others shared in the meanwhile, but will look appropriate to the user until they do a refresh.
-					joke.setShares(joke.getShares()+1);
-					adapter.notifyDataSetChanged();
 				}
 			}
 		});
 	}
 
 	/** Record the user's vote. */
-	private static void recordVote(final Context context, final Joke joke, final int voteDifference, final JokeArrayAdapter adapter){
+	private static void recordJokeVote(final Context context, final Joke joke, final int voteDifference, final JokeArrayAdapter adapter){
+		// Only allow if they voted for first time, or changed their vote.
+		// TODO
+		// Make it show a +1 to the user for instant feedback.  This isn't the actual latest if others shared in the meanwhile, but will look appropriate to the user until they do a refresh.  It may be too confusing if it jumps by several when they click once if we did update it.
+		if(voteDifference>0) joke.setVotesUp  (joke.getVotesUp  ()+voteDifference);
+		else                 joke.setVotesDown(joke.getVotesDown()-voteDifference);
+		adapter.notifyDataSetChanged();
+		// Change icons to show up/down vote.
+		// TODO
+		// Save to Joke
 		JokesApplication.getParseClient().jokeVote(joke.getObjectId(), voteDifference, new SaveCallback() {
-			@Override
-			public void done(ParseException e) {
+			@Override public void done(ParseException e) {
 				if(e!=null){
-					Log.e("ERROR", "Failed to update share count: "+e.getMessage(),e);
-					Toast.makeText(context, "Update Share Count FAILED!", Toast.LENGTH_SHORT).show();
+					Log.e("ERROR", "Update Vote Count FAILED!: "+e.getMessage(),e);
+					Toast.makeText(context, "Update Vote Count FAILED!", Toast.LENGTH_SHORT).show();
 				}else{
-					// Make it show a +1 to the user, which isn't the actual latest if others shared in the meanwhile, but will look appropriate to the user until they do a refresh.
-					if(voteDifference>0) joke.setVotesUp  (joke.getVotesUp  ()+voteDifference);
-					else                 joke.setVotesDown(joke.getVotesDown()-voteDifference);
-					adapter.notifyDataSetChanged();
 					Toast.makeText(context, "Voted", Toast.LENGTH_SHORT).show();
 				}
 			}

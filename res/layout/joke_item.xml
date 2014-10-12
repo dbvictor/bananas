@@ -32,7 +32,7 @@
         android:paddingRight="2dp"
         android:text="U"
         android:textColor="@color/text_grey"
-        android:textSize="10dp" />
+        android:textSize="16dp" />
 
     <TextView
         android:id="@+id/tvDownVotes"
@@ -42,7 +42,7 @@
         android:layout_below="@+id/tvUpVotes"
         android:paddingLeft="7dp"
         android:paddingRight="2dp"
-        android:textSize="10dp"
+        android:textSize="16dp"
         android:text="D"
         android:textColor="@color/text_grey" />
 
@@ -54,7 +54,7 @@
         android:layout_below="@+id/tvDownVotes"
         android:paddingLeft="7dp"
         android:paddingRight="2dp"
-        android:textSize="10dp"
+        android:textSize="16dp"
         android:text="S"
         android:textColor="@color/text_grey" />
 
@@ -68,7 +68,7 @@
         android:paddingLeft="7dp"
         android:paddingRight="10dp"
         android:text="Time"
-        android:textSize="10dp"
+        android:textSize="14dp"
         android:textColor="@color/text_grey"
         android:textStyle="italic" />
 
@@ -120,10 +120,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/tvTime"
         android:layout_toRightOf="@+id/ivCategoryImage"
         android:text="Title"
-        android:textStyle="bold"
-        android:textSize="12dp" />
+        android:textSize="16dp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvBody"
@@ -135,20 +136,21 @@
         android:onClick="onJokeClick"
         android:paddingBottom="5dp"
         android:paddingTop="5dp"
+        android:minLines="2"
         android:text="Joke body..."
-        android:textSize="10dp" />
+        android:textSize="14dp" />
 
     <TextView
         android:id="@+id/tvUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvBody"
         android:layout_alignParentRight="true"
-        android:paddingRight="5dp"
+        android:layout_below="@+id/tvBody"
         android:maxLines="1"
-        android:textStyle="italic"
+        android:paddingRight="5dp"
         android:text="\@Username"
         android:textColor="@color/text_grey"
-        android:textSize="10dp" />
+        android:textSize="14dp"
+        android:textStyle="italic" />
 
 </RelativeLayout>

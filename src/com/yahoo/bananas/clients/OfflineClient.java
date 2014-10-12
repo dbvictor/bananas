@@ -130,7 +130,7 @@ public class OfflineClient {
 	private Map<String, JokeState> getJokeStates(Collection<String> jokeObjectIds, boolean createIfNotExist){
 		Map<String,JokeState> jokeStates = new HashMap<String,JokeState>(jokeObjectIds.size());
 		for(String jokeObjectId : jokeObjectIds) jokeStates.put(jokeObjectId,getJokeState(jokeObjectId,createIfNotExist));
-		Log.d("trace", "Found joke states x"+jokeStates.size());
+		Log.d("trace", "OfflineClient.getJokeStates found results = "+jokeStates.size());
 		return jokeStates;
 	}
 	/** Asynchronous callback for getJokeStates() result. */
@@ -143,23 +143,19 @@ public class OfflineClient {
 		List<String> jokeObjectIds = new ArrayList<String>(jokes.size());
 		for(Joke j : jokes) jokeObjectIds.add(j.getObjectId());
 		// Call joke object ID based version
-		getJokeStates(jokeObjectIds, createIfNotExist, new GetJokeStates() {
+		getJokeStates(jokeObjectIds, false, new GetJokeStates() { // Don't tell lower layer to create.  We check anyway, we'll just create and control it here so we have more clarity about what we actually found.
 			@Override
 			public void done(Map<String,JokeState> results, Exception e) {
-				Log.d("trace","OfflineClient.getJokeStates.done() results="+((results!=null)? results.size() : "null"));
+				Log.d("trace","OfflineClient.getJokeStates.done results = "+((results!=null)? results.size() : "null"));
 				if(e!=null) Log.e("ERROR","Failed to load Joke States: "+e.getClass().getSimpleName()+" = "+e.getMessage());
 				if(results!=null){
 					for(Joke j : jokes){
-						j.setUserState(results.get(j.getObjectId()));
-						if(j.getUserState()==null){
-							Log.e("UNEXPECTED","Failed to find joke state for joke '"+j.getObjectId()+"' when the option was set to create if not exist!");
-							if(e!=null) e = new RuntimeException("INTERNAL ERROR: Failed to find joke state for joke '"+j.getObjectId()+"' when the option was set to create if not exist!"); 
-						}
+						JokeState js = results.get(j.getObjectId());
+						if(createIfNotExist && (js==null)) js = new JokeState(j.getObjectId());
+						if(js!=null) j.setUserState(js);
 					}
 				}
-				ParseException parseException = null;
-				if(e!=null) parseException = new ParseException(e.getMessage(), e);
-				handler.done(jokes, parseException);
+				handler.done(jokes, (e==null) ? null : new ParseException(e.getMessage(), e));
 			}
 		});
 	}

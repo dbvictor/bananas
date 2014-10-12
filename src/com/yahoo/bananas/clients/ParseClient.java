@@ -48,7 +48,8 @@ public class ParseClient {
     
     /** Get current logged-in Parse user ID (not name). */
     public String getUserId(){
-        String userid = ParseUser.getCurrentUser().getObjectId();
+    	ParseUser user = ParseUser.getCurrentUser();
+        String userid = (user!=null)? user.getObjectId() : null;
         return userid;
     }
     /**

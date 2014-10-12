@@ -15,8 +15,10 @@ import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Model;
 import com.activeandroid.query.Select;
 import com.parse.ParseException;
+import com.yahoo.bananas.JokesApplication;
 import com.yahoo.bananas.models.Joke;
 import com.yahoo.bananas.models.JokeState;
+import com.yahoo.bananas.models.UserStats;
 
 /**
  * Client for interacting with local persistent store (SQLite) for offline behavior.
@@ -28,21 +30,52 @@ import com.yahoo.bananas.models.JokeState;
 public class OfflineClient {
     /** Cache for JokeStates retrieved by joke's objectId. */
     private static ConcurrentHashMap<String,JokeState> CACHE_JOKESTATES = null;
+    /** User Stats for the current user. */
+    private static UserStats CACHE_USERSTATS = null;
 	
 	/** Load (or reload) the JokeState cache (CACHE_JOKESTATES) from offline storage. */
 	private void cacheJokeStates(){
 		ConcurrentHashMap<String,JokeState> map = new ConcurrentHashMap<String,JokeState>();
-		List<JokeState> list = getAll(JokeState.class);
+		List<JokeState> list  = getAll(JokeState.class);
+		UserStats       stats = new UserStats();
 		for(JokeState js : list) map.put(js.getJokeObjectId(), js);
 		CACHE_JOKESTATES = map;
 	}
-	
-	/** Asynchronously load (or reload) the JokeState cache (CACHE_JOKESTATE) from offline storage. */
+	/** Asynchronously pre-load, load, or reload JokeState cache (CACHE_JOKESTATES) from offline storage. */
 	public void cacheJokeStatesAsync(){
 		new AsyncTask<Void,Void,Void>(){
-			@Override
-		    protected Void doInBackground(Void... ignore) { // Type is first one in template.
+			@Override protected Void doInBackground(Void... ignore) { // Type is first one in template.
 		         cacheJokeStates(); // Some long running task we don't want to wait for.
+		         return null;
+		     }
+		}.execute();
+	}
+	
+	/** Load (or reload) the UserStats cache (CACHE_USERSTATS) from offline storage. */
+	private void cacheUserStats(){
+		// Load stats found from JokeStates, which should be cached.
+		if(CACHE_JOKESTATES==null) cacheJokeStates();  // But load the cache if it isn't loaded yet.
+		Collection<JokeState> list  = CACHE_JOKESTATES.values();
+		// Then populate the user stats from the JokeStates.
+		UserStats             stats = new UserStats();
+		for(JokeState js : list){
+			if(js.getShared() >0) stats.addShared ();
+			if(js.getRead     ()) stats.addRead   ();
+			if(js.getVotedUp  ()) stats.addVotesUp();
+			if(js.getVotedDown()) stats.addVotesDn();
+		}
+		stats.touched(list.size()); // Touched is simply the size of all joke states recorded so far.
+		// Get authored count (by searching SQLite for offline jokes authored by this user.
+		String userId = JokesApplication.getParseClient().getUserId();
+		if(userId!=null) stats.created(getCount(Joke.class, Joke.COL.CREATEDBY+" = ?", JokesApplication.getParseClient().getUserId()));
+		// Once fully completed, save this as the cached instance.
+		CACHE_USERSTATS  = stats; 
+	}
+	/** Asynchronously pre-load, load, or reload UserStats cache (CACHE_USERSTATS) from offline storage. */
+	public void cacheUserStatsAsync(){
+		new AsyncTask<Void,Void,Void>(){
+			@Override protected Void doInBackground(Void... ignore) { // Type is first one in template.
+		         cacheUserStats();  // depends on cacheJokeStates()
 		         return null;
 		     }
 		}.execute();
@@ -112,7 +145,7 @@ public class OfflineClient {
 	 *         KEY: Joke ObjectId.
 	 *         VALUE: JokeState for that joke.
 	 */
-	public void getJokeStates(final Collection<String> jokeObjectIds, final boolean createIfNotExist, final GetJokeStates handler){
+	public void getJokeStates(final Collection<String> jokeObjectIds, final boolean createIfNotExist, final OfflineClient.GetJokeStates handler){
 		// If joke states are cached, just return from cache immediately.
 		if(CACHE_JOKESTATES!=null) handler.done(getJokeStates(jokeObjectIds, createIfNotExist), null);
 		// Otherwise run a background task to load the cache.
@@ -160,12 +193,47 @@ public class OfflineClient {
 		});
 	}
 	
+	/**
+	 * (Cached) Get the User Stats
+	 * CACHED: This method utilizes a cache to obtain current history.
+	 * @param handler
+	 *          Return results will be passed back through the handler.
+	 *          If cache is not loaded, this task will run asynchronously and call back when ready.  
+	 * @return Non-null user stats.
+	 */
+	public void getUserStats(final OfflineClient.GetUserStats handler){
+		// If joke states are cached, just return from cache immediately.
+		if(CACHE_USERSTATS!=null) handler.done(CACHE_USERSTATS, null);
+		// Otherwise run a background task to load the cache.
+		else new AsyncTask<Void,Void,Void>(){
+			@Override
+		    protected Void doInBackground(Void... ignore) { // Type is first one in template.
+				try{
+					cacheUserStats(); // Synchronously load cache
+					handler.done(getUserStats(), null); // Then run function that relies on cache.
+				}catch(Exception e){ handler.done(null, e); } 
+				return null;
+			}
+		}.execute();
+	}
+	/** Synchronously load user stats. */
+	private UserStats getUserStats(){
+		// Return from cached instance.  If not yet loaded, load cache.
+		if(CACHE_USERSTATS==null) cacheJokeStates();
+		return CACHE_USERSTATS;
+	}
+	/** Asynchronous callback for getJokeStates() result. */
+	public abstract static class GetUserStats{
+		public abstract void done(UserStats result, Exception e);
+	}
+	
 	// ========================================================================
 	// STATIC UTILITY FUNCTIONS
 	// ========================================================================
 	// ----- PERSISTENCE -----
 	/**
 	 * Retrieve all instances from offline storage for the specified class.
+	 * @param modelClass - Your model subclass (with .class) for the object you want query. Ex: Joke.class
 	 * @return Non-null List of zero or more instances of the class found. 
 	 */
     public static <T extends Model> List<T> getAll(Class<T> modelClass) {
@@ -182,6 +250,7 @@ public class OfflineClient {
 
 	/**
 	 * Retrieve all instances from offline storage for the specified class.
+	 * @param modelClass - Your model subclass (with .class) for the object you want query. Ex: Joke.class
 	 * @param orderBy - Order by some specific attribute, such as "createdAt DESC" or "createdAt ASC".
 	 * @return Non-null List of zero or more instances of the class found. 
 	 */
@@ -195,6 +264,24 @@ public class OfflineClient {
           .execute();
         if(result==null) result = new ArrayList<T>(0);
         return result;
+    }
+    
+	/**
+	 * Count the number of instances that match the specified condition.
+	 * @param modelClass - Your model subclass (with .class) for the object you want query. Ex: Joke.class
+	 * @param where - Constrain for specific column values (using "?" for values / parameter marker).  Ex: "Category = ?"
+	 * @param whereMarkerValues - The values for any '?' values specified in the where clause.
+	 * @return 0 or more count of matching results. 
+	 */
+    public static <T extends Model> int getCount(Class<T> modelClass, String where, Object... whereMarkerValues) {
+        // This is how you execute a query
+        List<T> result = new Select("objectId")
+          .from(modelClass)
+          .where(where, whereMarkerValues)
+          //NO ORDER: .orderBy("createdAt DESC")
+          .execute();
+        if(result==null) result = new ArrayList<T>(0);
+        return result.size();
     }
     
 	/** Save multiple Model subclass instances to offline persistence (SQLite). */
@@ -229,6 +316,12 @@ public class OfflineClient {
 	/** Save Model subclass instance asynchronously to offline persistence (SQLite). */
 	public static void saveToOfflineAsync(Model model){
 		saveToOfflineAsync(Arrays.asList(model));
+	}
+	/** Save JokeState instance asynchronously to offline persistent (SQLite)
+	 *  AND update cache with new instance. */
+	public static void saveToOfflineAsync(JokeState js){
+		CACHE_JOKESTATES.put(js.getJokeObjectId(), js);
+		saveToOfflineAsync(Arrays.asList(js));
 	}
 	
 }

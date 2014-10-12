@@ -21,9 +21,9 @@ import com.parse.SaveCallback;
 import com.yahoo.bananas.JokesApplication;
 import com.yahoo.bananas.R;
 import com.yahoo.bananas.activities.DetailActivity;
+import com.yahoo.bananas.clients.ParseClient;
 import com.yahoo.bananas.models.Category;
 import com.yahoo.bananas.models.Joke;
-import com.yahoo.bananas.models.JokeState;
 import com.yahoo.bananas.models.Tweet;
 import com.yahoo.bananas.models.User;
 import com.yahoo.bananas.util.Util;
@@ -223,18 +223,23 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 		// Change icons to show up/down vote.
 		// TODO
 		// Save to Joke
-		JokesApplication.getParseClient().jokeVote(joke.getObjectId(), voteUp, voteDown, new SaveCallback() {
-			@Override public void done(ParseException e) {
+		JokesApplication.getParseClient().jokeVote(joke.getObjectId(), voteUp, voteDown, new ParseClient.JokeVote() {
+			@Override public void done(int changedVotesUp, int changedVotesDn, ParseException e) {
 				if(e!=null){
 					Log.e("ERROR", "Update Vote Count FAILED!: "+e.getMessage(),e);
 					Toast.makeText(context, "Update Vote Count FAILED!", Toast.LENGTH_SHORT).show();
 				}else{
-					Toast.makeText(context, "Voted", Toast.LENGTH_SHORT).show();
-					//TODO: We have to know what changed from the done method in order to know how to change the #s in the UI.
-					//FUTURE: // Make it show a +1 to the user for instant feedback.  This isn't the actual latest if others shared in the meanwhile, but will look appropriate to the user until they do a refresh.  It may be too confusing if it jumps by several when they click once if we did update it.
-					//FUTURE: if(voteDifference>0) joke.setVotesUp  (joke.getVotesUp  ()+voteDifference);
-					//FUTURE: else                 joke.setVotesDown(joke.getVotesDown()-voteDifference);
-					//FUTURE: adapter.notifyDataSetChanged();
+					// We have to know what changed from the done method in order to know how to change the #s in the UI.
+					// => This is why we have the changed vote counts passed to us.
+					if((changedVotesUp!=0)||(changedVotesDn!=0)){
+						Toast.makeText(context, "Voted", Toast.LENGTH_SHORT).show();
+						// Make it show a +1 to the user for instant feedback.  This isn't the actual latest if others shared in the meanwhile, but will look appropriate to the user until they do a refresh.  It may be too confusing if it jumps by several when they click once if we did update it.
+						joke.setVotesUp  (joke.getVotesUp  ()+changedVotesUp);
+						joke.setVotesDown(joke.getVotesDown()+changedVotesDn);
+						adapter.notifyDataSetChanged();
+					}else{
+						Toast.makeText(context, "No Change", Toast.LENGTH_SHORT).show();
+					}
 				}
 			}
 		});

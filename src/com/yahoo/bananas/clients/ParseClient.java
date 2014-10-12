@@ -357,12 +357,12 @@ public class ParseClient {
      * @param voteUp       - Vote Up
      * @param voteDn       - Vote Down 
      **/
-    public void jokeVote(final String jokeObjectId, final boolean voteUp, final boolean voteDn, final SaveCallback handler){
+    public void jokeVote(final String jokeObjectId, final boolean voteUp, final boolean voteDn, final ParseClient.JokeVote handler){
 		// Get existing votes for this user
 		JokesApplication.getOfflineClient().getJokeState(jokeObjectId,true,new OfflineClient.GetJokeState() {
 			@Override
 			public void done(JokeState js, Exception e) {
-				if(e!=null) handler.done(new ParseException(e.getMessage(),e));
+				if(e!=null) handler.done(0,0,new ParseException(e.getMessage(),e));
 				// 0. Determine the change to vote count
 				int changeVotesUp = 0;
 				int changeVotesDn = 0;
@@ -374,12 +374,16 @@ public class ParseClient {
 				if(voteDn) changeVotesDn++;
 				// If no change needed, just return
 				if((changeVotesUp==0)&&(changeVotesDn==0)){
-					handler.done(null);
+					handler.done(changeVotesUp,changeVotesDn,null);
 				// Otherwise save changes to voting
 				}else{
 					final int changeVotesUpFinal = changeVotesUp;
 					final int changeVotesDnFinal = changeVotesDn;
-			    	updateLatest(jokeObjectId, handler, new UpdateJoke() {
+			    	updateLatest(jokeObjectId, new SaveCallback() {
+						@Override public void done(ParseException updateLatestExc) {
+							handler.done(changeVotesUpFinal, changeVotesDnFinal, updateLatestExc);
+						}
+					}, new UpdateJoke() {
 						@Override public void applyChanges(Joke joke) {
 							joke.setVotesUp  (joke.getVotesUp  ()+changeVotesUpFinal);
 							joke.setVotesDown(joke.getVotesDown()-changeVotesDnFinal);
@@ -388,6 +392,15 @@ public class ParseClient {
 				}
 			}
 		});
+    }
+    public abstract static class JokeVote{
+    	/**
+    	 * Callback when saved persistently.  Reports actual changes to voting up/down counts (if any)
+    	 * in case you want to update UI.  Repeating the same vote will not cause a change to the counts.
+    	 * Changing the existing vote will alter both acounts.
+    	 * @param chagneVotesUp/Dn - difference in existing votes up / down affected by the current user vote action.
+    	 */
+    	public abstract void done(int changedVotesUp, int changedVotesDn, ParseException e);
     }
     
     /** Update existing User. */

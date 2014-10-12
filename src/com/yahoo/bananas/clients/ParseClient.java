@@ -24,6 +24,7 @@ import com.yahoo.bananas.models.Category;
 import com.yahoo.bananas.models.Joke;
 import com.yahoo.bananas.models.JokeState;
 import com.yahoo.bananas.models.User;
+import com.yahoo.bananas.models.UserStats;
 
 /** Client for interacting with the remote store (Parse) for online behavior. */
 public class ParseClient {
@@ -342,11 +343,70 @@ public class ParseClient {
 		query.findInBackground(handler);
     }
 
+    /**
+     * Record user reading a joke.
+     * @param read - whether the user read the joke or not.  You can mark a joke unread.
+     * @param jokeObjectId - the ID of the joke for which you want to change the voting counts.
+     **/
+    public void jokeRead(Joke joke, final boolean read, final SaveCallback handler){
+		// Get existing read for this user
+    	JokeState js = joke.getUserState();
+		// 0. Determine the change to vote count
+		int changeReads = 0;
+		// Undo existing reads
+		if(js.getRead()) changeReads--;
+		// Apply new reads
+		if(read) changeReads++;
+		// If no change needed, just return
+		if(changeReads==0){
+			handler.done(null);
+		// Otherwise save changes
+		}else{
+	    	// Update joke in remote store with added/removed reads.
+			final int changeReadsFinal = changeReads;
+			//FUTURE: We don't store reads on the remote store at this time.  Just local persistence.
+	    	//FUTURE: updateLatest(joke.getObjectId(), handler, new UpdateJoke() {
+			//FUTURE:	@Override public void applyChanges(Joke joke) {
+			//FUTURE: 		joke.setReads(joke.getReads()+changeReadsFinal);
+			//FUTURE:	}
+			//FUTURE: });
+	    	// Update current user joke read/stats
+	    	// - Add reads to user's JokeState
+			js.setRead(read);
+			OfflineClient.saveToOfflineAsync(js); // Save persistently so it lives beyond this session.
+	    	// - Add vote to user stats
+	    	OfflineClient offlineClient = JokesApplication.getOfflineClient();
+	    	offlineClient.getUserStats(new OfflineClient.GetUserStats() {
+				@Override public void done(UserStats stats, Exception e) {
+					stats.read(stats.read()+changeReadsFinal);
+					// this isn't persistent, so just updating the cached value in memory is good.
+				}
+			});
+		}
+    }
+    
     /** Record a share event for a joke, incrementing the share number by one. */
     public void jokeShare(final String jokeObjectId, final SaveCallback handler){
+    	// Update joke in remote store with added share.
     	updateLatest(jokeObjectId, handler, new UpdateJoke() {
 			@Override public void applyChanges(Joke joke) {
 				joke.setShares(joke.getShares()+1);
+			}
+		});
+    	// Update current user joke state/stats
+    	// - Add share to user's JokeState
+    	OfflineClient offlineClient = JokesApplication.getOfflineClient();
+    	offlineClient.getJokeState(jokeObjectId, true, new OfflineClient.GetJokeState() {
+			@Override public void done(JokeState js, Exception e) {
+				js.setShared(js.getShared()+1);
+				OfflineClient.saveToOfflineAsync(js); // Save persistently so it lives beyond this session.
+			}
+		});
+    	// - Add share to user stats
+    	offlineClient.getUserStats(new OfflineClient.GetUserStats() {
+			@Override public void done(UserStats result, Exception e) {
+				result.addShared();
+				// this isn't persistent, so just updating the cached value in memory is good.
 			}
 		});
     }
@@ -377,12 +437,31 @@ public class ParseClient {
 					handler.done(null);
 				// Otherwise save changes to voting
 				}else{
+			    	// Update joke in remote store with added votes.
 					final int changeVotesUpFinal = changeVotesUp;
 					final int changeVotesDnFinal = changeVotesDn;
 			    	updateLatest(jokeObjectId, handler, new UpdateJoke() {
 						@Override public void applyChanges(Joke joke) {
 							joke.setVotesUp  (joke.getVotesUp  ()+changeVotesUpFinal);
-							joke.setVotesDown(joke.getVotesDown()-changeVotesDnFinal);
+							joke.setVotesDown(joke.getVotesDown()+changeVotesDnFinal);
+						}
+					});
+			    	// Update current user joke votes/stats
+			    	// - Add votes to user's JokeState
+			    	OfflineClient offlineClient = JokesApplication.getOfflineClient();
+			    	offlineClient.getJokeState(jokeObjectId, true, new OfflineClient.GetJokeState() {
+						@Override public void done(JokeState js, Exception e) {
+							js.setVotedUp  (voteUp);
+							js.setVotedDown(voteDn);
+							OfflineClient.saveToOfflineAsync(js); // Save persistently so it lives beyond this session.
+						}
+					});
+			    	// - Add vote to user stats
+			    	offlineClient.getUserStats(new OfflineClient.GetUserStats() {
+						@Override public void done(UserStats stats, Exception e) {
+							stats.votesUp(stats.votesUp()+changeVotesUpFinal);
+							stats.votesDn(stats.votesDn()+changeVotesDnFinal);
+							// this isn't persistent, so just updating the cached value in memory is good.
 						}
 					});
 				}

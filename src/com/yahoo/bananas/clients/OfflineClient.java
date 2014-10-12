@@ -224,7 +224,7 @@ public class OfflineClient {
 	}
 	/** Asynchronous callback for getJokeStates() result. */
 	public abstract static class GetUserStats{
-		public abstract void done(UserStats result, Exception e);
+		public abstract void done(UserStats stats, Exception e);
 	}
 	
 	// ========================================================================

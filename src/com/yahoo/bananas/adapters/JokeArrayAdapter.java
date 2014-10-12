@@ -24,6 +24,7 @@ import com.yahoo.bananas.activities.DetailActivity;
 import com.yahoo.bananas.clients.ParseClient;
 import com.yahoo.bananas.models.Category;
 import com.yahoo.bananas.models.Joke;
+import com.yahoo.bananas.models.JokeState;
 import com.yahoo.bananas.models.Tweet;
 import com.yahoo.bananas.models.User;
 import com.yahoo.bananas.util.Util;
@@ -91,7 +92,7 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 		ImageView ivUpVotes = (ImageView) v.findViewById(R.id.ivStaticUp);
 		ImageView ivDownVotes = (ImageView) v.findViewById(R.id.ivStaticDown);
 		ImageView ivShares = (ImageView) v.findViewById(R.id.ivStaticShares);
-		
+		ImageView ivRead = (ImageView) v.findViewById(R.id.ivRead);
 
 		JokeState userState = joke.getUserState();
 		if (userState != null) {
@@ -111,7 +112,7 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 				ivUpVotes.setImageResource(R.drawable.ic_up);
 			}
 			if (read) {
-				//TODO
+				ivRead.setVisibility(ImageView.VISIBLE);
 			}
 		}
 		

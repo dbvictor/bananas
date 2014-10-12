@@ -153,4 +153,14 @@
         android:textSize="14dp"
         android:textStyle="italic" />
 
+    <ImageView
+        android:id="@+id/ivRead"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tvUserName"
+        android:layout_alignBottom="@+id/tvUserName"
+        android:layout_toLeftOf="@+id/tvUserName"
+        android:visibility="invisible"
+        android:src="@drawable/ic_action_read" />
+
 </RelativeLayout>

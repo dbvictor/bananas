@@ -103,8 +103,8 @@ public class ProfileActivity extends FragmentActivity {
 				tvCreated.setText(created < 0 ? "?" : String.valueOf(created));
 				
 				TextView tvRead = (TextView) findViewById(R.id.tvJokesRead);
-				int touched = result.touched();
-				tvRead.setText(touched < 0 ? "?" : String.valueOf(touched));
+				int read = result.read();
+				tvRead.setText(read < 0 ? "?" : String.valueOf(read));
 				
 				TextView tvVotesUp = (TextView) findViewById(R.id.tvVotesUp);
 				int votesUp = result.votesUp();

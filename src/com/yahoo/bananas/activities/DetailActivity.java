@@ -11,7 +11,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.activeandroid.util.Log;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.parse.ParseException;
+import com.parse.SaveCallback;
+import com.yahoo.bananas.JokesApplication;
 import com.yahoo.bananas.R;
 import com.yahoo.bananas.models.Joke;
 import com.yahoo.bananas.models.User;
@@ -49,6 +53,17 @@ public class DetailActivity extends Activity {
 //		}
 //		TextView tvCategory = (TextView) findViewById(R.id.tvCategory);
 //		tvCategory.setText(joke.getCategory().getDisplayName());
+		
+		// Mark the joke read
+		final DetailActivity parentThis = this;
+		JokesApplication.getParseClient().jokeRead(joke, true, new SaveCallback() {
+			@Override public void done(ParseException e) {
+				if(e!=null){
+					Log.e("ERROR","Failed to mark joke read: "+e.getClass().getSimpleName()+" = "+e.getMessage(),e);
+					Toast.makeText(parentThis, "Mark Read FAILED!", Toast.LENGTH_SHORT).show();
+				}
+			}
+		});
 	}
 	
 	private void setActionBarColor() {

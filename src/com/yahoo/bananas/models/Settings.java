@@ -16,8 +16,11 @@ public class Settings implements Serializable{
 	private static final int    CATEGORIES_MAXCOUNT = Category.values().length;
 	// Member Variables
 	private final HashSet<Category> categoriesSelected = new HashSet<Category>(CATEGORIES_MAXCOUNT);
+	private       Theme             theme              = Theme.White;
 	// Access Methods
 	public Set<Category> getCategoriesSelected(){ return categoriesSelected; }
+	public Theme         getTheme             (){ return theme             ; }
+	public void          setTheme    (Theme val){ this.theme = val;          }
 	
 	/** Compare if two settings instances reflect the same values. */
 	@Override
@@ -28,6 +31,7 @@ public class Settings implements Serializable{
 		if(s2==null) isSame = false;
 		else if(s1.categoriesSelected.size()!=s2.categoriesSelected.size()) isSame = false;
 		else if(s1.categoriesSelected.containsAll(s2.categoriesSelected)==false) isSame = false;
+		else if(s1.theme!=s2.theme) isSame = false;
 		return isSame;
 	}
 	
@@ -42,6 +46,8 @@ public class Settings implements Serializable{
 				settings.categoriesSelected.add(c);
 			}
 		}
+		// Theme
+		settings.theme = Theme.valueOf(pref.getString(Theme.class.getSimpleName(),Theme.White.name()));
 		return settings;
 	}
 	public void save(Activity anyActivity){
@@ -51,6 +57,8 @@ public class Settings implements Serializable{
 		for(Category c : Category.values()){
 			prefEdit.putBoolean(Category.class.getSimpleName()+"."+c.name(), categoriesSelected.contains(c));
 		}
+		// Theem
+		prefEdit.putString(Theme.class.getSimpleName(), theme.name());
 		prefEdit.commit();
 	}
 	public void save(Activity anyActivity, Category category, boolean selected){

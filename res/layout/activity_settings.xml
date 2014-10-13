@@ -4,6 +4,26 @@
     android:layout_height="match_parent"
     tools:context="${relativePackage}.${activityClass}" >
 
+    <TextView
+        android:id="@+id/tvTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/spTheme"
+        android:layout_alignBottom="@+id/spTheme"
+        android:layout_alignBaseline="@+id/spTheme"
+        android:layout_marginLeft="10dp"
+        android:text="@string/theme_label"
+        android:textSize="18sp" />
+
+    <Spinner
+        android:id="@+id/spTheme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/tvTheme"
+        android:layout_alignParentTop="true"
+         />
+    
     <FrameLayout
         android:id="@+id/flCategoryFilters"
         android:layout_width="wrap_content"
@@ -11,8 +31,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true" >
-
+        android:layout_below="@+id/tvTheme"
+        >
     </FrameLayout>
 
 </RelativeLayout>

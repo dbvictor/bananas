@@ -96,7 +96,10 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 		User createdByUser = joke.getCreatedByUser();
 		if (createdByUser != null) {
 			 //username will be a string of random characters, so using real name, which the user can set to whatever they want
-			tvUserName.setText(createdByUser.getRealName());	
+			if(theme==Theme.Grey && createdByUser.getRealName()!=null)
+				tvUserName.setText(" by "+createdByUser.getRealName());
+			else
+				tvUserName.setText(createdByUser.getRealName());	
 		}
 		if (joke.getCreatedAt() != null)
 			tvTime.setText(Util.getRelativeTimeAgo(joke.getCreatedAt().toString()));

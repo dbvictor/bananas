@@ -78,7 +78,7 @@ public class CreateActivity extends Activity {
 	}
 	
 	private void setupSpinner() {
-		SpinnerAdapter spAdapter = new ArrayAdapter<Category>(this, android.R.layout.simple_list_item_1, Category.getCategories());
+		SpinnerAdapter spAdapter = new ArrayAdapter<Category>(this, android.R.layout.simple_list_item_1, Category.getList());
 		spCategory.setAdapter(spAdapter);
 		spCategory.setOnItemSelectedListener(new OnItemSelectedListener() {
 

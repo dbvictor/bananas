@@ -24,6 +24,7 @@ import com.yahoo.bananas.activities.DetailActivity;
 import com.yahoo.bananas.clients.ParseClient;
 import com.yahoo.bananas.models.Category;
 import com.yahoo.bananas.models.Joke;
+import com.yahoo.bananas.models.JokeState;
 import com.yahoo.bananas.models.Tweet;
 import com.yahoo.bananas.models.User;
 import com.yahoo.bananas.util.Util;
@@ -49,12 +50,22 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 		TextView  tvUserName     = (TextView ) v.findViewById(R.id.tvUserName);
 		TextView  tvTime         = (TextView ) v.findViewById(R.id.tvTime);
 		TextView  tvBody         = (TextView ) v.findViewById(R.id.tvBody);
-		TextView  tvUpVotes		 = (TextView ) v.findViewById(R.id.tvUpVotes);
-		TextView  tvDownVotes	 = (TextView ) v.findViewById(R.id.tvDownVotes);
-		TextView  tvShares		 = (TextView ) v.findViewById(R.id.tvShares);
 		TextView  tvTitle		 = (TextView ) v.findViewById(R.id.tvTitle);
 		ImageView ivCategoryImage = (ImageView) v.findViewById(R.id.ivCategoryImage);
+				
+		setupJokeData(joke, tvUserName, tvTime, tvBody, tvTitle, ivCategoryImage);
+		
+		setupUserStatus(v, joke);
+		setupDetailViewListeners(v, joke);
+		setupShareListener(v, joke, this);
+		setupVoteListeners(v, joke, this);
+		
+		return v;
+	}
 
+	private void setupJokeData(final Joke joke, TextView tvUserName,
+			TextView tvTime, TextView tvBody, TextView tvTitle,
+			ImageView ivCategoryImage) {
 		// Populate views with joke data.
 		User createdByUser = joke.getCreatedByUser();
 		if (createdByUser != null) {
@@ -75,15 +86,46 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 		ivCategoryImage.setImageResource(category.getImageResourceId());
 		tvBody.setText(jokeText);
 		tvTitle.setText(joke.getTitle());
+	}
+
+	private void setupUserStatus(View v, final Joke joke) {
+		ImageView ivUpVotes = (ImageView) v.findViewById(R.id.ivStaticUp);
+		ImageView ivDownVotes = (ImageView) v.findViewById(R.id.ivStaticDown);
+		ImageView ivShares = (ImageView) v.findViewById(R.id.ivStaticShares);
+		ImageView ivRead = (ImageView) v.findViewById(R.id.ivRead);
+
+		JokeState userState = joke.getUserState();
+		if (userState != null) {
+			boolean read = userState.getRead();
+			int shared = userState.getShared();
+			boolean votedUp = userState.getVotedUp();
+			boolean votedDown = userState.getVotedDown();
+			
+			if (shared > 0) {
+				ivShares.setImageResource(R.drawable.ic_shared);
+			}
+			if (votedUp) {
+				ivUpVotes.setImageResource(R.drawable.ic_up_voted);
+				ivDownVotes.setImageResource(R.drawable.ic_down);
+			} else if (votedDown) {
+				ivDownVotes.setImageResource(R.drawable.ic_down_voted);
+				ivUpVotes.setImageResource(R.drawable.ic_up);
+			}
+			if (read) {
+				ivRead.setVisibility(ImageView.VISIBLE);
+			}
+		}
+		
+		TextView  tvUpVotes		 = (TextView ) v.findViewById(R.id.tvUpVotes);
+		TextView  tvDownVotes	 = (TextView ) v.findViewById(R.id.tvDownVotes);
+		TextView  tvShares		 = (TextView ) v.findViewById(R.id.tvShares);
+
+		
 		tvUpVotes.setText(String.valueOf(joke.getVotesUp()));
 		tvDownVotes.setText(String.valueOf(joke.getVotesDown()));
 		tvShares.setText(String.valueOf(joke.getShares()));
 		
-		setupDetailViewListeners(v, joke);
-		setupShareListener(v, joke, this);
-		setupVoteListeners(v, joke, this);
 		
-		return v;
 	}
 	
 	private static void setupDetailViewListeners(View v, final Joke joke){
@@ -124,6 +166,8 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 						Toast.makeText(v.getContext(), "Tweeted", Toast.LENGTH_SHORT).show();
 						// Record Share Event
 						recordJokeShare(v.getContext(),joke,adapter);
+						ImageView ivShare = (ImageView)v;
+						ivShare.setImageResource(R.drawable.ic_shared);
 					}
 					@Override
 					public void onFailure(Throwable e, String s) {
@@ -137,18 +181,22 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 	}
 
 	private static void setupVoteListeners(View v, final Joke joke, final JokeArrayAdapter adapter){
-		ImageView ivUp = (ImageView) v.findViewById(R.id.ivStaticUp);
-		ImageView ivDn = (ImageView) v.findViewById(R.id.ivStaticDown);
+		final ImageView ivUp = (ImageView) v.findViewById(R.id.ivStaticUp);
+		final ImageView ivDn = (ImageView) v.findViewById(R.id.ivStaticDown);
 		ivUp.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(final View v) {
 				recordJokeVote(v.getContext(),joke,true,false,adapter);
+				ivUp.setImageResource(R.drawable.ic_up_voted);
+				ivDn.setImageResource(R.drawable.ic_down);
 			}
 		});
 		ivDn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(final View v) {
 				recordJokeVote(v.getContext(),joke,false,true,adapter);
+				ivDn.setImageResource(R.drawable.ic_down_voted);
+				ivUp.setImageResource(R.drawable.ic_up);
 			}
 		});
 	}

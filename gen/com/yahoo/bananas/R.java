@@ -132,7 +132,7 @@ public final class R {
         public static final int fragment_category_filters=0x7f030008;
         public static final int fragment_jokes_list=0x7f030009;
         public static final int item_category_filter=0x7f03000a;
-        public static final int joke_item=0x7f03000b;
+        public static final int joke_item_grey=0x7f03000b;
         public static final int joke_item_white=0x7f03000c;
     }
     public static final class menu {

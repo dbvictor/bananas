@@ -58,7 +58,7 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 			LayoutInflater inflator = LayoutInflater.from(getContext());
 			switch(theme){
 				case Grey:
-					v = inflator.inflate(R.layout.joke_item, parent, false);
+					v = inflator.inflate(R.layout.joke_item_grey, parent, false);
 					break;
 				case White: 
 					v = inflator.inflate(R.layout.joke_item_white, parent, false);

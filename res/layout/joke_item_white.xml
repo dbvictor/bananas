@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+   <!--  <ImageView
+        android:id="@+id/ivProfileImage"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:onClick="onProfileClick"
+        android:src="@drawable/ic_bananas_logo" /> -->
+    
+    <ImageView
+        android:id="@+id/ivCategoryImage"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        />
+
+    <TextView
+        android:id="@+id/tvUpVotes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/ivStaticUp"
+        android:paddingLeft="7dp"
+        android:paddingRight="2dp"
+        android:text="U"
+        android:textColor="@color/text_grey"
+        android:textSize="16dp" />
+
+    <TextView
+        android:id="@+id/tvDownVotes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/ivStaticDown"
+        android:layout_below="@+id/tvUpVotes"
+        android:paddingLeft="7dp"
+        android:paddingRight="2dp"
+        android:textSize="16dp"
+        android:text="D"
+        android:textColor="@color/text_grey" />
+
+    <TextView
+        android:id="@+id/tvShares"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/ivStaticShares"
+        android:layout_below="@+id/tvDownVotes"
+        android:paddingLeft="7dp"
+        android:paddingRight="2dp"
+        android:textSize="16dp"
+        android:text="S"
+        android:textColor="@color/text_grey" />
+
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/tvUpVotes"
+        android:maxLines="1"
+        android:paddingLeft="7dp"
+        android:paddingRight="10dp"
+        android:text="Time"
+        android:textSize="14dp"
+        android:textColor="@color/text_grey"
+        android:textStyle="italic" />
+
+    <ImageView
+        android:id="@+id/ivStaticUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tvUserName"
+        android:layout_alignBottom="@+id/tvUpVotes"
+        android:layout_alignTop="@+id/tvUpVotes"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/ic_up" />
+
+    <ImageView
+        android:id="@+id/ivStaticDown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvDownVotes"
+        android:layout_alignTop="@+id/tvDownVotes"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/ivStaticUp"
+        android:src="@drawable/ic_down" />
+
+    <ImageView
+        android:id="@+id/ivStaticShares"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvShares"
+        android:layout_alignLeft="@+id/ivStaticDown"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/tvShares"
+        android:layout_below="@+id/ivStaticDown"
+        android:baselineAlignBottom="false"
+        android:src="@drawable/ic_shares" />
+
+    <!-- <TextView
+        android:id="@+id/tvJokeCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="10dp"
+        android:layout_alignBottom="@+id/tvUserName"
+        android:layout_toRightOf="@+id/ivProfileImage"
+        android:textColor="@color/text_grey"
+        android:text="Category" /> -->
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/tvTime"
+        android:layout_toRightOf="@+id/ivCategoryImage"
+        android:text="Title"
+        android:textSize="16dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvBody"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvTitle"
+        android:layout_toLeftOf="@+id/tvShares"
+        android:layout_toRightOf="@+id/ivCategoryImage"
+        android:onClick="onJokeClick"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:minLines="2"
+        android:text="Joke body..."
+        android:textSize="14dp" />
+
+    <TextView
+        android:id="@+id/tvUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tvBody"
+        android:maxLines="1"
+        android:paddingRight="5dp"
+        android:text="\@Username"
+        android:textColor="@color/text_grey"
+        android:textSize="14dp"
+        android:textStyle="italic" />
+
+    <ImageView
+        android:id="@+id/ivRead"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tvUserName"
+        android:layout_alignBottom="@+id/tvUserName"
+        android:layout_toLeftOf="@+id/tvUserName"
+        android:src="@drawable/ic_action_read" />
+
+</RelativeLayout>

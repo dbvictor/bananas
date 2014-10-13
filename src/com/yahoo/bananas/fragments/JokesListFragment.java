@@ -51,14 +51,14 @@ abstract public class JokesListFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// Non-view initialization
-		settings    = Settings.load(getActivity());
-		parseClient = JokesApplication.getParseClient();
+		settings       = Settings.load(getActivity());
+		parseClient    = JokesApplication.getParseClient();
 		internetStatus = new InternetStatus(getActivity());
-		lastObjectId     = null; // Always start from null.
-		lastDate = null;
-		lastVotesUp = -1;
-		jokes         = new ArrayList<Joke>();
-		aJokes        = new JokeArrayAdapter(getActivity(), jokes); // WARNING: RARELY USE getActivity().  Other usage is likely improper.
+		lastObjectId   = null; // Always start from null.
+		lastDate       = null;
+		lastVotesUp    = -1;
+		jokes          = new ArrayList<Joke>();
+		aJokes         = new JokeArrayAdapter(getActivity(), jokes, settings.getTheme()); // WARNING: RARELY USE getActivity().  Other usage is likely improper.
 	}
 	
 	/** View/UI-related initialization. */
@@ -120,6 +120,7 @@ abstract public class JokesListFragment extends Fragment {
 	/** Tell the fragment to refresh its contents because something changed and it may not be accurate. */
 	public void refresh(Settings settings){
 		this.settings = settings;
+		aJokes.setTheme(settings.getTheme());
         populateJokeStream(true); // true = start from beginning again
         setupEndlessScroll(); // Resetup endless scroll in case it previously hit the bottom and stopped scrolling further again. 
 	}

@@ -27,24 +27,45 @@ import com.yahoo.bananas.clients.ParseClient;
 import com.yahoo.bananas.models.Category;
 import com.yahoo.bananas.models.Joke;
 import com.yahoo.bananas.models.JokeState;
+import com.yahoo.bananas.models.Theme;
 import com.yahoo.bananas.models.Tweet;
 import com.yahoo.bananas.models.User;
 import com.yahoo.bananas.util.Util;
 
 public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 	private static final int JOKE_BODY_READABLE_LIMIT = 200;
+	private Theme theme;
 
-	public JokeArrayAdapter(Context context, List<Joke> objects){
+	public JokeArrayAdapter(Context context, List<Joke> objects, Theme theme){
 		super(context, 0, objects);
+		this.theme = theme;
+	}
+	
+	public void setTheme(Theme theme){
+		this.theme = theme;
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final Joke joke = getItem(position);
 		View v;
-		if (convertView == null) {
+		// If we changed themes, we have to re-inflate
+		if((convertView!=null)&&(!convertView.getTag().equals(theme))){
+			Log.d("theme", "JokeArrayAdapter.getView() Ignoring recycled convertView because theme changed.");
+			convertView = null;
+		}
+		if(convertView == null) {
 			LayoutInflater inflator = LayoutInflater.from(getContext());
-			v = inflator.inflate(R.layout.joke_item, parent, false);
+			switch(theme){
+				case Grey:
+					v = inflator.inflate(R.layout.joke_item, parent, false);
+					break;
+				case White: 
+					v = inflator.inflate(R.layout.joke_item_white, parent, false);
+					break;
+				default: throw new RuntimeException("Unexpected theme '"+theme+"'");
+			}
+			v.setTag(theme);
 		} else {
 			v = convertView;
 		}

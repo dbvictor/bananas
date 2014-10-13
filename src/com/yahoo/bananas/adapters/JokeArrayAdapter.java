@@ -20,6 +20,7 @@ import com.parse.ParseException;
 import com.parse.SaveCallback;
 import com.yahoo.bananas.JokesApplication;
 import com.yahoo.bananas.R;
+import com.yahoo.bananas.activities.CategoryActivity;
 import com.yahoo.bananas.activities.DetailActivity;
 import com.yahoo.bananas.clients.ParseClient;
 import com.yahoo.bananas.models.Category;
@@ -79,11 +80,24 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 		tvDownVotes.setText(String.valueOf(joke.getVotesDown()));
 		tvShares.setText(String.valueOf(joke.getShares()));
 		
+		//TODO: setupCategoryViewListener(v, joke);
 		setupDetailViewListeners(v, joke);
 		setupShareListener(v, joke, this);
 		setupVoteListeners(v, joke, this);
 		
 		return v;
+	}
+	
+	private static void setupCategoryViewListener(View v, final Joke joke){
+		ImageView ivCategoryImage = (ImageView) v.findViewById(R.id.ivCategoryImage);
+		ivCategoryImage.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(v.getContext(),CategoryActivity.class);
+				intent.putExtra(Category.class.getSimpleName(), joke.getCategory());
+				v.getContext().startActivity(intent);
+			}
+		});
 	}
 	
 	private static void setupDetailViewListeners(View v, final Joke joke){

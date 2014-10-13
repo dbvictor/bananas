@@ -11,6 +11,7 @@
     <string name="title_activity_photos">Flickr Photos</string>
     <string name="login_twitter_button">Login with Twitter</string>
     <string name="title_activity_timeline">Bananas</string>
+    <string name="title_activity_category">Category Jokes</string>
     <string name="title_activity_create">New Joke</string>
     <string name="title_activity_profile">Profile</string>
     <string name="title_activity_settings">Select Categories</string>

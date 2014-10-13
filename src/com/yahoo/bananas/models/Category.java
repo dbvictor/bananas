@@ -53,14 +53,13 @@ public enum Category {
 	}
 	private static HashMap<Integer,Category> MAP_DB_TO_ENUM = null;
 	
-	public static List<Category> getCategories() {
-		
-		List<Category> categories = new ArrayList<Category>();
-		for (Category cat : Category.values()) {
-			categories.add(cat);
-		}
-		return categories;
+	public static List<Category> getList() {
+		Category[] array = Category.values();
+		List<Category> list = new ArrayList<Category>(array.length);
+		for (Category c : array) list.add(c);
+		return list;
 	}
+	
 	public int getImageResourceId() {
 		return this.imageId;
 	}

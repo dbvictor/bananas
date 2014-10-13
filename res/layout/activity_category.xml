@@ -1,0 +1,21 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context="${relativePackage}.${activityClass}" >
+
+    <!-- Frame Layout for Dynamically Loaded Fragments -->
+    <FrameLayout
+        android:id="@+id/flCategoryJokeStreamContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/rlHeader"
+        android:layout_marginBottom="12dp"
+        android:background="@color/white" >
+    </FrameLayout>
+
+</RelativeLayout>

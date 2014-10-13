@@ -21,6 +21,7 @@ import com.parse.ParseException;
 import com.parse.SaveCallback;
 import com.yahoo.bananas.JokesApplication;
 import com.yahoo.bananas.R;
+import com.yahoo.bananas.activities.CategoryActivity;
 import com.yahoo.bananas.activities.DetailActivity;
 import com.yahoo.bananas.clients.ParseClient;
 import com.yahoo.bananas.models.Category;
@@ -60,6 +61,9 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 		setupDetailViewListeners(v, joke);
 		setupShareListener(v, joke, this);
 		setupVoteListeners(v, joke, this);
+		//NO: setupCategoryViewListener(v, joke); // Don't setup category view listeners here.  We do with in layout XML so that activity has to implement the handler.  This way categoryActivity can stop it from looping back to itself.
+		//BUT: do tag it with the category so the onClick handler can know which category the image represents.
+		ivCategoryImage.setTag(joke.getCategory());
 		
 		return v;
 	}
@@ -95,8 +99,6 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 	private void setupUserStatus(JokeState userState, View v, final Joke joke) {
 
 		if (userState != null) {
-
-			
 			int shared = userState.getShared();
 			if (shared > 0) {
 				ImageView ivShares = (ImageView) v.findViewById(R.id.ivStaticShares);
@@ -122,13 +124,24 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 		TextView  tvUpVotes		 = (TextView ) v.findViewById(R.id.tvUpVotes);
 		TextView  tvDownVotes	 = (TextView ) v.findViewById(R.id.tvDownVotes);
 		TextView  tvShares		 = (TextView ) v.findViewById(R.id.tvShares);
-
 		
 		tvUpVotes.setText(String.valueOf(joke.getVotesUp()));
 		tvDownVotes.setText(String.valueOf(joke.getVotesDown()));
 		tvShares.setText(String.valueOf(joke.getShares()));
-		
-		
+	}
+	
+	//NO: Don't setup category view listeners here.  We do with in layout XML so that activity has to implement the handler.  This way categoryActivity can stop it from looping back to itself.
+	private static void setupCategoryViewListener(View v, final Joke joke){
+		ImageView ivCategoryImage = (ImageView) v.findViewById(R.id.ivCategoryImage);
+		ivCategoryImage.setTag(joke.getCategory());
+		ivCategoryImage.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(v.getContext(),CategoryActivity.class);
+				intent.putExtra(Category.class.getSimpleName(), joke.getCategory());
+				v.getContext().startActivity(intent);
+			}
+		});
 	}
 	
 	private static void setupDetailViewListeners(View v, final Joke joke){

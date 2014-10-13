@@ -1,5 +1,6 @@
 package com.yahoo.bananas.activities;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import com.yahoo.bananas.JokesApplication;
 import com.yahoo.bananas.R;
 import com.yahoo.bananas.clients.OfflineClient;
 import com.yahoo.bananas.fragments.UserJokeStreamFragment;
+import com.yahoo.bananas.models.Category;
 import com.yahoo.bananas.models.User;
 import com.yahoo.bananas.models.UserStats;
 import com.yahoo.bananas.util.InternetStatus;
@@ -132,9 +134,21 @@ public class ProfileActivity extends FragmentActivity {
 		return false;
 	}
 
-	/** When the user click on a profile image in the tweet list. */
+	/** When the user clicks on a profile image in the jokes list. */
 	public void onProfileClick(View v){
 		// Do nothing.  These are only the images of the profile they are already viewing.  No need to re-show the same activity.
+	}
+	
+	/** When the user clicks on a category image in the jokes list. */
+	public void onCategoryClick(View v){
+		Category category = (Category) v.getTag(); // We store the category object in the JokeArrayAdapter when the image is created.
+		if(category!=null){ // Error if not there.
+			Intent i = new Intent(this,CategoryActivity.class);
+			i.putExtra(Category.class.getSimpleName(), category);
+			v.getContext().startActivity(i);
+		} else {
+			Toast.makeText(this, "Image Missing Category Info!", Toast.LENGTH_SHORT).show();
+		}
 	}
 	
 }

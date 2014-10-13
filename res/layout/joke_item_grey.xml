@@ -125,8 +125,8 @@
         android:layout_toLeftOf="@+id/tvTime"
         android:layout_toRightOf="@+id/ivCategoryImage"
         android:text="Title"
-        android:textSize="16dp"
-        android:textStyle="bold" />
+        android:textSize="14sp"
+        android:textStyle="normal" />
 
     <TextView
         android:id="@+id/tvBody"
@@ -135,8 +135,9 @@
         android:layout_below="@+id/tvTitle"
         android:layout_toLeftOf="@+id/tvShares"
         android:layout_toRightOf="@+id/ivCategoryImage"
-        android:background="@color/white"
         android:minLines="2"
+        android:background="@color/background_grey"
+        android:textColor="@color/black"
         android:onClick="onJokeClick"
         android:paddingBottom="5dp"
         android:paddingTop="5dp"

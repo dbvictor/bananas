@@ -8,7 +8,7 @@ import java.util.List;
 /** Categories of jokes. */
 public enum Theme {
 	White		(0,"White"),
-	Grey  		(1,"Grewy");
+	Grey  		(1,"Grey");
 	
 	// Members
 	private Integer dbValue     = -1;

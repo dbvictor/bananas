@@ -5,6 +5,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,10 +53,10 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 		TextView  tvBody         = (TextView ) v.findViewById(R.id.tvBody);
 		TextView  tvTitle		 = (TextView ) v.findViewById(R.id.tvTitle);
 		ImageView ivCategoryImage = (ImageView) v.findViewById(R.id.ivCategoryImage);
-				
-		setupJokeData(joke, tvUserName, tvTime, tvBody, tvTitle, ivCategoryImage);
+		JokeState userState = joke.getUserState();
+		setupJokeData(userState, joke, tvUserName, tvTime, tvBody, tvTitle, ivCategoryImage);
 		
-		setupUserStatus(v, joke);
+		setupUserStatus(userState, v, joke);
 		setupDetailViewListeners(v, joke);
 		setupShareListener(v, joke, this);
 		setupVoteListeners(v, joke, this);
@@ -63,7 +64,7 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 		return v;
 	}
 
-	private void setupJokeData(final Joke joke, TextView tvUserName,
+	private void setupJokeData(JokeState userState, final Joke joke, TextView tvUserName,
 			TextView tvTime, TextView tvBody, TextView tvTitle,
 			ImageView ivCategoryImage) {
 		// Populate views with joke data.
@@ -85,33 +86,35 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 		}
 		ivCategoryImage.setImageResource(category.getImageResourceId());
 		tvBody.setText(jokeText);
+		if (userState.getRead()) {
+			tvBody.setTextColor(Color.GRAY);
+		}
 		tvTitle.setText(joke.getTitle());
 	}
 
-	private void setupUserStatus(View v, final Joke joke) {
-		ImageView ivUpVotes = (ImageView) v.findViewById(R.id.ivStaticUp);
-		ImageView ivDownVotes = (ImageView) v.findViewById(R.id.ivStaticDown);
-		ImageView ivShares = (ImageView) v.findViewById(R.id.ivStaticShares);
-		ImageView ivRead = (ImageView) v.findViewById(R.id.ivRead);
+	private void setupUserStatus(JokeState userState, View v, final Joke joke) {
 
-		JokeState userState = joke.getUserState();
 		if (userState != null) {
-			boolean read = userState.getRead();
-			int shared = userState.getShared();
-			boolean votedUp = userState.getVotedUp();
-			boolean votedDown = userState.getVotedDown();
+
 			
+			int shared = userState.getShared();
 			if (shared > 0) {
+				ImageView ivShares = (ImageView) v.findViewById(R.id.ivStaticShares);
 				ivShares.setImageResource(R.drawable.ic_shared);
 			}
-			if (votedUp) {
+			
+			ImageView ivUpVotes = (ImageView) v.findViewById(R.id.ivStaticUp);
+			ImageView ivDownVotes = (ImageView) v.findViewById(R.id.ivStaticDown);
+			if (userState.getVotedUp()) {
 				ivUpVotes.setImageResource(R.drawable.ic_up_voted);
 				ivDownVotes.setImageResource(R.drawable.ic_down);
-			} else if (votedDown) {
+			} else if (userState.getVotedDown()) {
 				ivDownVotes.setImageResource(R.drawable.ic_down_voted);
 				ivUpVotes.setImageResource(R.drawable.ic_up);
 			}
+			boolean read = userState.getRead();
 			if (read) {
+				ImageView ivRead = (ImageView) v.findViewById(R.id.ivRead);
 				ivRead.setVisibility(ImageView.VISIBLE);
 			}
 		}

@@ -43,7 +43,6 @@ public final class R {
         public static final int ic_create=0x7f02000e;
         public static final int ic_doctor=0x7f02000f;
         public static final int ic_down=0x7f020010;
-<<<<<<< HEAD
         public static final int ic_down_voted=0x7f020011;
         public static final int ic_food=0x7f020012;
         public static final int ic_home=0x7f020013;
@@ -59,28 +58,14 @@ public final class R {
         public static final int ic_up=0x7f02001d;
         public static final int ic_up_voted=0x7f02001e;
         public static final int ic_yomama=0x7f02001f;
-=======
-        public static final int ic_food=0x7f020011;
-        public static final int ic_home=0x7f020012;
-        public static final int ic_knockknock=0x7f020013;
-        public static final int ic_launcher=0x7f020014;
-        public static final int ic_lawyer=0x7f020015;
-        public static final int ic_mentions=0x7f020016;
-        public static final int ic_others=0x7f020017;
-        public static final int ic_pencil_cartoon_not_a_box=0x7f020018;
-        public static final int ic_popular=0x7f020019;
-        public static final int ic_shares=0x7f02001a;
-        public static final int ic_up=0x7f02001b;
-        public static final int ic_yomama=0x7f02001c;
->>>>>>> 980a30f982a9902615b094009093431cde4966d1
     }
     public static final class id {
-        public static final int actionCreate=0x7f090031;
-        public static final int actionDone=0x7f090030;
-        public static final int actionInternetToggle=0x7f090034;
-        public static final int actionProfile=0x7f090032;
-        public static final int actionSettings=0x7f090033;
-        public static final int action_settings=0x7f09002f;
+        public static final int actionCreate=0x7f090032;
+        public static final int actionDone=0x7f090031;
+        public static final int actionInternetToggle=0x7f090035;
+        public static final int actionProfile=0x7f090033;
+        public static final int actionSettings=0x7f090034;
+        public static final int action_settings=0x7f090030;
         public static final int bLogin=0x7f09000e;
         public static final int bSkip=0x7f09000f;
         public static final int btClickHereToReadMoreFrom=0x7f09000b;
@@ -98,6 +83,7 @@ public final class R {
         public static final int ivJokesRead=0x7f090019;
         public static final int ivLike=0x7f090008;
         public static final int ivProfileImage=0x7f090000;
+        public static final int ivRead=0x7f09002f;
         public static final int ivShared=0x7f09001d;
         public static final int ivStaticDown=0x7f090028;
         public static final int ivStaticShares=0x7f09002a;

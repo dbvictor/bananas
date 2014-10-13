@@ -46,7 +46,6 @@
         android:layout_centerHorizontal="true"
         android:background="@drawable/custom_button"
         android:minHeight="30dp"
-        android:layout_marginTop="5dp"
         android:onClick="moreFromThisUser"
         android:text=" See all jokes from xyz "
         android:textSize="12sp" />
@@ -62,19 +61,19 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ImageView
-        android:id="@+id/ivLike"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btClickHereToReadMoreFrom"
-        android:layout_toLeftOf="@+id/btClickHereToReadMoreFrom"
-        android:src="@drawable/ic_up" />
-
-    <ImageView
         android:id="@+id/ivDislike"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btClickHereToReadMoreFrom"
-        android:layout_toRightOf="@+id/btClickHereToReadMoreFrom"
+        android:layout_alignRight="@+id/tvJoke"
+        android:layout_alignTop="@+id/btClickHereToReadMoreFrom"
         android:src="@drawable/ic_down" />
+
+    <ImageView
+        android:id="@+id/ivLike"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvJoke"
+        android:layout_alignTop="@+id/btClickHereToReadMoreFrom"
+        android:src="@drawable/ic_up" />
 
 </RelativeLayout>

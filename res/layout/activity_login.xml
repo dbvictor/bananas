@@ -9,27 +9,45 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".LoginActivity" >
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="30sp"
+        android:layout_marginTop="30sp"
+        android:background="@color/white"
+        android:orientation="vertical" >
+
     <Button
         android:id="@+id/bLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_margin="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="5dp"
         android:onClick="loginToRest"
         android:text="@string/login_twitter_button" />
 
     <Button
         android:id="@+id/bSkip"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/bLogin"
-        android:layout_alignRight="@+id/bLogin"
-        android:layout_alignTop="@+id/bLogin"
-        android:layout_marginTop="43dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="20dp"
+        
         android:onClick="skipLogin"
         android:text="@string/login_skip_button" />
 
-    <ProgressBar
+
+    </LinearLayout>
+    
+        <ProgressBar
         android:id="@+id/pbLogin"
         android:visibility="invisible"
         style="?android:attr/progressBarStyleLarge"

@@ -19,6 +19,7 @@ import com.yahoo.bananas.fragments.JokesListFragment;
 import com.yahoo.bananas.fragments.NewestStreamFragment;
 import com.yahoo.bananas.fragments.PopularStreamFragment;
 import com.yahoo.bananas.listeners.FragmentTabListener;
+import com.yahoo.bananas.models.Category;
 import com.yahoo.bananas.models.Joke;
 import com.yahoo.bananas.models.Settings;
 import com.yahoo.bananas.models.User;
@@ -163,6 +164,7 @@ public class JokeStreamActivity extends FragmentActivity {
 		}
 	}
 	
+	/** When the user clicks on a profile image in the jokes list. */
 	public void onProfileClick(View v){
 		// Get the user that they clicked on.
 		User u = (User) v.getTag(); // We stored the user object in JokeArrayAdapter when the image is created.
@@ -172,6 +174,18 @@ public class JokeStreamActivity extends FragmentActivity {
 			startActivityForResult(i, ACTIVITY_PROFILE);
 		} else {
 			Toast.makeText(this, "Image Missing User Info!", Toast.LENGTH_SHORT).show();
+		}
+	}
+	
+	/** When the user clicks on a category image in the jokes list. */
+	public void onCategoryClick(View v){
+		Category category = (Category) v.getTag(); // We store the category object in the JokeArrayAdapter when the image is created.
+		if(category!=null){ // Error if not there.
+			Intent i = new Intent(this,CategoryActivity.class);
+			i.putExtra(Category.class.getSimpleName(), category);
+			v.getContext().startActivity(i);
+		} else {
+			Toast.makeText(this, "Image Missing Category Info!", Toast.LENGTH_SHORT).show();
 		}
 	}
 

@@ -5,6 +5,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.parse.ParseException;
 import com.parse.SaveCallback;
 import com.yahoo.bananas.JokesApplication;
 import com.yahoo.bananas.R;
+import com.yahoo.bananas.activities.CategoryActivity;
 import com.yahoo.bananas.activities.DetailActivity;
 import com.yahoo.bananas.clients.ParseClient;
 import com.yahoo.bananas.models.Category;
@@ -52,18 +54,21 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 		TextView  tvBody         = (TextView ) v.findViewById(R.id.tvBody);
 		TextView  tvTitle		 = (TextView ) v.findViewById(R.id.tvTitle);
 		ImageView ivCategoryImage = (ImageView) v.findViewById(R.id.ivCategoryImage);
-				
-		setupJokeData(joke, tvUserName, tvTime, tvBody, tvTitle, ivCategoryImage);
+		JokeState userState = joke.getUserState();
+		setupJokeData(userState, joke, tvUserName, tvTime, tvBody, tvTitle, ivCategoryImage);
 		
-		setupUserStatus(v, joke);
+		setupUserStatus(userState, v, joke);
 		setupDetailViewListeners(v, joke);
 		setupShareListener(v, joke, this);
 		setupVoteListeners(v, joke, this);
+		//NO: setupCategoryViewListener(v, joke); // Don't setup category view listeners here.  We do with in layout XML so that activity has to implement the handler.  This way categoryActivity can stop it from looping back to itself.
+		//BUT: do tag it with the category so the onClick handler can know which category the image represents.
+		ivCategoryImage.setTag(joke.getCategory());
 		
 		return v;
 	}
 
-	private void setupJokeData(final Joke joke, TextView tvUserName,
+	private void setupJokeData(JokeState userState, final Joke joke, TextView tvUserName,
 			TextView tvTime, TextView tvBody, TextView tvTitle,
 			ImageView ivCategoryImage) {
 		// Populate views with joke data.
@@ -85,33 +90,33 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 		}
 		ivCategoryImage.setImageResource(category.getImageResourceId());
 		tvBody.setText(jokeText);
+		if (userState.getRead()) {
+			tvBody.setTextColor(Color.GRAY);
+		}
 		tvTitle.setText(joke.getTitle());
 	}
 
-	private void setupUserStatus(View v, final Joke joke) {
-		ImageView ivUpVotes = (ImageView) v.findViewById(R.id.ivStaticUp);
-		ImageView ivDownVotes = (ImageView) v.findViewById(R.id.ivStaticDown);
-		ImageView ivShares = (ImageView) v.findViewById(R.id.ivStaticShares);
-		ImageView ivRead = (ImageView) v.findViewById(R.id.ivRead);
+	private void setupUserStatus(JokeState userState, View v, final Joke joke) {
 
-		JokeState userState = joke.getUserState();
 		if (userState != null) {
-			boolean read = userState.getRead();
 			int shared = userState.getShared();
-			boolean votedUp = userState.getVotedUp();
-			boolean votedDown = userState.getVotedDown();
-			
 			if (shared > 0) {
+				ImageView ivShares = (ImageView) v.findViewById(R.id.ivStaticShares);
 				ivShares.setImageResource(R.drawable.ic_shared);
 			}
-			if (votedUp) {
+			
+			ImageView ivUpVotes = (ImageView) v.findViewById(R.id.ivStaticUp);
+			ImageView ivDownVotes = (ImageView) v.findViewById(R.id.ivStaticDown);
+			if (userState.getVotedUp()) {
 				ivUpVotes.setImageResource(R.drawable.ic_up_voted);
 				ivDownVotes.setImageResource(R.drawable.ic_down);
-			} else if (votedDown) {
+			} else if (userState.getVotedDown()) {
 				ivDownVotes.setImageResource(R.drawable.ic_down_voted);
 				ivUpVotes.setImageResource(R.drawable.ic_up);
 			}
+			boolean read = userState.getRead();
 			if (read) {
+				ImageView ivRead = (ImageView) v.findViewById(R.id.ivRead);
 				ivRead.setVisibility(ImageView.VISIBLE);
 			}
 		}
@@ -119,13 +124,24 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 		TextView  tvUpVotes		 = (TextView ) v.findViewById(R.id.tvUpVotes);
 		TextView  tvDownVotes	 = (TextView ) v.findViewById(R.id.tvDownVotes);
 		TextView  tvShares		 = (TextView ) v.findViewById(R.id.tvShares);
-
 		
 		tvUpVotes.setText(String.valueOf(joke.getVotesUp()));
 		tvDownVotes.setText(String.valueOf(joke.getVotesDown()));
 		tvShares.setText(String.valueOf(joke.getShares()));
-		
-		
+	}
+	
+	//NO: Don't setup category view listeners here.  We do with in layout XML so that activity has to implement the handler.  This way categoryActivity can stop it from looping back to itself.
+	private static void setupCategoryViewListener(View v, final Joke joke){
+		ImageView ivCategoryImage = (ImageView) v.findViewById(R.id.ivCategoryImage);
+		ivCategoryImage.setTag(joke.getCategory());
+		ivCategoryImage.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(v.getContext(),CategoryActivity.class);
+				intent.putExtra(Category.class.getSimpleName(), joke.getCategory());
+				v.getContext().startActivity(intent);
+			}
+		});
 	}
 	
 	private static void setupDetailViewListeners(View v, final Joke joke){

@@ -126,6 +126,7 @@
         android:layout_alignRight="@+id/tvTime"
         android:layout_toRightOf="@+id/ivCategoryImage"
         android:text="Title"
+        android:textColor="@color/twitterBlue"
         android:textSize="14sp"
         android:textStyle="normal" />
 

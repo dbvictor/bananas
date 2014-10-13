@@ -11,15 +11,16 @@ public final class R {
     public static final class attr {
     }
     public static final class color {
-        public static final int background_darkest_grey=0x7f040003;
-        public static final int background_grey=0x7f040004;
-        public static final int background_whitelike_grey=0x7f040005;
-        public static final int black=0x7f040009;
+        public static final int background_darkest_grey=0x7f040004;
+        public static final int background_grey=0x7f040005;
+        public static final int background_whitelike_grey=0x7f040006;
+        public static final int black=0x7f04000a;
         public static final int darkyellow=0x7f040002;
+        public static final int lightyellow=0x7f040003;
         public static final int mustard=0x7f040001;
-        public static final int text_grey=0x7f040006;
-        public static final int twitterBlue=0x7f040008;
-        public static final int white=0x7f040007;
+        public static final int text_grey=0x7f040007;
+        public static final int twitterBlue=0x7f040009;
+        public static final int white=0x7f040008;
         public static final int yellow=0x7f040000;
     }
     public static final class dimen {

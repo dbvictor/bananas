@@ -99,7 +99,7 @@ public class SettingsActivity extends FragmentActivity {
 		i.putExtra(JokeStreamActivity.INTENT_SETTINGS, settings);
 		setResult(RESULT_OK, i);
 		finish();					
-		overridePendingTransition(R.anim.in_from_left, R.anim.out_to_right);
+		overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
 	}
 	
 	/** Override the back button behavior to save as well. */
@@ -107,7 +107,7 @@ public class SettingsActivity extends FragmentActivity {
 	public void onBackPressed(){
 		// Do the same as save and return.
 		save(null);
-		overridePendingTransition(R.anim.in_from_left, R.anim.out_to_right);
+		overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
 	}	
 	
 }

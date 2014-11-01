@@ -155,7 +155,7 @@ public class ProfileActivity extends FragmentActivity {
 	@Override
 	public void onBackPressed(){
 		finish();					
-		overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);			
+		overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);			
 	}	
 	
 }

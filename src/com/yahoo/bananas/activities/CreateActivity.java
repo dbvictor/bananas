@@ -148,7 +148,7 @@ public class CreateActivity extends Activity {
 						i.putExtra(JokeStreamActivity.INTENT_JOKE, joke);
 						setResult(RESULT_OK, i);
 						finish();					
-						overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+						overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.slide_out_to_top);
 					}
 				}
 			});
@@ -159,7 +159,7 @@ public class CreateActivity extends Activity {
 	@Override
 	public void onBackPressed(){
 		finish();					
-		overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+		overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.slide_out_to_top);
 	}	
 	
 }

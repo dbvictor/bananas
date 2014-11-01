@@ -149,7 +149,7 @@ public class JokeStreamActivity extends FragmentActivity {
 			Intent i = new Intent(this,CreateActivity.class);
 			//no args: i.putExtra("settings", searchFilters);
 			startActivityForResult(i, ACTIVITY_CREATE);
-			overridePendingTransition(R.anim.in_from_top, R.anim.out_to_bottom);
+			overridePendingTransition(R.anim.slide_in_from_top, R.anim.slide_out_to_bottom);
 		}
 	}
 
@@ -160,7 +160,7 @@ public class JokeStreamActivity extends FragmentActivity {
 			Intent i = new Intent(this,ProfileActivity.class);
 			i.putExtra("user", user);
 			startActivityForResult(i, ACTIVITY_PROFILE);
-			overridePendingTransition(R.anim.in_from_left, R.anim.out_to_right);
+			overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
 		} else {
 			Toast.makeText(this, "User information not available at this time.", Toast.LENGTH_SHORT).show();
 		}
@@ -174,7 +174,7 @@ public class JokeStreamActivity extends FragmentActivity {
 			Intent i = new Intent(this,ProfileActivity.class);
 			i.putExtra("user", u);
 			startActivityForResult(i, ACTIVITY_PROFILE);
-			overridePendingTransition(R.anim.in_from_left, R.anim.out_to_right);
+			overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
 		} else {
 			Toast.makeText(this, "Image Missing User Info!", Toast.LENGTH_SHORT).show();
 		}
@@ -187,7 +187,7 @@ public class JokeStreamActivity extends FragmentActivity {
 			Intent i = new Intent(this,CategoryActivity.class);
 			i.putExtra(Category.class.getSimpleName(), category);
 			v.getContext().startActivity(i);
-			overridePendingTransition(R.anim.in_from_left, R.anim.out_to_right);
+			overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
 		} else {
 			Toast.makeText(this, "Image Missing Category Info!", Toast.LENGTH_SHORT).show();
 		}
@@ -198,7 +198,7 @@ public class JokeStreamActivity extends FragmentActivity {
 		Intent i = new Intent(this,SettingsActivity.class);
 		i.putExtra(INTENT_SETTINGS, settings);
 		startActivityForResult(i, ACTIVITY_SETTINGS);
-		overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+		overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
 	}
 	
     @Override

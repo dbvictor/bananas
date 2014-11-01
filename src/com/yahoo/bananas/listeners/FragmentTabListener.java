@@ -1,11 +1,13 @@
 package com.yahoo.bananas.listeners;
 
-import android.os.Bundle;
 import android.app.ActionBar.Tab;
 import android.app.ActionBar.TabListener;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+
+import com.yahoo.bananas.R;
 
 public class FragmentTabListener<T extends Fragment> implements TabListener {
 	private Fragment mFragment;
@@ -46,6 +48,7 @@ public class FragmentTabListener<T extends Fragment> implements TabListener {
 	
 	public void onTabSelected(Tab tab, android.app.FragmentTransaction ft) {
 		FragmentTransaction sft = mActivity.getSupportFragmentManager().beginTransaction();
+		sft.setCustomAnimations(R.anim.flip_in, R.anim.flip_out);
 		// Check if the fragment is already initialized
 		if (mFragment == null) {
 			// If not, instantiate and add it to the activity
@@ -60,6 +63,7 @@ public class FragmentTabListener<T extends Fragment> implements TabListener {
 
 	public void onTabUnselected(Tab tab, android.app.FragmentTransaction ft) {
 		FragmentTransaction sft = mActivity.getSupportFragmentManager().beginTransaction();
+		sft.setCustomAnimations(R.anim.flip_in, R.anim.flip_out);
 		if (mFragment != null) {
 			// Detach the fragment, because another one is being attached
 			sft.detach(mFragment);

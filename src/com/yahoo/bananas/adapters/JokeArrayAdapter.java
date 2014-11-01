@@ -167,7 +167,7 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 				Intent intent = new Intent(v.getContext(),CategoryActivity.class);
 				intent.putExtra(Category.class.getSimpleName(), joke.getCategory());
 				v.getContext().startActivity(intent);
-				activity.overridePendingTransition(R.anim.in_from_left, R.anim.out_to_right);
+				activity.overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
 			}
 		});
 	}
@@ -181,7 +181,7 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 				Intent intent = new Intent(v.getContext(),DetailActivity.class);
 				intent.putExtra("joke", joke);
 				v.getContext().startActivity(intent);
-				activity.overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+				activity.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
 			}
 		});
 		tvTitle.setOnClickListener(new OnClickListener() {
@@ -190,7 +190,7 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 				Intent intent = new Intent(v.getContext(),DetailActivity.class);
 				intent.putExtra("joke", joke);
 				v.getContext().startActivity(intent);
-				activity.overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+				activity.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
 			}
 		});
 	}

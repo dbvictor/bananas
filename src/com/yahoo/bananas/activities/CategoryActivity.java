@@ -65,5 +65,12 @@ public class CategoryActivity extends FragmentActivity {
 	public void onCategoryClick(View v){
 		// Do nothing.  These are only the images of the category they are already viewing.  No need to re-show the same activity.
 	}
+
+	/** Override the back button behavior to override default exit animation. */
+	@Override
+	public void onBackPressed(){
+		finish();					
+		overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+	}	
 	
 }

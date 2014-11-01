@@ -104,6 +104,7 @@ public class DetailActivity extends Activity {
 			Intent i = new Intent(this,ProfileActivity.class);
 			i.putExtra("user", u);
 			startActivityForResult(i, ACTIVITY_PROFILE);
+			overridePendingTransition(R.anim.in_from_left, R.anim.out_to_right);			
 		} else {
 			Toast.makeText(this, "Image Missing User Info!", Toast.LENGTH_SHORT).show();
 		}
@@ -135,5 +136,13 @@ public class DetailActivity extends Activity {
 			}
 		});
 	}
+	
+	/** Override the back button behavior to override default exit animation. */
+	@Override
+	public void onBackPressed(){
+		finish();					
+		//TODO: We should only do this when we figure out to have the reverse animation coming in (TODO in JokeArrayAdapter)
+		//TODO: overridePendingTransition(R.anim.in_from_left, R.anim.out_to_right);
+	}	
 	
 }

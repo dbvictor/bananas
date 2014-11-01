@@ -151,4 +151,11 @@ public class ProfileActivity extends FragmentActivity {
 		}
 	}
 	
+	/** Override the back button behavior to override default exit animation. */
+	@Override
+	public void onBackPressed(){
+		finish();					
+		overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);			
+	}	
+	
 }

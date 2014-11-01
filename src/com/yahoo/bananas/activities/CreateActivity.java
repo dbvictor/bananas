@@ -148,9 +148,18 @@ public class CreateActivity extends Activity {
 						i.putExtra(JokeStreamActivity.INTENT_JOKE, joke);
 						setResult(RESULT_OK, i);
 						finish();					
+						overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
 					}
 				}
 			});
 		}
 	}
+	
+	/** Override the back button behavior to override default exit animation. */
+	@Override
+	public void onBackPressed(){
+		finish();					
+		overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
+	}	
+	
 }

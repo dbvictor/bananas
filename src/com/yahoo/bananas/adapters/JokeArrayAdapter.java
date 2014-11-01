@@ -3,6 +3,7 @@ import java.util.List;
 
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -35,9 +36,11 @@ import com.yahoo.bananas.util.Util;
 public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 	private static final int JOKE_BODY_READABLE_LIMIT = 200;
 	private Theme theme;
+	private final Activity activity;
 
-	public JokeArrayAdapter(Context context, List<Joke> objects, Theme theme){
-		super(context, 0, objects);
+	public JokeArrayAdapter(Activity activity, List<Joke> objects, Theme theme){
+		super(activity, 0, objects);
+		this.activity = activity;
 		this.theme = theme;
 	}
 	
@@ -155,7 +158,7 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 	}
 	
 	//NO: Don't setup category view listeners here.  We do with in layout XML so that activity has to implement the handler.  This way categoryActivity can stop it from looping back to itself.
-	private static void setupCategoryViewListener(View v, final Joke joke){
+	private void setupCategoryViewListener(View v, final Joke joke){
 		ImageView ivCategoryImage = (ImageView) v.findViewById(R.id.ivCategoryImage);
 		ivCategoryImage.setTag(joke.getCategory());
 		ivCategoryImage.setOnClickListener(new OnClickListener() {
@@ -164,13 +167,12 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 				Intent intent = new Intent(v.getContext(),CategoryActivity.class);
 				intent.putExtra(Category.class.getSimpleName(), joke.getCategory());
 				v.getContext().startActivity(intent);
-				//TODO: How do we get to Activity to overridePendingTransition?
-				//TODO: v.getContext().overridePendingTransition(R.anim.in_from_left, R.anim.out_to_right);
+				activity.overridePendingTransition(R.anim.in_from_left, R.anim.out_to_right);
 			}
 		});
 	}
 	
-	private static void setupDetailViewListeners(View v, final Joke joke){
+	private void setupDetailViewListeners(View v, final Joke joke){
 		TextView  tvBody         = (TextView ) v.findViewById(R.id.tvBody);
 		TextView  tvTitle		 = (TextView ) v.findViewById(R.id.tvTitle);
 		tvBody.setOnClickListener(new OnClickListener() {
@@ -179,8 +181,7 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 				Intent intent = new Intent(v.getContext(),DetailActivity.class);
 				intent.putExtra("joke", joke);
 				v.getContext().startActivity(intent);
-				//TODO: How do we get to Activity to overridePendingTransition?
-				//TODO: v.getContext().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+				activity.overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
 			}
 		});
 		tvTitle.setOnClickListener(new OnClickListener() {
@@ -189,13 +190,12 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 				Intent intent = new Intent(v.getContext(),DetailActivity.class);
 				intent.putExtra("joke", joke);
 				v.getContext().startActivity(intent);
-				//TODO: How do we get to Activity to overridePendingTransition?
-				//TODO: v.getContext().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+				activity.overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
 			}
 		});
 	}
 	
-	private static void setupShareListener(View v, final Joke joke, final JokeArrayAdapter adapter){
+	private void setupShareListener(View v, final Joke joke, final JokeArrayAdapter adapter){
 		ImageView iv = (ImageView) v.findViewById(R.id.ivStaticShares);
 		iv.setOnClickListener(new OnClickListener() {
 			@Override

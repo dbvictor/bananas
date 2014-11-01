@@ -58,6 +58,10 @@ public class FragmentTabListener<T extends Fragment> implements TabListener {
 			// If it exists, simply attach it in order to show it
 			sft.attach(mFragment);
 		}
+		// You can add fragment changes to the back stack (back button).  But if we do that, we
+		// have to handle the case that our custom animation move the old one off screen.
+		// BUT in this case, you may not want fragments to be part of back stack.
+		//NO BACK: sft.addToBackStack("optional tag");
 		sft.commit();
 	}
 

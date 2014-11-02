@@ -25,6 +25,7 @@ import com.yahoo.bananas.R;
 import com.yahoo.bananas.activities.CategoryActivity;
 import com.yahoo.bananas.activities.DetailActivity;
 import com.yahoo.bananas.clients.ParseClient;
+import com.yahoo.bananas.listeners.OnSwipeTouchListener;
 import com.yahoo.bananas.models.Category;
 import com.yahoo.bananas.models.Joke;
 import com.yahoo.bananas.models.JokeState;
@@ -86,6 +87,7 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 		setupShareListener(v, joke, this);
 		setupVoteListeners(v, joke, this);
 		//NO: setupCategoryViewListener(v, joke); // Don't setup category view listeners here.  We do with in layout XML so that activity has to implement the handler.  This way categoryActivity can stop it from looping back to itself.
+		setupSwipeActions(tvTitle,tvBody,tvUserName); // Setup Swipe Actions
 		//BUT: do tag it with the category so the onClick handler can know which category the image represents.
 		ivCategoryImage.setTag(joke.getCategory());
 		
@@ -290,6 +292,23 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 				}
 			}
 		});
+	}
+	
+	/** Setup swipe actions */
+	private void setupSwipeActions(View... swipableItems){
+		for(View v : swipableItems){
+			// - Right
+			/* TODO: Determine what we want to do if the user swipes.
+			 *       - We might want to not allow delete, or make them use the detail view.
+			v.setOnTouchListener(new OnSwipeTouchListener(v.getContext()) {
+				  @Override
+				  public void onSwipeRight() {
+				    Toast.makeText(activity, "Right", Toast.LENGTH_SHORT).show();
+				    // TODO: If created by user, modal dialog to confirm delete
+				    // TODO: If created by other, modal dialog to share?
+				  }
+			}); */
+		}
 	}
 	
 }

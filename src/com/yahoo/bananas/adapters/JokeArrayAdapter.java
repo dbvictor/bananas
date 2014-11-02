@@ -3,10 +3,11 @@ import java.util.List;
 
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.yahoo.bananas.R;
 import com.yahoo.bananas.activities.CategoryActivity;
 import com.yahoo.bananas.activities.DetailActivity;
 import com.yahoo.bananas.clients.ParseClient;
+import com.yahoo.bananas.fragments.ModelDialogFragment;
 import com.yahoo.bananas.listeners.OnSwipeTouchListener;
 import com.yahoo.bananas.models.Category;
 import com.yahoo.bananas.models.Joke;
@@ -37,9 +39,9 @@ import com.yahoo.bananas.util.Util;
 public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 	private static final int JOKE_BODY_READABLE_LIMIT = 200;
 	private Theme theme;
-	private final Activity activity;
+	private final FragmentActivity activity;
 
-	public JokeArrayAdapter(Activity activity, List<Joke> objects, Theme theme){
+	public JokeArrayAdapter(FragmentActivity activity, List<Joke> objects, Theme theme){
 		super(activity, 0, objects);
 		this.activity = activity;
 		this.theme = theme;
@@ -300,11 +302,22 @@ public class JokeArrayAdapter extends ArrayAdapter<Joke> {
 			// - Right
 			/* TODO: Determine what we want to do if the user swipes.
 			 *       - We might want to not allow delete, or make them use the detail view.
+			 *
 			v.setOnTouchListener(new OnSwipeTouchListener(v.getContext()) {
 				  @Override
 				  public void onSwipeRight() {
 				    Toast.makeText(activity, "Right", Toast.LENGTH_SHORT).show();
-				    // TODO: If created by user, modal dialog to confirm delete
+				    // If created by user, modal dialog to delete
+				    // TODO: Detect if created by user.
+				  	FragmentManager fm = activity.getSupportFragmentManager();
+				  	ModelDialogFragment alertDialog = ModelDialogFragment.newInstance("Delete?","Do you want to delete?","Yes","No", new Runnable(){
+						@Override
+						public void run() {
+							// TODO: actually implement this.
+						    Toast.makeText(activity, "Deleted", Toast.LENGTH_SHORT).show();
+						}
+				  	});
+				  	alertDialog.show(fm, "fragment_confirm");
 				    // TODO: If created by other, modal dialog to share?
 				  }
 			}); */

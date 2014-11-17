@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,7 +37,7 @@ public class DetailActivity extends Activity {
 
 		joke = (Joke) getIntent().getSerializableExtra("joke");
 		
-		Toast.makeText(this, "Detail View", Toast.LENGTH_SHORT).show();
+//		Toast.makeText(this, "Detail View", Toast.LENGTH_SHORT).show();
 		
 		TextView tvBody = (TextView) findViewById(R.id.tvJoke);
 		tvBody.setText(joke.getText());
@@ -51,8 +50,8 @@ public class DetailActivity extends Activity {
 		tvBody.setMovementMethod(new ScrollingMovementMethod());
 		TextView tvJokeTitle = (TextView)findViewById(R.id.tvJokeTitle);
 		tvJokeTitle.setText(joke.getTitle());
-		Button btClickHereToReadMoreFrom = (Button)findViewById(R.id.btClickHereToReadMoreFrom);
-		btClickHereToReadMoreFrom.setText(" See all jokes from "+joke.getCreatedByUser().getRealName() + " ");
+//		Button btClickHereToReadMoreFrom = (Button)findViewById(R.id.btClickHereToReadMoreFrom);
+//		btClickHereToReadMoreFrom.setText(" See all jokes from "+joke.getCreatedByUser().getRealName() + " ");
 		ImageView ivCreationUser = (ImageView)findViewById(R.id.ivCreationUser);
 		ImageLoader.getInstance().displayImage(joke.getCreatedByUser().getImageUrl(), ivCreationUser);	
 		

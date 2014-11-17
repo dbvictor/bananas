@@ -13,12 +13,11 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/tvJokeTitle"
-        android:layout_marginBottom="20sp"
         android:layout_marginLeft="20sp"
         android:layout_marginRight="20sp"
         android:layout_marginTop="20sp"
         android:background="@color/white"
-        android:gravity="center"
+        android:gravity="left|center_vertical"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:scrollbars="vertical"
@@ -32,23 +31,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_below="@+id/tvJoke"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:onClick="moreFromThisUser"
         android:src="@drawable/ic_launcher" />
 
-    <Button
+    <!-- <Button
         android:id="@+id/btClickHereToReadMoreFrom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="invisible"
         android:layout_above="@+id/ivCreationUser"
         android:layout_centerHorizontal="true"
         android:background="@drawable/custom_button"
         android:minHeight="30dp"
         android:onClick="moreFromThisUser"
         android:text=" See all jokes from xyz "
-        android:textSize="12sp" />
+        android:textSize="12sp" /> -->
 
     <TextView
         android:id="@+id/tvJokeTitle"
@@ -61,38 +61,38 @@
         android:text="Title"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <ImageView
-        android:id="@+id/ivDislike"
+    <TextView
+        android:id="@+id/tvDislikeCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/tvJoke"
-        android:layout_alignTop="@+id/btClickHereToReadMoreFrom"
-        android:src="@drawable/ic_down" />
-
-    <ImageView
-        android:id="@+id/ivLike"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tvJoke"
-        android:layout_alignTop="@+id/btClickHereToReadMoreFrom"
-        android:src="@drawable/ic_up" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/ivDislike"
+        android:layout_alignTop="@+id/tvLikeCount"
+        android:text="dislike" />
 
     <TextView
         android:id="@+id/tvLikeCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/ivCreationUser"
         android:layout_alignLeft="@+id/ivLike"
-        android:layout_below="@+id/ivLike"
+        android:layout_alignParentBottom="true"
         android:text="like" />
 
-    <TextView
-        android:id="@+id/tvDislikeCount"
+    <ImageView
+        android:id="@+id/ivLike"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/ivCreationUser"
-        android:layout_alignRight="@+id/ivDislike"
-        android:layout_alignTop="@+id/tvLikeCount"
-        android:text="dislike" />
+        android:layout_above="@+id/tvLikeCount"
+        android:layout_alignLeft="@+id/tvJoke"
+        android:src="@drawable/ic_up" />
+
+    <ImageView
+        android:id="@+id/ivDislike"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tvDislikeCount"
+        android:layout_alignRight="@+id/tvJoke"
+        android:layout_below="@+id/tvJoke"
+        android:src="@drawable/ic_down" />
 
 </RelativeLayout>
